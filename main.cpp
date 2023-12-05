@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "structs.h"
 
 int main()
 {
