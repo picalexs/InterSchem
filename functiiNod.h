@@ -6,16 +6,33 @@
 
 using namespace std;
 
-void initNod(nod &N) {
-	N.expresie.clear();
-	N.tip = 0;
-	N.x = 0; N.y = 0;
+void initializareNod(nod &N) {
+	N.date.tip = 0;
+	N.date.expresie.clear();
+	N.date.x = 0; N.date.y = 0;
 	N.st = NULL; N.dr = NULL;
 }
 
-nod* creareNod() {
+void atribuireNod(nod& N, dateNod date) {
+	N.date.tip = date.tip;
+	N.date.expresie= date.expresie;
+	N.date.x = date.x; N.date.y = date.y;
+	N.st = NULL; N.dr = NULL;
+}
+
+bool esteNodNull(nod *N) {
+	return (N == nullptr);
+}
+
+nod* creareNodNull() {
 	nod* N = new nod;
-	initNod(*N);
+	initializareNod(*N);
+	return N;
+}
+
+nod* creareNod(dateNod date) {
+	nod* N = creareNodNull();
+	atribuireNod(*N, date);
 	return N;
 }
 
@@ -30,31 +47,36 @@ void stergereNod(nod* N) {
 }
 
 bool esteVerificare(nod& N) {
-	return (N.tip==0)
+	return (N.date.tip == 'I');
 }
 
-void inserareNod(nod &tata, bool fiu) {
-	nod* N = creareNod();
-	if (!fiu) {//bool fiu: 0-fiu st., 1-fiu dr.
-
+void inserareNod(nod* tata, bool fiu, dateNod date) {
+	if (esteNodNull(tata))
+		return;
+	nod* N = creareNod(date);
+	if (fiu == 0) {//bool fiu: 0-fiu st., 1-fiu dr.
+		tata->st = N;
+	}
+	else {
+		tata->dr = N;
 	}
 }
 
-void initArbore(arbore &A, string expresieNoua) {
-	nod *radacinaNoua = creareNod();
+void atribuireArbore(arbore &A, dateNod date) {
+	nod *radacinaNoua = creareNod(date);
 	A.radacina = radacinaNoua;
-	A.radacina->expresie = expresieNoua;
 	A.nrNoduri = 1;
 }
 
 bool esteArboreNull(arbore& A) {
-	return (A.radacina == NULL);
+	return (A.radacina == nullptr);
 }
 
-arbore* creareArbore(string expresieNoua) {
+arbore* creareArbore(dateNod date) {
 	arbore* A = new arbore;
-	if(A==nullptr)
-		return;
-	initArbore(*A,expresieNoua);
+	if (A == nullptr) {
+		throw("EROARE", A);
+	}
+	atribuireArbore(*A, date);
 	return A;
 }

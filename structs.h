@@ -2,17 +2,21 @@
 #include <string>
 #include <iostream>
 using namespace std;
+vector<string> numeNoduri = {"Start", "Stop", "Atribuire", "Citire", "Afisare", "If"};
+struct dateNod{
+	int tip=0;//0-START, 1-STOP, 2-Atribuire Variabila, 3-Citire, 4-Afisare, 5-If
+	string expresie;
+	int x = 0, y = 0;
+};
 
 struct nod
 {
-	string expresie;
-	char tip;//0-START, 1-STOP, V-Atribuire Variabila, I-If, C-Citire, A-Afisare
-	int x = 0, y = 0;
+	dateNod date;
 	nod* st = NULL, * dr = NULL;
 };
 
 struct arbore {
-	nod* radacina;
+	nod* radacina=NULL;
 	int nrNoduri=0;
 };
 
