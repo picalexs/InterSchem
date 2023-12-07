@@ -1,6 +1,8 @@
 #pragma once
 #include "structs.h"
 
+dateNod schimbareDate(int tip,string expresie,int x,int y);
+
 void initializareNod(nod& N);
 
 void atribuireNod(nod& N, dateNod date);

@@ -1,5 +1,13 @@
 #include "functiiNod.h"
 
+dateNod schimbareDate(int tip, string expresie, int x, int y) {
+	dateNod date;
+	date.tip = tip;
+	date.expresie = expresie;
+	date.x = x;
+	date.y = y;
+}
+
 void initializareNod(nod& N) {
 	N.date.tip = 0;
 	N.date.expresie.clear();
@@ -67,8 +75,8 @@ bool esteArboreNull(arbore& A) {
 	return (A.radacina == nullptr);
 }
 
-arbore* creareArbore(dateNod date) {
-	arbore* A = new arbore;
+arbore *creareArbore(dateNod date) {
+	arbore *A = new arbore;
 	if (A == nullptr) {
 		throw("EROARE");
 	}

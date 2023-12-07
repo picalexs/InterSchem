@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="creareSimboluri.cpp" />
     <ClCompile Include="functiiNod.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="functii.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
