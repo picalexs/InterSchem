@@ -134,13 +134,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="functiiNod.cpp" />
+    <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="desenareSimboluri.cpp" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functii.h" />
     <ClInclude Include="functiiNod.h" />
+    <ClInclude Include="desenareSimboluri.h" />
+    <ClInclude Include="logicaSimboluri.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="testareArbore.h" />
   </ItemGroup>

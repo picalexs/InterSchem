@@ -27,6 +27,12 @@
     <ClCompile Include="structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="desenareSimboluri.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logicaSimboluri.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -39,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testareArbore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="desenareSimboluri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logicaSimboluri.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

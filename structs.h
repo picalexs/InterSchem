@@ -6,7 +6,7 @@ using namespace std;
 
 extern vector<string> numeNoduri;
 struct dateNod {
-	int tip = 0; //0-START, 1-STOP, 2-Atribuire, 3-Citire, 4-Afisare, 5-If
+	int tip = 0; //0-START, 1-STOP, 2-Atribuire, 3-Citire, 4-Afisare, 5-Daca/While
 	string expresie;
 	int x = 0, y = 0;
 };
