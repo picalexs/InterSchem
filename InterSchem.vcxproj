@@ -133,12 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="functiiNod.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="structs.cpp" />
+    <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functii.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="testareArbore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

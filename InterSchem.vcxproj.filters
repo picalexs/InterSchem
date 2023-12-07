@@ -18,7 +18,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testlinii.cpp">
+    <ClCompile Include="testareArbore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="functiiNod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="functiiNod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testareArbore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
