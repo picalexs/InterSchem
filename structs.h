@@ -4,7 +4,7 @@
 using namespace std;
 vector<string> numeNoduri = {"Start", "Stop", "Atribuire", "Citire", "Afisare", "If"};
 struct dateNod{
-	int tip=0;//0-START, 1-STOP, 2-Atribuire Variabila, 3-Citire, 4-Afisare, 5-If
+	int tip=0; //0-START, 1-STOP, 2-Atribuire, 3-Citire, 4-Afisare, 5-If
 	string expresie;
 	int x = 0, y = 0;
 };

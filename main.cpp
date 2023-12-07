@@ -3,145 +3,143 @@
 #include "functiiNod.h"
 #include <cstdlib>
 #include <ctime>
+using namespace std;
+using namespace sf;
 
-void deseneazaArbore(sf::RenderWindow& window, nod* nodCurent, float x, float y, float spacing) {
+void deseneazaArbore(RenderWindow& window, nod* nodCurent, float x, float y, float spacing) {
     if (nodCurent == nullptr) {
         return;
     }
-
-    // Desenează legătura către fiul stâng, dacă există
-    if (nodCurent->st != nullptr) {
-        float childX = x - spacing;
-        float childY = y + 100.f;
-        sf::Vertex line[] = {
-            sf::Vertex(sf::Vector2f(x, y + 20.f), sf::Color::Black),  // Schimbarea culorii în negru pentru linie
-            sf::Vertex(sf::Vector2f(childX, childY), sf::Color::Black) // Schimbarea culorii în negru pentru linie
-        };
-        window.draw(line, 2, sf::Lines);
-        deseneazaArbore(window, nodCurent->st, childX, childY, spacing * 0.5f);
-    }
-
-    // Desenează legătura către fiul drept, dacă există
-    if (nodCurent->dr != nullptr) {
-        float childX = x + spacing;
-        float childY = y + 100.f;
-        sf::Vertex line[] = {
-            sf::Vertex(sf::Vector2f(x, y + 20.f), sf::Color::Black),  // Schimbarea culorii în negru pentru linie
-            sf::Vertex(sf::Vector2f(childX, childY), sf::Color::Black) // Schimbarea culorii în negru pentru linie
-        };
-        window.draw(line, 2, sf::Lines);
-        deseneazaArbore(window, nodCurent->dr, childX, childY, spacing * 0.5f);
-    }
-
-    // Desenează nodul curent
-    sf::CircleShape nodeShape(20.f);
-    nodeShape.setFillColor(sf::Color::Blue);
+    CircleShape nodeShape(20.f);
+    if(nodCurent->date.tip<=1)
+        nodeShape.setFillColor(Color::Black);
+    else if (nodCurent->date.tip == 2)
+        nodeShape.setFillColor(Color::Yellow);
+    else if (nodCurent->date.tip == 3)
+        nodeShape.setFillColor(Color::Green);
+    else if (nodCurent->date.tip == 4)
+        nodeShape.setFillColor(Color::Red);
+    else
+        nodeShape.setFillColor(Color::Magenta);
     nodeShape.setPosition(x, y);
     window.draw(nodeShape);
 
-    // Afișează numele nodului
-    sf::Font font;
-    font.loadFromFile("Arial.ttf"); // Înlocuiește cu calea către fontul dorit
-    sf::Text text(numeNoduri[nodCurent->date.tip], font, 16);
-    text.setFillColor(sf::Color::Black);
-    text.setPosition(x - 20.f, y - 30.f); // Ajustează poziția textului
+    Font font;
+    font.loadFromFile("Arial.ttf");
+    Text text(numeNoduri[nodCurent->date.tip], font, 16);
+    text.setFillColor(Color::Black);
+    text.setPosition(x - 20.f, y - 30.f);
     window.draw(text);
+
+    float newX = x;
+    float newY = y + 75;
+
+    if (nodCurent->st != nullptr && nodCurent->date.tip != 5) {
+        Vertex line[] = {
+            Vertex(Vector2f(x, y + 20.f), Color::Black),
+            Vertex(Vector2f(newX, newY), Color::Black)
+        };
+        window.draw(line, 2, Lines);
+        deseneazaArbore(window, nodCurent->st, newX, newY, spacing);
+    }
+
+    newX = x - 2.5f*spacing;
+    newY = y + 100.f;
+
+    if (nodCurent->st != nullptr && nodCurent->date.tip == 5) {
+        Vertex line[] = {
+            Vertex(Vector2f(x, y + 20.f), Color::Black),
+            Vertex(Vector2f(newX, newY), Color::Black)
+        };
+        window.draw(line, 2, Lines);
+        deseneazaArbore(window, nodCurent->st, newX, newY, spacing * 0.5f);
+    }
+
+    newX = x + 2.5f*spacing;
+    if (nodCurent->dr != nullptr && nodCurent->date.tip == 5) {
+        Vertex line[] = {
+            Vertex(Vector2f(x, y + 20.f), Color::Black),
+            Vertex(Vector2f(newX, newY), Color::Black)
+        };
+        window.draw(line, 2, Lines);
+        deseneazaArbore(window, nodCurent->dr, newX, newY, spacing * 0.5f);
+    }
 }
 
-
-void adaugaNoduri(nod* nodCurent, int numarNoduri, int& contor, int nivel) {
-    if (contor >= numarNoduri || nivel >= 4) { // Assuming a maximum depth of 4 for the tree
+void adaugaNoduriRandom(nod* nodCurent, int numarNoduri, int& contor, int nivel) {
+    if ((contor >= numarNoduri || nivel >= 5) && nodCurent->date.tip != 5) {
+        if (nodCurent->st == nullptr && nodCurent->dr == nullptr && nodCurent->date.tip != 1) {
+            nodCurent->st = creareNod({ 1, "ExpresieStop", 0, 0 });
+            contor++;
+        }
         return;
     }
-
-    unsigned int seed = static_cast<unsigned int>(std::time(nullptr)); // Seed based on current time
-    srand(seed);
-
     int probabilitate = rand() % 100;
-    if (nodCurent->date.tip == 0) {
-        // If it's the Start node, add an If, Citire, or Afisare node
-        if (probabilitate < 33) {
-            nodCurent->st = creareNod({ 5, "ExpresieIf", 0, 0 });
+    if (nodCurent->date.tip == 0 || nodCurent->date.tip == 5) {
+        for (int i = 0; i < 2; ++i) {
+            int tipNod = rand() % 4 + 2;
+            nod* newNode = creareNod({ tipNod, "Expresie" + numeNoduri[tipNod], 0, 0 });
+            if (i == 0) {
+                nodCurent->st = newNode;
+            }
+            else {
+                nodCurent->dr = newNode;
+            }
+            adaugaNoduriRandom(newNode, numarNoduri, contor, nivel + 1);
         }
-        else if (probabilitate >= 33 && probabilitate < 66) {
-            nodCurent->st = creareNod({ 3, "ExpresieCitire", 0, 0 });
-        }
-        else {
-            nodCurent->st = creareNod({ 4, "ExpresieAfisare", 0, 0 });
-        }
-        contor++;
-        adaugaNoduri(nodCurent->st, numarNoduri, contor, nivel + 1);
+        contor += 2;
     }
-    else if (nodCurent->date.tip == 5) {
-        // If it's an If node, add an V or C node
-        if (probabilitate < 50) {
-            nodCurent->st = creareNod({ 2, "ExpresieAtribuire", 0, 0 });
-        }
-        else {
-            nodCurent->st = creareNod({ 1, "ExpresieStop", 0, 0 });
-            contor++;
-        }
-        adaugaNoduri(nodCurent->st, numarNoduri, contor, nivel + 1);
-    }
-    else if (nodCurent->date.tip == 2) {
-        // If it's a V node, add a C or STOP node
-        if (probabilitate < 50) {
-            nodCurent->st = creareNod({ 3, "ExpresieCitire", 0, 0 });
-        }
-        else {
-            nodCurent->st = creareNod({ 1, "ExpresieStop", 0, 0 });
-            contor++;
-        }
-        adaugaNoduri(nodCurent->st, numarNoduri, contor, nivel + 1);
-    }
-
-    probabilitate = rand() % 100;
-    if (probabilitate < 50) {
-        nodCurent->dr = creareNod({ 1, "ExpresieStop", 0, 0 }); // The leaf nodes are always STOP
+    else if (nodCurent->date.tip != 1) {
+        int tipNod = rand() % 5 + 1;
+        nodCurent->st = creareNod({ tipNod, "Expresie" + numeNoduri[tipNod], 0, 0 });
+        adaugaNoduriRandom(nodCurent->st, numarNoduri, contor, nivel + 1);
         contor++;
     }
 
-    // Recursively add nodes to the right side
-    if (nodCurent->dr != nullptr && contor < numarNoduri) {
-        adaugaNoduri(nodCurent->dr, numarNoduri, contor, nivel);
+    if (contor < numarNoduri && nodCurent->st == nullptr && nodCurent->dr == nullptr) {
+        if (nodCurent->date.tip != 5 && nodCurent->date.tip != 1) {
+            nodCurent->st = creareNod({ 1, "ExpresieStop", 0, 0 });
+            contor++;
+        }
     }
 }
 
-
-
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Arbore");
+    RenderWindow window(VideoMode(1000, 800), "Arbore");
     window.setFramerateLimit(45);
-    srand(static_cast<unsigned int>(time(nullptr)));
+    srand(time(nullptr));
 
-    arbore* A = creareArbore({ 0, "Expresie", 400, 50 });
+    arbore* A = creareArbore({ 0, "Expresie", 500, 50 });
     int contor = 0;
-    adaugaNoduri(A->radacina, 6, contor,0);
+    adaugaNoduriRandom(A->radacina, 6, contor,0);
 
     while (window.isOpen()) {
-        sf::Event event;
-        srand(static_cast<unsigned int>(std::time(nullptr))); // Inițializare seed pentru numere aleatoare înainte de bucla principală
+        Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+            if (Keyboard::isKeyPressed(Keyboard::R)) {
                 stergereNod(A->radacina);
                 A->radacina = nullptr;
                 A->nrNoduri = 0;
                 A = creareArbore({ 0, "Expresie", 400, 50 });
                 contor = 0;
-                adaugaNoduri(A->radacina, 6, contor,0);
+                srand(time(nullptr));
+                adaugaNoduriRandom(A->radacina, 6, contor,0);
             }
         }
 
-        window.clear(sf::Color::White);
-
+        window.clear(Color::White);
         if (!esteArboreNull(*A)) {
-            deseneazaArbore(window, A->radacina, 400.f, 50.f, 200.f);
+            deseneazaArbore(window, A->radacina, 500.f, 50.f, 100.f);
+            Font font;
+            font.loadFromFile("Arial.ttf");
+            Text text("Resetaza arborele cu 'R'.", font, 16);
+            text.setFillColor(Color::Black);
+            text.setPosition(0, 0);
+            window.draw(text);
         }
-
         window.display();
     }
-
     return 0;
 }

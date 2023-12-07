@@ -10,14 +10,14 @@ void initializareNod(nod &N) {
 	N.date.tip = 0;
 	N.date.expresie.clear();
 	N.date.x = 0; N.date.y = 0;
-	N.st = NULL; N.dr = NULL;
+	N.st = nullptr; N.dr = nullptr;
 }
 
 void atribuireNod(nod& N, dateNod date) {
 	N.date.tip = date.tip;
 	N.date.expresie= date.expresie;
 	N.date.x = date.x; N.date.y = date.y;
-	N.st = NULL; N.dr = NULL;
+	N.st = nullptr; N.dr = nullptr;
 }
 
 bool esteNodNull(nod *N) {
@@ -31,7 +31,7 @@ nod* creareNodNull() {
 }
 
 nod* creareNod(dateNod date) {
-	nod* N = creareNodNull();
+	nod* N = new nod;
 	atribuireNod(*N, date);
 	return N;
 }
@@ -46,11 +46,7 @@ void stergereNod(nod* N) {
 	delete N;
 }
 
-bool esteVerificare(nod& N) {
-	return (N.date.tip == 'I');
-}
-
-void inserareNod(nod* tata, bool fiu, dateNod date) {
+void inserareFiu(nod* tata, bool fiu, dateNod date) {
 	if (esteNodNull(tata))
 		return;
 	nod* N = creareNod(date);
@@ -60,6 +56,11 @@ void inserareNod(nod* tata, bool fiu, dateNod date) {
 	else {
 		tata->dr = N;
 	}
+}
+
+void initializareArbore(arbore& A) {
+	A.radacina = nullptr;
+	A.nrNoduri = 0;
 }
 
 void atribuireArbore(arbore &A, dateNod date) {
@@ -75,7 +76,7 @@ bool esteArboreNull(arbore& A) {
 arbore* creareArbore(dateNod date) {
 	arbore* A = new arbore;
 	if (A == nullptr) {
-		throw("EROARE", A);
+		throw("EROARE");
 	}
 	atribuireArbore(*A, date);
 	return A;
