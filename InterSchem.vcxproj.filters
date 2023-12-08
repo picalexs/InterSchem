@@ -33,6 +33,15 @@
     <ClCompile Include="logicaSimboluri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="creareSimboluri.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fereastra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="verificareZonaSimbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -51,6 +60,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaSimboluri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="creareSimboluri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fereastra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="verificareZonaSimbol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

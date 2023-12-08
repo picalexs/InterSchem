@@ -1,3 +1,6 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include "functiiNod.h"
-void creareSimbol();
+using namespace sf;
+
+void creareSimbol(RenderWindow& window, dateNod date);

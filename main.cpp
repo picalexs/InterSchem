@@ -1,7 +1,7 @@
-﻿#include "testareArbore.h"
-#include "creareSimboluri.h"
+﻿#include "fereastra.h"
+#include "testareArbore.h"
 int main() {
     //generareArbore();
-    creareSimbol();
+    creareFereastra();
     return 0;
 }

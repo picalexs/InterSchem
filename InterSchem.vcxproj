@@ -134,21 +134,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="creareSimboluri.cpp" />
+    <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiNod.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="desenareSimboluri.cpp" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="testareArbore.cpp" />
+    <ClCompile Include="verificareZonaSimbol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="creareSimboluri.h" />
+    <ClInclude Include="fereastra.h" />
     <ClInclude Include="functii.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
     <ClInclude Include="logicaSimboluri.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="testareArbore.h" />
+    <ClInclude Include="verificareZonaSimbol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

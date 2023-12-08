@@ -1,69 +1,44 @@
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
-#include <SFML/Graphics.hpp>
-#include <map>
-using namespace sf;
 using namespace std;
 
-void creareSimbolStart(dateNod date) {
-    desenareNodStart(date);
+void creareSimbolStart(RenderWindow& window ,dateNod date) {
+    desenareNodStart(window,date);
 }
 
-void creareSimbolStop(dateNod date) {
-    desenareNodStop(date);
+void creareSimbolStop(RenderWindow& window, dateNod date) {
+    desenareNodStop(window,date);
 }
 
-void creareSimbolAtribuire(dateNod date) {
-    desenareNodAtribuire(date);
+void creareSimbolAtribuire(RenderWindow& window, dateNod date) {
+    desenareNodAtribuire(window,date);
 }
 
-void creareSimbolCitire(dateNod date) {
-    desenareNodCitire(date);
+void creareSimbolCitire(RenderWindow& window, dateNod date) {
+    desenareNodCitire(window,date);
 }
 
-void creareSimbolAfisare(dateNod date) {
-    desenareNodAfisare(date);
+void creareSimbolAfisare(RenderWindow& window, dateNod date) {
+    desenareNodAfisare(window,date);
 }
 
-void creareSimbolDaca(dateNod date) {
-    desenareNodDaca(date);
+void creareSimbolDaca(RenderWindow& window, dateNod date) {
+    desenareNodDaca(window,date);
 }
 
-void creareSimbol() {
-    map<Keyboard::Key, bool> esteTastaApasata;
-    arbore A;
-    initializareArbore(A);
-
-    while (!Keyboard::isKeyPressed(Keyboard::Escape)) {
-        for (int key = Keyboard::Num1; key <= Keyboard::Num6; key++) {
-            if (Keyboard::isKeyPressed(Keyboard::Key(key))) {
-                if (!esteTastaApasata[Keyboard::Key(key)]) {
-                    cout << "Creare nod: " << key - Keyboard::Num0 << endl;
-
-                    dateNod date = schimbareDate(key - 1, "", 0, 0);
-
-                    if (esteArboreNull(A))
-                        A= *creareArbore(date);
-                    switch (key) {
-                    case 1:
-                        creareSimbolStart(date); break;
-                    case 2:
-                        creareSimbolStop(date); break;
-                    case 3:
-                        creareSimbolAtribuire(date); break;
-                    case 4:
-                        creareSimbolCitire(date); break;
-                    case 5:
-                        creareSimbolAfisare(date); break;
-                    case 6:
-                        creareSimbolDaca(date); break;
-                    }
-                    esteTastaApasata[Keyboard::Key(key)] = true;
-                }
-            }
-            else {
-                esteTastaApasata[Keyboard::Key(key)] = false;
-            }
-        }
+void creareSimbol(RenderWindow& window, dateNod date) {
+    switch (date.tip) {
+    case 0:
+        creareSimbolStart(window, date); break;
+    case 1:
+        creareSimbolStop(window, date); break;
+    case 2:
+        creareSimbolAtribuire(window, date); break;
+    case 3:
+        creareSimbolCitire(window, date); break;
+    case 4:
+        creareSimbolAfisare(window, date); break;
+    case 5:
+        creareSimbolDaca(window, date); break;
     }
-};
+}

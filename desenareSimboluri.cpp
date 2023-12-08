@@ -1,6 +1,4 @@
 #include "desenareSimboluri.h"
-#include <SFML/Graphics.hpp>
-using namespace sf;
 
 void desenareLinie() {
 	
@@ -14,52 +12,59 @@ void desenareTriunghi() {
 
 }
 
-void desenareNodStart(dateNod date){
+void desenareNodStart(RenderWindow& window, dateNod date){
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Black);
+	window.draw(shape);
 	//desenare nod start ca elipsa folosind date.x, date.y si eventual o raza sau poate un colt st, colt dr
 }
 
-void desenareNodStop(dateNod date) {
+void desenareNodStop(RenderWindow& window, dateNod date) {
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Black);
+	window.draw(shape);
 	//desenare nod stop
 	//acelasi lucru ca si pt nod start
 }
 
-void desenareNodAtribuire(dateNod date) {
+void desenareNodAtribuire(RenderWindow& window, dateNod date) {
 	
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Yellow);
+	window.draw(shape);
 	//desenare nod atribuire -dreptunghi
 }
 
-void desenareNodCitire(dateNod date) {
+void desenareNodCitire(RenderWindow& window, dateNod date) {
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Green);
+	window.draw(shape);
+	window.draw(shape);
 	//desenare nod citire -trapez cu baza mai mare sus si baza mica jos
 }
 
-void desenareNodAfisare(dateNod date) {
+void desenareNodAfisare(RenderWindow& window, dateNod date) {
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Red);
+	window.draw(shape);
 	//desenare nod afisare -trapez cu baza mare jos, baza mica sus
 }
 
-void desenareNodDaca(dateNod date) {
+void desenareNodDaca(RenderWindow& window, dateNod date) {
 	sf::CircleShape shape;
 	shape.setRadius(50);
-	shape.setPosition(date.x, date.y);
+	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
 	shape.setFillColor(Color::Magenta);
+	window.draw(shape);
 	//desenare nod daca - triunghi
 }

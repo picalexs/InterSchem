@@ -6,6 +6,7 @@ dateNod schimbareDate(int tip, string expresie, int x, int y) {
 	date.expresie = expresie;
 	date.x = x;
 	date.y = y;
+	return date;
 }
 
 void initializareNod(nod& N) {
