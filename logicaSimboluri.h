@@ -8,3 +8,5 @@ using namespace sf;
 void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTastaApasata);
 
 void logicaStergereSimbol(RenderWindow& window, bool& esteApasatStergere);
+
+void logicaLegaturaIntreSimboluri(RenderWindow& window);

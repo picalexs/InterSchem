@@ -71,13 +71,13 @@ bool esteArboreNull(arbore& A) {
 nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
 	if (nodCurent == nullptr)
 		return nullptr;
-
-	Vector2i pozNod;
-	pozNod.x = date.x;
-	pozNod.y = date.y;
-	if (verificareSimbolInZona(pozNod, nodCurent->date))
+	Vector2i pozMouse;
+	pozMouse.x = date.x;
+	pozMouse.y = date.y;
+	if (verificareSimbolInZona(pozMouse, nodCurent->date)) {
+		cout << "gasit in zona:" << endl;
 		return nodCurent;
-
+	}
 	nod* nodGasit = gasesteNodRecursiv(nodCurent->st, date);
 	if (nodGasit != nullptr)
 		return nodGasit;
@@ -87,11 +87,37 @@ nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
 nod* gasesteNodInArbore(arbore A, dateNod date) {
 	if (A.radacina == nullptr)
 		return nullptr;
-
 	return gasesteNodRecursiv(A.radacina, date);
 }
 
+nod* gasesteNodCuPozMouse(RenderWindow& window, arbore &A) {
+	if (A.radacina == nullptr)
+		return nullptr;
+	Vector2i pozitieMouse = Mouse::getPosition(window);
+	dateNod nodPePozitieMouse;
+	nodPePozitieMouse.x = pozitieMouse.x;
+	nodPePozitieMouse.y = pozitieMouse.y;
+	return gasesteNodRecursiv(A.radacina, nodPePozitieMouse);
+}
+
+nod* gasesteNodListaCuPozMouse(RenderWindow &window) {
+	Vector2i pozitieMouse = Mouse::getPosition(window);
+	dateNod nodPePozitieMouse;
+	nodPePozitieMouse.x = pozitieMouse.x;
+	nodPePozitieMouse.y = pozitieMouse.y;
+
+	for (auto& A : listaArbori) {
+		nod* nodGasit = gasesteNodInArbore(A, nodPePozitieMouse);
+		if (nodGasit != nullptr) {
+			return nodGasit;
+		}
+	}
+	return nullptr;
+}
+
+
 nod* gasesteNodInListaArbori(dateNod date) {
+
 	for (size_t i = 0; i < listaArbori.size(); ++i) {
 		nod* nodGasit = gasesteNodInArbore(listaArbori[i], date);
 		if (nodGasit != nullptr)

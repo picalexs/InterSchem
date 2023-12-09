@@ -1,14 +1,7 @@
 #include "logicaSimboluri.h"
 #include "creareSimboluri.h"
+#include "desenareSimboluri.h"
 #include "verificareZonaSimbol.h"
-
-dateNod returneazaPozitieMouse(RenderWindow &window) {
-    Vector2i pozitieMouse = Mouse::getPosition(window);
-    dateNod nodPePozitieMouse;
-    nodPePozitieMouse.x = pozitieMouse.x;
-    nodPePozitieMouse.y = pozitieMouse.y;
-    return nodPePozitieMouse;
-}
 
 void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTastaApasata) {
 
@@ -35,8 +28,22 @@ void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTast
         return;
     for (arbore A : listaArbori) {
         if (A.radacina == nullptr)
-            return;
+            continue;
         creareSimbol(window, A.radacina->date);
+    }
+}
+
+vector<pair<dateNod, dateNod>> listaLinii;
+
+void stergereLinie(nod *N) {
+    for (auto it = listaLinii.begin(); it != listaLinii.end();) {
+        if ((it->first.x == N->date.x && it->first.x== N->date.y)||
+            (it->second.x == N->date.x && it->second.x == N->date.y)) {
+            it = listaLinii.erase(it);
+        }
+        else {
+            ++it;
+        }
     }
 }
 
@@ -49,11 +56,11 @@ void logicaStergereSimbol(RenderWindow& window, bool& esteApasatStergere) {
         esteApasatStergere = true;
         // Parcurgerea listei de arbori si a fiecarui arbore pentru a gasi nodul si a-l sterge daca este gasit
         for (auto& A : listaArbori) {
-            dateNod pozMouse = returneazaPozitieMouse(window);
-            nod* nodDeSters = gasesteNodInArbore(A, pozMouse);
+            nod* nodDeSters = gasesteNodCuPozMouse(window , A);
 
             if (nodDeSters != nullptr) {
                 cout << "Stergere nod de tipul " << nodDeSters->date.tip << " de pe coordonatele (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")" << endl;
+                stergereLinie(nodDeSters);
                 stergereNodFaraSubarbore(A,nodDeSters);
                 return;
             }
@@ -61,36 +68,30 @@ void logicaStergereSimbol(RenderWindow& window, bool& esteApasatStergere) {
     }
 }
 
-void logicaLegaturaIntreSimboluri(RenderWindow& window, dateNod dateNod1, dateNod dateNod2) {
-    if (!Mouse::isButtonPressed(sf::Mouse::Left))
+nod* nod1 = nullptr;
+nod* nod2 = nullptr;
+
+void logicaLegaturaIntreSimboluri(RenderWindow& window) {
+    desenareLinieIntreSimboluri(window, listaLinii);
+    if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (nod1 == nullptr) {
+            nod1 = gasesteNodListaCuPozMouse(window);
+        }
+        nod* nod2Nou= gasesteNodListaCuPozMouse(window);
+        if (nod2 == nullptr || nod2 == nod1 || nod2Nou!=nod2) {
+            nod2 = nod2Nou;
+        }
+        return;
+    }
+    if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
         return;
 
-    nod* nod1 = nullptr;
-    nod* nod2 = nullptr;
+    //nod1->st = nod2;
 
-    if (listaArbori.empty())
-        return;
-
-    for (auto& A : listaArbori) {
-        nod* nodGasit = gasesteNodInArbore(A, dateNod1);
-        if (nodGasit != nullptr) {
-            nod1 = nodGasit;
-            break;
-        }
-    }
-
-    if (dateNod2.tip == -1) {
-        Vector2i pozitieMouse = Mouse::getPosition(window);
-        dateNod nodPePozitieMouse;
-        nodPePozitieMouse.x = pozitieMouse.x;
-        nodPePozitieMouse.y = pozitieMouse.y;
-
-        for (auto& A : listaArbori) {
-            nod* nodGasit = gasesteNodInArbore(A, nodPePozitieMouse);
-            if (nodGasit != nullptr) {
-                nod2 = nodGasit;
-                break;
-            }
-        }
-    }
+    Vector2i pozitieMouse = Mouse::getPosition(window);
+    /*for(auto it = listaLinii.begin(); it != listaLinii.end();it++)
+        if((it->first.x != nod1->date.x && it->first.x != nod1->date.y) &&
+            (it->second.x != nod2->date.x && it->second.x != nod2->date.y))*/
+    listaLinii.push_back(make_pair(nod1->date, nod2->date));
+    nod1 = nullptr; nod2 = nullptr;
 }

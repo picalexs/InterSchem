@@ -1,5 +1,6 @@
 #pragma once
 #include "structs.h"
+#include <SFML/Graphics.hpp>
 
 dateNod schimbareDate(int tip,string expresie,int x,int y);
 
@@ -24,6 +25,10 @@ bool esteArboreNull(arbore& A);
 nod* gasesteNodRecursiv(nod* nodCurent, dateNod date);
 
 nod* gasesteNodInArbore(arbore A, dateNod date);
+
+nod* gasesteNodCuPozMouse(sf::RenderWindow& window, arbore &A);
+
+nod* gasesteNodListaCuPozMouse(sf::RenderWindow& window);
 
 nod* gasesteNodInListaArbori(dateNod date);
 

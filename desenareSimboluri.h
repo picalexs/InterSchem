@@ -14,3 +14,5 @@ void desenareNodCitire(RenderWindow& window, dateNod date);
 void desenareNodAfisare(RenderWindow& window, dateNod date);
 
 void desenareNodDaca(RenderWindow& window, dateNod date);
+
+void desenareLinieIntreSimboluri(RenderWindow& window, vector<pair<dateNod, dateNod>> listaLinii);

@@ -19,6 +19,7 @@ void creareFereastra() {
 
         logicaCreareSimbol(window, esteTastaApasata);
         logicaStergereSimbol(window, esteApasatStergere);
+        logicaLegaturaIntreSimboluri(window);
 
         Font font;
         font.loadFromFile("Arial.ttf");
