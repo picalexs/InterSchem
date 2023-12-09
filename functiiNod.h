@@ -13,8 +13,6 @@ nod* creareNodNull();
 
 nod* creareNod(dateNod date);
 
-void stergereNod(nod* N);
-
 void inserareFiu(nod* tata, bool fiu, dateNod date);
 
 void initializareArbore(arbore& A);
@@ -24,3 +22,17 @@ void atribuireArbore(arbore& A, dateNod date);
 bool esteArboreNull(arbore& A);
 
 arbore* creareArbore(dateNod date);
+
+nod* gasesteNodRecursiv(nod* nodCurent, dateNod date);
+
+nod* gasesteNodInArbore(arbore* A, dateNod date);
+
+nod* gasesteNodInListaArbori(dateNod date);
+
+int numaraNoduri(nod* N);
+
+void stergereIntregArbore(nod*& N);
+
+void stergereArboreCuRadacina(arbore*& A);
+
+void stergereNodFaraSubarbore(arbore*&A, nod *N);

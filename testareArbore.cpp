@@ -26,7 +26,7 @@ void deseneazaArbore(RenderWindow& window, nod* nodCurent, float x, float y, flo
     font.loadFromFile("Arial.ttf");
     Text text(numeNoduri[nodCurent->date.tip], font, 16);
     text.setFillColor(Color::Black);
-    text.setPosition(x - 20.f, y - 30.f);
+    text.setPosition(x - 20.f, y-30.f);
     window.draw(text);
 
     float newX = x;
@@ -117,7 +117,7 @@ void generareArbore() {
             if (event.type == Event::Closed)
                 window.close();
             if (Keyboard::isKeyPressed(Keyboard::R)) {
-                stergereNod(A->radacina);
+                stergereIntregArbore(A->radacina);
                 A->radacina = nullptr;
                 A->nrNoduri = 0;
                 A = creareArbore({ 0, "Expresie", 400, 50 });
