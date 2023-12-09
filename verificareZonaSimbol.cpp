@@ -7,44 +7,43 @@ bool verificareTemporara(Vector2i pozitieMouse, dateNod date, int distMax) {
 }
 
 bool verificareSimbolStart(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolStop(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolAtribuire(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolCitire(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolAfisare(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolDaca(Vector2i pozitieMouse, dateNod date) {
-    return false;
+    return verificareTemporara(pozitieMouse, date, 50);
 }
 
 bool verificareSimbolInZona(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
-
     switch (date.tip) {
     case 0:
-        verificareSimbolStart(pozitieMouse, date); break;
+        return verificareSimbolStart(pozitieMouse, date);
     case 1:
-        verificareSimbolStop(pozitieMouse, date); break;
+        return verificareSimbolStop(pozitieMouse, date);
     case 2:
-        verificareSimbolAtribuire(pozitieMouse, date); break;
+        return verificareSimbolAtribuire(pozitieMouse, date);
     case 3:
-        verificareSimbolCitire(pozitieMouse, date); break;
+        return verificareSimbolCitire(pozitieMouse, date);
     case 4:
-        verificareSimbolAfisare(pozitieMouse, date); break;
+        return verificareSimbolAfisare(pozitieMouse, date);
     case 5:
-        verificareSimbolDaca(pozitieMouse, date); break;
+        return verificareSimbolDaca(pozitieMouse, date);
     }
+    return false;
 }

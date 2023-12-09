@@ -21,18 +21,20 @@ void atribuireArbore(arbore& A, dateNod date);
 
 bool esteArboreNull(arbore& A);
 
-arbore* creareArbore(dateNod date);
-
 nod* gasesteNodRecursiv(nod* nodCurent, dateNod date);
 
-nod* gasesteNodInArbore(arbore* A, dateNod date);
+nod* gasesteNodInArbore(arbore A, dateNod date);
 
 nod* gasesteNodInListaArbori(dateNod date);
 
 int numaraNoduri(nod* N);
 
+int numarNoduriDinArbore(arbore A);
+
+int numarNoduriDinListaArbori();
+
 void stergereIntregArbore(nod*& N);
 
-void stergereArboreCuRadacina(arbore*& A);
+void stergereArboreCuRadacina(arbore& A);
 
-void stergereNodFaraSubarbore(arbore*&A, nod *N);
+void stergereNodFaraSubarbore(arbore& A, nod *N);

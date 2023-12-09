@@ -21,4 +21,4 @@ struct arbore {
 };
 
 extern vector<string> numeNoduri;
-extern vector<arbore*> listaArbori;
+extern vector<arbore> listaArbori;

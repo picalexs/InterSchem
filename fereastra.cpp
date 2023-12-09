@@ -20,6 +20,14 @@ void creareFereastra() {
         logicaCreareSimbol(window, esteTastaApasata);
         logicaStergereSimbol(window, esteApasatStergere);
 
+        Font font;
+        font.loadFromFile("Arial.ttf");
+        string textDeAfisat = "Nr. simboluri: " + std::to_string(numarNoduriDinListaArbori());
+        Text text(textDeAfisat, font, 16);
+        text.setFillColor(Color::Black);
+        text.setPosition(0, 0);
+        window.draw(text);
+
         window.display();
     }
 }

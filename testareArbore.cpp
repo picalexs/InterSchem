@@ -107,9 +107,10 @@ void generareArbore() {
     window.setFramerateLimit(45);
     srand(time(nullptr));
 
-    arbore* A = creareArbore({ 0, "Expresie", 500, 50 });
+    arbore A;
+    atribuireArbore(A, { 0, "Expresie", 500, 50 });
     int contor = 0;
-    adaugaNoduriRandom(A->radacina, 6, contor, 0);
+    adaugaNoduriRandom(A.radacina, 6, contor, 0);
 
     while (window.isOpen()) {
         Event event;
@@ -117,19 +118,19 @@ void generareArbore() {
             if (event.type == Event::Closed)
                 window.close();
             if (Keyboard::isKeyPressed(Keyboard::R)) {
-                stergereIntregArbore(A->radacina);
-                A->radacina = nullptr;
-                A->nrNoduri = 0;
-                A = creareArbore({ 0, "Expresie", 400, 50 });
+                stergereIntregArbore(A.radacina);
+                A.radacina = nullptr;
+                A.nrNoduri = 0;
+                atribuireArbore(A,{ 0, "Expresie", 400, 50 });
                 contor = 0;
                 srand(time(nullptr));
-                adaugaNoduriRandom(A->radacina, 6, contor, 0);
+                adaugaNoduriRandom(A.radacina, 6, contor, 0);
             }
         }
 
         window.clear(Color::White);
-        if (!esteArboreNull(*A)) {
-            deseneazaArbore(window, A->radacina, 500.f, 50.f, 100.f);
+        if (!esteArboreNull(A)) {
+            deseneazaArbore(window, A.radacina, 500.f, 50.f, 100.f);
             Font font;
             font.loadFromFile("Arial.ttf");
             Text text("Resetaza arborele cu 'R'.", font, 16);

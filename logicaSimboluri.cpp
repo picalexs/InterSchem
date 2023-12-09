@@ -19,7 +19,8 @@ void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTast
 
                 Vector2i pozitieMouse = Mouse::getPosition(window);
                 dateNod date = schimbareDate(key - Keyboard::Num1, "expresie de test", pozitieMouse.x, pozitieMouse.y);
-                arbore* ArboreNou = creareArbore(date);
+                arbore ArboreNou;
+                atribuireArbore(ArboreNou, date);
                 listaArbori.push_back(ArboreNou);
 
                 esteTastaApasata[Keyboard::Key(key)] = true;
@@ -32,10 +33,10 @@ void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTast
 
     if (listaArbori.empty())
         return;
-    for (arbore* A : listaArbori) {
-        if (A == nullptr)
-            continue;
-        creareSimbol(window, A->radacina->date);
+    for (arbore A : listaArbori) {
+        if (A.radacina == nullptr)
+            return;
+        creareSimbol(window, A.radacina->date);
     }
 }
 
