@@ -1,6 +1,7 @@
 #include "testareArbore.h"
 #include "logicaSimboluri.h"
 #include "creareSimboluri.h"
+#include "desenareSimboluri.h"
 
 void functieDebugging(RenderWindow & window) {
     Font font;
@@ -25,6 +26,10 @@ void functieDebugging(RenderWindow & window) {
     text3.setPosition(0, 30);
     window.draw(text3);
 
+    Text text4("Resetaza arborele cu 'R'.", font, 16);
+    text4.setFillColor(Color::Black);
+    text4.setPosition(820, 0);
+    window.draw(text4);
 }
 
 void creareFereastra() {
@@ -38,12 +43,22 @@ void creareFereastra() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        if (Keyboard::isKeyPressed(Keyboard::R))
+        {
+            listaArbori.clear();
+            listaLinii.clear();
+
+        }
+
         window.clear(sf::Color::White);
 
         logicaCreareSimbol(window);
         logicaStergereSimbol(window);
         logicaLegaturaIntreSimboluri(window);
+
         creareSimbolPtListaArbori(window);
+        desenareLinieIntreSimboluri(window);
 
         functieDebugging(window);
 

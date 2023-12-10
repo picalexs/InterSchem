@@ -64,7 +64,6 @@ nod* nod1 = nullptr;
 nod* nod2 = nullptr;
 
 void logicaLegaturaIntreSimboluri(RenderWindow& window) {
-    desenareLinieIntreSimboluri(window, listaLinii);
     if (Mouse::isButtonPressed(sf::Mouse::Left)) {
         if (nod1 == nullptr) {
             nod1 = gasesteNodListaCuPozMouse(window);

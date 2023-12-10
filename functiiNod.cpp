@@ -154,18 +154,24 @@ int numarNoduriDinListaArbori() {
 void stergereIntregArbore(nod*& N) {
 	if (N == nullptr)
 		return;
-
+	int poz = -1;
+	for (int i = 0; i < listaArbori.size(); i++)
+		if (esteNodInArbore(N, listaArbori[i].radacina))
+			poz = i;
+	if (poz == -1)
+		return;
+	
+	//stergere ceva nod listaArbori[i]
 	stergereIntregArbore(N->st);
 	stergereIntregArbore(N->dr);
 
-	delete N;
 	N = nullptr;
-
+	delete N;
 }
 
 void stergereArboreCuRadacina(arbore& A) {
 	if (A.radacina == nullptr)
-		return;
+		throw("A.radacina este null!");
 	stergereIntregArbore(A.radacina);
 	initializareArbore(A);
 }
@@ -210,8 +216,8 @@ void stergereNodFaraSubarbore(arbore& A, nod* N) {
 		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
 		listaArbori.insert(listaArbori.begin(), SubarboreNou);
 	}
-	stergereArboreCuRadacina(A);
 	stergereDinListaArbori(N);
+	stergereIntregArbore(N);
 }
 
 bool existaLinie(pair<dateNod, dateNod> linie) {
@@ -227,7 +233,8 @@ bool existaLinie(pair<dateNod, dateNod> linie) {
 bool creareLegatura(nod*& nod1, nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
-	if (nod1->st != nullptr || nod1->dr != nullptr)
+	if ((nod1->date.tip==5 && nod1->dr != nullptr)
+	  ||(nod1->date.tip!=5 && (nod1->st != nullptr || nod1->dr != nullptr)))
 		return false;
 
 	pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
@@ -251,9 +258,18 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 				return false;
 
 			listaLinii.push_back(linie1);
+			if (nod1->date.tip == 5) {
+				if (nod1->st == nullptr)
+					nod1->st = nod2;
+				else
+					nod1->dr = nod2;
+			}
+			else {
+				nod1->st = nod2;
+			}
 			listaArbori[i].nrNoduri = numaraNoduri(listaArbori[i].radacina);
 			stergereDinListaArbori(nod2);
-			nod1->st = nod2;
+			
 			return true;
 		}
 	return false;

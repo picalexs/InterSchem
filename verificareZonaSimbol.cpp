@@ -7,27 +7,27 @@ bool verificareTemporara(Vector2i pozitieMouse, dateNod date, int distMax) {
 }
 
 bool verificareSimbolStart(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolStop(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolAtribuire(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolCitire(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolAfisare(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolDaca(Vector2i pozitieMouse, dateNod date) {
-    return verificareTemporara(pozitieMouse, date, 50);
+    return verificareTemporara(pozitieMouse, date, 40);
 }
 
 bool verificareSimbolInZona(Vector2i pozitieMouse, dateNod date) {
