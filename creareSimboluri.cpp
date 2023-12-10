@@ -42,3 +42,19 @@ void creareSimbol(RenderWindow& window, dateNod date) {
         creareSimbolDaca(window, date); break;
     }
 }
+
+void creareSimbolPtArbore(RenderWindow& window, nod *N) {
+    if (N == nullptr)
+        return;
+    creareSimbol(window, N->date);
+    creareSimbolPtArbore(window, N->st);
+    creareSimbolPtArbore(window, N->dr);
+}
+
+void creareSimbolPtListaArbori(RenderWindow& window) {
+    for (int i = 0; i < listaArbori.size(); i++) {
+        if (listaArbori[i].radacina == nullptr)
+            continue;
+        creareSimbolPtArbore(window, listaArbori[i].radacina);
+    }
+}

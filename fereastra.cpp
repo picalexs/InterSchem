@@ -1,5 +1,6 @@
 #include "testareArbore.h"
 #include "logicaSimboluri.h"
+#include "creareSimboluri.h"
 
 void functieDebugging(RenderWindow & window) {
     Font font;
@@ -42,6 +43,7 @@ void creareFereastra() {
         logicaCreareSimbol(window);
         logicaStergereSimbol(window);
         logicaLegaturaIntreSimboluri(window);
+        creareSimbolPtListaArbori(window);
 
         functieDebugging(window);
 

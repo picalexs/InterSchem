@@ -68,6 +68,14 @@ bool esteArboreNull(arbore& A) {
 	return (A.radacina == nullptr);
 }
 
+bool esteNodInArbore(nod* nodCautat, nod* radacina) {
+	if (radacina == nullptr)
+		return 0;
+	if (radacina == nodCautat)
+		return 1;
+	return (esteNodInArbore(nodCautat, radacina->st) || esteNodInArbore(nodCautat, radacina->dr));
+}
+
 nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
 	if (nodCurent == nullptr)
 		return nullptr;
@@ -113,7 +121,6 @@ nod* gasesteNodListaCuPozMouse(RenderWindow &window) {
 	}
 	return nullptr;
 }
-
 
 nod* gasesteNodInListaArbori(dateNod date) {
 
@@ -163,9 +170,9 @@ void stergereArboreCuRadacina(arbore& A) {
 	initializareArbore(A);
 }
 
-void stergereDinListaArbori() {
+void stergereDinListaArbori(nod *N) {
 	for (int i = 0; i < listaArbori.size();) {
-		if (listaArbori[i].radacina == nullptr) {
+		if (listaArbori[i].radacina == N || listaArbori[i].radacina==nullptr) {
 			listaArbori.erase(listaArbori.begin() + i);
 		}
 		else {
@@ -193,14 +200,61 @@ void stergereNodFaraSubarbore(arbore& A, nod* N) {
 	if (subarbore1 != nullptr) {
 		arbore SubarboreNou;
 		atribuireArbore(SubarboreNou, subarbore1->date);
+		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
 		listaArbori.insert(listaArbori.begin(), SubarboreNou);
 	}
 
 	if (subarbore2 != nullptr) {
 		arbore SubarboreNou;
 		atribuireArbore(SubarboreNou, subarbore2->date);
+		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
 		listaArbori.insert(listaArbori.begin(), SubarboreNou);
 	}
 	stergereArboreCuRadacina(A);
-	stergereDinListaArbori();
+	stergereDinListaArbori(N);
+}
+
+bool existaLinie(pair<dateNod, dateNod> linie) {
+	for (int i = 0; i < listaLinii.size(); i++)
+		if (linie.first.x == listaLinii[i].first.x
+			&& linie.first.y == listaLinii[i].first.y
+			&& linie.second.x == listaLinii[i].second.x
+			&& linie.second.y == listaLinii[i].second.y)
+			return true;
+	return false;
+}
+
+bool creareLegatura(nod*& nod1, nod*& nod2) {
+	if (nod1 == nullptr || nod2 == nullptr)
+		return false;
+	if (nod1->st != nullptr || nod1->dr != nullptr)
+		return false;
+
+	pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
+	pair<dateNod, dateNod> linie2 = make_pair(nod2->date, nod1->date);
+
+	if (existaLinie(linie1) || existaLinie(linie2))
+		return false;
+
+	int poz = -1;
+	for (int i = 0; i < listaArbori.size(); i++)
+		if (listaArbori[i].radacina == nod2) {
+			poz = i;
+			break;
+		}
+	if (poz == -1)
+		return false;
+
+	for (int i = 0; i < listaArbori.size(); i++)
+		if (esteNodInArbore(nod1, listaArbori[i].radacina)) {
+			if (nod2 != listaArbori[i].radacina && esteNodInArbore(nod2, listaArbori[i].radacina))
+				return false;
+
+			listaLinii.push_back(linie1);
+			listaArbori[i].nrNoduri = numaraNoduri(listaArbori[i].radacina);
+			stergereDinListaArbori(nod2);
+			nod1->st = nod2;
+			return true;
+		}
+	return false;
 }

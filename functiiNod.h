@@ -22,6 +22,8 @@ void atribuireArbore(arbore& A, dateNod date);
 
 bool esteArboreNull(arbore& A);
 
+bool esteNodInArbore(nod* nodCautat, nod* radacina);
+
 nod* gasesteNodRecursiv(nod* nodCurent, dateNod date);
 
 nod* gasesteNodInArbore(arbore A, dateNod date);
@@ -38,8 +40,14 @@ int numarNoduriDinArbore(arbore A);
 
 int numarNoduriDinListaArbori();
 
+void stergereDinListaArbori(nod* N);
+
 void stergereIntregArbore(nod*& N);
 
 void stergereArboreCuRadacina(arbore& A);
 
 void stergereNodFaraSubarbore(arbore& A, nod *N);
+
+bool existaLinie(pair<dateNod, dateNod> linie);
+
+bool creareLegatura(nod*& nod1, nod*& nod2);
