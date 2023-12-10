@@ -3,8 +3,8 @@
 #include "desenareSimboluri.h"
 #include "verificareZonaSimbol.h"
 
-void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTastaApasata) {
-
+map < Keyboard::Key, bool> esteTastaApasata;
+void logicaCreareSimbol(RenderWindow& window) {
     for (int key = Keyboard::Num1; key <= Keyboard::Num6; key++) {
         if (Keyboard::isKeyPressed(Keyboard::Key(key))) {
             if (!esteTastaApasata[Keyboard::Key(key)]) {
@@ -33,8 +33,6 @@ void logicaCreareSimbol(RenderWindow& window, map<Keyboard::Key, bool>& esteTast
     }
 }
 
-vector<pair<dateNod, dateNod>> listaLinii;
-
 void stergereLinie(nod *N) {
     for (auto it = listaLinii.begin(); it != listaLinii.end();) {
         if ((it->first.x == N->date.x && it->first.x== N->date.y)||
@@ -47,7 +45,8 @@ void stergereLinie(nod *N) {
     }
 }
 
-void logicaStergereSimbol(RenderWindow& window, bool& esteApasatStergere) {
+bool esteApasatStergere = false;
+void logicaStergereSimbol(RenderWindow& window) {
     if (!Keyboard::isKeyPressed(Keyboard::Escape) && esteApasatStergere) {
         esteApasatStergere = false;
         return;
@@ -66,6 +65,16 @@ void logicaStergereSimbol(RenderWindow& window, bool& esteApasatStergere) {
             }
         }
     }
+}
+
+bool existaLinie(pair<dateNod,dateNod> linie) {
+    for (int i = 0; i < listaLinii.size(); i++)
+        if (linie.first.x == listaLinii[i].first.x
+            && linie.first.y == listaLinii[i].first.y
+            && linie.second.x == listaLinii[i].second.x
+            && linie.second.y == listaLinii[i].second.y)
+            return true;
+    return false;
 }
 
 nod* nod1 = nullptr;
@@ -89,9 +98,11 @@ void logicaLegaturaIntreSimboluri(RenderWindow& window) {
     //nod1->st = nod2;
 
     Vector2i pozitieMouse = Mouse::getPosition(window);
-    /*for(auto it = listaLinii.begin(); it != listaLinii.end();it++)
-        if((it->first.x != nod1->date.x && it->first.x != nod1->date.y) &&
-            (it->second.x != nod2->date.x && it->second.x != nod2->date.y))*/
-    listaLinii.push_back(make_pair(nod1->date, nod2->date));
+    
+    pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
+    pair<dateNod, dateNod> linie2 = make_pair(nod2->date, nod1->date);
+    if (!existaLinie(linie1) && !existaLinie(linie2))
+        listaLinii.push_back(linie1);
+
     nod1 = nullptr; nod2 = nullptr;
 }

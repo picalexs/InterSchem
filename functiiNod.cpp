@@ -74,10 +74,9 @@ nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
 	Vector2i pozMouse;
 	pozMouse.x = date.x;
 	pozMouse.y = date.y;
-	if (verificareSimbolInZona(pozMouse, nodCurent->date)) {
-		cout << "gasit in zona:" << endl;
+	if (verificareSimbolInZona(pozMouse, nodCurent->date))
 		return nodCurent;
-	}
+	
 	nod* nodGasit = gasesteNodRecursiv(nodCurent->st, date);
 	if (nodGasit != nullptr)
 		return nodGasit;

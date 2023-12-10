@@ -22,3 +22,4 @@ struct arbore {
 
 extern vector<string> numeNoduri;
 extern vector<arbore> listaArbori;
+extern vector<pair<dateNod, dateNod>> listaLinii;
