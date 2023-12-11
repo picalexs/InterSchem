@@ -20,3 +20,11 @@ struct arbore {
 	nod* radacina = NULL;
 	int nrNoduri = 0;
 };
+
+struct functie
+{
+	string expresie;
+	//char vect[MAX + 1][MAX1];
+	float a, b;
+	int n;
+};

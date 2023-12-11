@@ -55,6 +55,19 @@ void logicaStergereSimbol(RenderWindow& window, dateNod date, bool& esteApasatSt
     }
 }
 
+void testare(RenderWindow& window, dateNod date) {
+
+    CircleShape triangle;
+    triangle.setRadius(50);
+    triangle.setPointCount(3);
+    window.draw(triangle);
+    triangle.setPosition(100, 200);
+    triangle.setFillColor(Color::Black);
+    window.draw(triangle);
+    ///line.rotate(45);
+    //desenare nod start ca elipsa folosind date.x, date.y si eventual o raza sau poate un colt st, colt dr
+
+}
 
 void creareFereastra() {
 
@@ -74,11 +87,14 @@ void creareFereastra() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
         }
         window.clear(sf::Color::White);
 
         logicaCreareSimbol(window, A, date, esteTastaApasata, dateSimboluriIzolate);
         logicaStergereSimbol(window, date,esteApasatStergere, dateSimboluriIzolate);
+
+        ///testare(window, date);
 
         window.display();
     }
