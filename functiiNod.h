@@ -2,39 +2,39 @@
 #include "structs.h"
 #include <SFML/Graphics.hpp>
 
-dateNod schimbareDate(int tip,string expresie,int x,int y);
+dateNod schimbareDate(int tip, const string& expresie,int x,int y);
 
 void initializareNod(nod& N);
 
-void atribuireNod(nod& N, dateNod date);
+void atribuireNod(nod& N, const dateNod& date);
 
-bool esteNodNull(nod* N);
+bool esteNodNull(const nod* N);
 
 nod* creareNodNull();
 
-nod* creareNod(dateNod date);
+nod* creareNod(const dateNod& date);
 
-void inserareFiu(nod* tata, bool fiu, dateNod date);
+void inserareFiu(nod* tata, bool fiu, const dateNod& date);
 
 void initializareArbore(arbore& A);
 
-void atribuireArbore(arbore& A, dateNod date);
+void atribuireArbore(arbore& A, const dateNod& date);
 
-bool esteArboreNull(arbore& A);
+bool esteArboreNull(const arbore& A);
 
-bool esteNodInArbore(nod* nodCautat, nod* radacina);
+bool esteNodInArbore(nod* nodCautat, const nod* radacina);
 
-nod* gasesteNodRecursiv(nod* nodCurent, dateNod date);
+nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date);
 
-nod* gasesteNodInArbore(arbore A, dateNod date);
+nod* gasesteNodInArbore(arbore A, const dateNod& date);
 
-nod* gasesteNodCuPozMouse(sf::RenderWindow& window, arbore &A);
+nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, arbore &A);
 
-nod* gasesteNodListaCuPozMouse(sf::RenderWindow& window);
+nod* gasesteNodListaCuPozMouse(const sf::RenderWindow& window);
 
-nod* gasesteNodInListaArbori(dateNod date);
+nod* gasesteNodInListaArbori(const dateNod& date);
 
-int numaraNoduri(nod* N);
+int numaraNoduri(const nod* N);
 
 int numarNoduriDinArbore(arbore A);
 
@@ -48,6 +48,6 @@ void stergereArboreCuRadacina(arbore& A);
 
 void stergereNodFaraSubarbore(arbore& A, nod *N);
 
-bool existaLinie(pair<dateNod, dateNod> linie);
+bool existaLinie(const pair<dateNod, dateNod>& linie);
 
 bool creareLegatura(nod*& nod1, nod*& nod2);

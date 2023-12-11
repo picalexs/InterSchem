@@ -3,8 +3,8 @@
 #include "functiiNod.h"
 using namespace sf;
 
-void creareSimbol(RenderWindow& window, dateNod date);
+void creareSimbol(RenderWindow& window, const dateNod& date);
 
-void creareSimbolPtArbore(RenderWindow& window, nod* N);
+void creareSimbolPtArbore(RenderWindow& window, const nod* N);
 
 void creareSimbolPtListaArbori(RenderWindow& window);

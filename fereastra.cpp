@@ -30,6 +30,14 @@ void functieDebugging(RenderWindow & window) {
     text4.setFillColor(Color::Black);
     text4.setPosition(820, 0);
     window.draw(text4);
+
+    Vector2i pozMouse=Mouse::getPosition(window);
+    string textPozMouse = "(" + to_string(pozMouse.x) + "," + to_string(pozMouse.y) + ")";
+    Text text5(textPozMouse, font, 16);
+    text5.setFillColor(Color::Black);
+    text5.setPosition(925, 15);
+    window.draw(text5);
+    
 }
 
 void creareFereastra() {

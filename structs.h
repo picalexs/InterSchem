@@ -12,11 +12,11 @@ struct dateNod {
 
 struct nod {
 	dateNod date;
-	nod* st = NULL, * dr = NULL;
+	nod* st = nullptr, * dr = nullptr;
 };
 
 struct arbore {
-	nod* radacina = NULL;
+	nod* radacina = nullptr;
 	int nrNoduri = 0;
 };
 

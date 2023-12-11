@@ -14,7 +14,7 @@ void desenareTriunghi() {
 
 }
 
-void desenareNodStart(RenderWindow& window, dateNod date){
+void desenareNodStart(RenderWindow& window, const dateNod& date){
 	CircleShape shape;
 	shape.setRadius(30);
 	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
@@ -23,7 +23,7 @@ void desenareNodStart(RenderWindow& window, dateNod date){
 	//desenare nod start ca elipsa folosind date.x, date.y si eventual o raza sau poate un colt st, colt dr
 }
 
-void desenareNodStop(RenderWindow& window, dateNod date) {
+void desenareNodStop(RenderWindow& window, const dateNod& date) {
 	CircleShape shape;
 	shape.setRadius(30);
 	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
@@ -33,7 +33,7 @@ void desenareNodStop(RenderWindow& window, dateNod date) {
 	//acelasi lucru ca si pt nod start
 }
 
-void desenareNodAtribuire(RenderWindow& window, dateNod date) {
+void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
 	
 	CircleShape shape;
 	shape.setRadius(30);
@@ -43,7 +43,7 @@ void desenareNodAtribuire(RenderWindow& window, dateNod date) {
 	//desenare nod atribuire -dreptunghi
 }
 
-void desenareNodCitire(RenderWindow& window, dateNod date) {
+void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 	CircleShape shape;
 	shape.setRadius(30);
 	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
@@ -53,7 +53,7 @@ void desenareNodCitire(RenderWindow& window, dateNod date) {
 	//desenare nod citire -trapez cu baza mai mare sus si baza mica jos
 }
 
-void desenareNodAfisare(RenderWindow& window, dateNod date) {
+void desenareNodAfisare(RenderWindow& window, const dateNod& date) {
 	CircleShape shape;
 	shape.setRadius(30);
 	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
@@ -62,7 +62,7 @@ void desenareNodAfisare(RenderWindow& window, dateNod date) {
 	//desenare nod afisare -trapez cu baza mare jos, baza mica sus
 }
 
-void desenareNodDaca(RenderWindow& window, dateNod date) {
+void desenareNodDaca(RenderWindow& window, const dateNod& date) {
 	CircleShape shape;
 	shape.setRadius(30);
 	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
@@ -73,11 +73,11 @@ void desenareNodDaca(RenderWindow& window, dateNod date) {
 
 void desenareLinieIntreSimboluri(RenderWindow& window) {
 	float grosimeLinie = 5;
-	float spatiu = 55;
 	RectangleShape line(Vector2f(0, grosimeLinie));
 	ConvexShape triunghi(3);
 
 	for (auto& linie : listaLinii) {
+		float spatiu = 55;
 		float mijlocXNod1 = linie.first.x;
 		float mijlocYNod1 = linie.first.y;
 		float mijlocXNod2 = linie.second.x;

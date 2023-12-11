@@ -3,8 +3,8 @@
 #include "functiiNod.h"
 using namespace sf;
 
-void logicaCreareSimbol(RenderWindow& window);
+void logicaCreareSimbol(const RenderWindow& window);
 
-void logicaStergereSimbol(RenderWindow& window);
+void logicaStergereSimbol(const RenderWindow& window);
 
 void logicaLegaturaIntreSimboluri(RenderWindow& window);

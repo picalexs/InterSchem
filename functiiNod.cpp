@@ -2,7 +2,7 @@
 #include "verificareZonaSimbol.h"
 #include <vector>
 
-dateNod schimbareDate(int tip, string expresie, int x, int y) {
+dateNod schimbareDate(const int tip, const string& expresie, const int x, const int y) {
 	dateNod date;
 	date.tip = tip;
 	date.expresie = expresie;
@@ -18,14 +18,14 @@ void initializareNod(nod& N) {
 	N.st = nullptr; N.dr = nullptr;
 }
 
-void atribuireNod(nod& N, dateNod date) {
+void atribuireNod(nod& N, const dateNod& date) {
 	N.date.tip = date.tip;
 	N.date.expresie = date.expresie;
 	N.date.x = date.x; N.date.y = date.y;
 	N.st = nullptr; N.dr = nullptr;
 }
 
-bool esteNodNull(nod* N) {
+bool esteNodNull(const nod* N) {
 	return (N == nullptr);
 }
 
@@ -35,13 +35,13 @@ nod* creareNodNull() {
 	return N;
 }
 
-nod* creareNod(dateNod date) {
+nod* creareNod(const dateNod& date) {
 	nod* N = new nod;
 	atribuireNod(*N, date);
 	return N;
 }
 
-void inserareFiu(nod* tata, bool fiu, dateNod date) {
+void inserareFiu(nod* tata, const bool fiu, const dateNod& date) {
 	if (esteNodNull(tata))
 		return;
 	nod* N = creareNod(date);
@@ -58,25 +58,25 @@ void initializareArbore(arbore& A) {
 	A.nrNoduri = 0;
 }
 
-void atribuireArbore(arbore& A, dateNod date) {
+void atribuireArbore(arbore& A, const dateNod& date) {
 	nod* radacinaNoua = creareNod(date);
 	A.radacina = radacinaNoua;
 	A.nrNoduri = 1;
 }
 
-bool esteArboreNull(arbore& A) {
+bool esteArboreNull(const arbore& A) {
 	return (A.radacina == nullptr);
 }
 
-bool esteNodInArbore(nod* nodCautat, nod* radacina) {
+bool esteNodInArbore(nod* nodCautat, const nod* radacina) {
 	if (radacina == nullptr)
-		return 0;
+		return false;
 	if (radacina == nodCautat)
-		return 1;
+		return true;
 	return (esteNodInArbore(nodCautat, radacina->st) || esteNodInArbore(nodCautat, radacina->dr));
 }
 
-nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
+nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date) {
 	if (nodCurent == nullptr)
 		return nullptr;
 	Vector2i pozMouse;
@@ -91,13 +91,13 @@ nod* gasesteNodRecursiv(nod* nodCurent, dateNod date) {
 	return gasesteNodRecursiv(nodCurent->dr, date);
 }
 
-nod* gasesteNodInArbore(arbore A, dateNod date) {
+nod* gasesteNodInArbore(arbore A, const dateNod& date) {
 	if (A.radacina == nullptr)
 		return nullptr;
 	return gasesteNodRecursiv(A.radacina, date);
 }
 
-nod* gasesteNodCuPozMouse(RenderWindow& window, arbore &A) {
+nod* gasesteNodCuPozMouse(const RenderWindow& window, arbore &A) {
 	if (A.radacina == nullptr)
 		return nullptr;
 	Vector2i pozitieMouse = Mouse::getPosition(window);
@@ -107,32 +107,36 @@ nod* gasesteNodCuPozMouse(RenderWindow& window, arbore &A) {
 	return gasesteNodRecursiv(A.radacina, nodPePozitieMouse);
 }
 
-nod* gasesteNodListaCuPozMouse(RenderWindow &window) {
+nod* gasesteNodListaCuPozMouse(const RenderWindow& window)
+{
 	Vector2i pozitieMouse = Mouse::getPosition(window);
 	dateNod nodPePozitieMouse;
 	nodPePozitieMouse.x = pozitieMouse.x;
 	nodPePozitieMouse.y = pozitieMouse.y;
 
-	for (auto& A : listaArbori) {
+	for (auto& A : listaArbori)
+	{
 		nod* nodGasit = gasesteNodInArbore(A, nodPePozitieMouse);
-		if (nodGasit != nullptr) {
+		if (nodGasit != nullptr)
+		{
 			return nodGasit;
 		}
 	}
 	return nullptr;
 }
 
-nod* gasesteNodInListaArbori(dateNod date) {
+nod* gasesteNodInListaArbori(const dateNod& date) {
 
-	for (size_t i = 0; i < listaArbori.size(); ++i) {
-		nod* nodGasit = gasesteNodInArbore(listaArbori[i], date);
+	for (auto A : listaArbori)
+	{
+		nod* nodGasit = gasesteNodInArbore(A, date);
 		if (nodGasit != nullptr)
 			return nodGasit;
 	}
 	return nullptr;
 }
 
-int numaraNoduri(nod* N) {
+int numaraNoduri(const nod* N) {
 	if (N == nullptr)
 		return 0;
 	return 1 + numaraNoduri(N->st) + numaraNoduri(N->dr);
@@ -161,7 +165,7 @@ void stergereIntregArbore(nod*& N) {
 	if (poz == -1)
 		return;
 	
-	//stergere ceva nod listaArbori[i]
+	//nu uita de stergere ceva nod listaArbori[i]...
 	stergereIntregArbore(N->st);
 	stergereIntregArbore(N->dr);
 
@@ -171,12 +175,13 @@ void stergereIntregArbore(nod*& N) {
 
 void stergereArboreCuRadacina(arbore& A) {
 	if (A.radacina == nullptr)
-		throw("A.radacina este null!");
+		return;
 	stergereIntregArbore(A.radacina);
 	initializareArbore(A);
 }
 
-void stergereDinListaArbori(nod *N) {
+void stergereDinListaArbori(nod* N)
+{
 	for (int i = 0; i < listaArbori.size();) {
 		if (listaArbori[i].radacina == N || listaArbori[i].radacina==nullptr) {
 			listaArbori.erase(listaArbori.begin() + i);
@@ -220,13 +225,15 @@ void stergereNodFaraSubarbore(arbore& A, nod* N) {
 	stergereIntregArbore(N);
 }
 
-bool existaLinie(pair<dateNod, dateNod> linie) {
-	for (int i = 0; i < listaLinii.size(); i++)
-		if (linie.first.x == listaLinii[i].first.x
-			&& linie.first.y == listaLinii[i].first.y
-			&& linie.second.x == listaLinii[i].second.x
-			&& linie.second.y == listaLinii[i].second.y)
+bool existaLinie(const pair<dateNod, dateNod>& linie) {
+	for (const auto& L : listaLinii)
+	{
+		if (linie.first.x == L.first.x
+			&& linie.first.y == L.first.y
+			&& linie.second.x == L.second.x
+			&& linie.second.y == L.second.y)
 			return true;
+	}
 	return false;
 }
 
@@ -252,13 +259,14 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 	if (poz == -1)
 		return false;
 
-	for (int i = 0; i < listaArbori.size(); i++)
-		if (esteNodInArbore(nod1, listaArbori[i].radacina)) {
-			if (nod2 != listaArbori[i].radacina && esteNodInArbore(nod2, listaArbori[i].radacina))
+	for (auto& i : listaArbori)
+		if (esteNodInArbore(nod1, i.radacina)) {
+			if (esteNodInArbore(nod2, i.radacina))//nod2 != listaArbori[i].radacina && 
 				return false;
 
 			listaLinii.push_back(linie1);
-			if (nod1->date.tip == 5) {
+			if (nod1->date.tip == 5)
+			{
 				if (nod1->st == nullptr)
 					nod1->st = nod2;
 				else
@@ -267,7 +275,7 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 			else {
 				nod1->st = nod2;
 			}
-			listaArbori[i].nrNoduri = numaraNoduri(listaArbori[i].radacina);
+			i.nrNoduri = numaraNoduri(i.radacina);
 			stergereDinListaArbori(nod2);
 			
 			return true;
