@@ -134,7 +134,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="creareSimboluri.cpp" />
+    <ClCompile Include="evaluareExpresie.cpp" />
+    <ClCompile Include="exemplu.cpp" />
     <ClCompile Include="fereastra.cpp" />
+    <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,7 +148,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="creareSimboluri.h" />
+    <ClInclude Include="evaluareExpresie.h" />
+    <ClInclude Include="exemplu.h" />
     <ClInclude Include="fereastra.h" />
+    <ClInclude Include="functiiMatematice.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
     <ClInclude Include="logicaSimboluri.h" />
