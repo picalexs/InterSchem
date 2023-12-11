@@ -2,7 +2,7 @@
 #include <cmath>
 #define PI 3.14159265358979323846
 
-void desenareLinie(RenderWindow& window, dateNod date) {
+void desenareLinie(RenderWindow& window, const dateNod& date) {
 	sf::RectangleShape line(sf::Vector2f(500, 4));
 	//line.setPosition(200, 400);
 	line.setPosition(date.x/2, date.y/2);
@@ -10,7 +10,7 @@ void desenareLinie(RenderWindow& window, dateNod date) {
 	window.draw(line);
 }
 
-void desenareDreptunghi(RenderWindow& window, dateNod date) {
+void desenareDreptunghi(RenderWindow& window, const dateNod& date) {
 	sf::RectangleShape rectangle(sf::Vector2f(500, 4));
 	rectangle.setPosition(date.x / 2, date.y / 2);
 	rectangle.setFillColor(Color::Black);
@@ -74,7 +74,7 @@ void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
 	//desenare nod atribuire -dreptunghi
 }
 
-void desenareNodCitire(RenderWindow& window, dateNod date) {
+void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 	sf::ConvexShape convex;
 	convex.setPosition(date.x, date.y);
 	convex.setPointCount(4);
@@ -87,7 +87,7 @@ void desenareNodCitire(RenderWindow& window, dateNod date) {
 	//desenare nod citire -trapez cu baza mai mare sus si baza mica jos
 }
 
-void desenareNodAfisare(RenderWindow& window, dateNod date) {
+void desenareNodAfisare(RenderWindow& window, const dateNod& date) {
 	sf::ConvexShape convex;
 	convex.setPosition(date.x, date.y);
 	convex.setPointCount(4);
@@ -100,7 +100,7 @@ void desenareNodAfisare(RenderWindow& window, dateNod date) {
 	//desenare nod afisare -trapez cu baza mare jos, baza mica sus
 }
 
-void desenareNodDaca(RenderWindow& window, dateNod date) {
+void desenareNodDaca(RenderWindow& window, const dateNod& date) {
 	sf::CircleShape triangle;
 	triangle.setRadius(75);
 	triangle.setPointCount(3);
