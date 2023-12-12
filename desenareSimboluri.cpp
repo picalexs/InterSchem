@@ -17,25 +17,55 @@ void desenareDreptunghi(RenderWindow& window, const dateNod& date) {
 	window.draw(rectangle);
 }
 
-void desenareTriunghi() {
-
+void desenareTriunghi(RenderWindow& window, const dateNod& date) {
+	sf::CircleShape triangle;
+	triangle.setRadius(75);
+	triangle.setPointCount(3);
+	window.draw(triangle);
+	triangle.setPosition(date.x - 75, date.y);
+	triangle.setFillColor(Color::Yellow);
+	window.draw(triangle);
 }
 
 void desenareNodStart(RenderWindow& window, const dateNod& date){
-	CircleShape shape;
-	shape.setRadius(30);
-	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
-	shape.setFillColor(Color::Blue);
-	window.draw(shape);
+	float radius_x = 65;
+	float radius_y = 25;
+	unsigned short quality = 70;
+
+	sf::ConvexShape ellipse;
+	ellipse.setPointCount(quality);
+
+	for (unsigned short i = 0; i < quality; ++i) {
+		float rad = (360 / quality * i) / (360 / PI / 2);
+		float x = cos(rad) * radius_x;
+		float y = sin(rad) * radius_y;
+
+		ellipse.setPoint(i, sf::Vector2f(x, y));
+	};
+	ellipse.setPosition(date.x, date.y);
+	ellipse.setFillColor(Color::Blue);
+	window.draw(ellipse);
 	//desenare nod start ca elipsa folosind date.x, date.y si eventual o raza sau poate un colt st, colt dr
 }
 
 void desenareNodStop(RenderWindow& window, const dateNod& date) {
-	CircleShape shape;
-	shape.setRadius(30);
-	shape.setPosition(date.x - shape.getRadius(), date.y - shape.getRadius());
-	shape.setFillColor(Color::Blue);
-	window.draw(shape);
+	float radius_x = 65;
+	float radius_y = 25;
+	unsigned short quality = 70;
+
+	sf::ConvexShape ellipse;
+	ellipse.setPointCount(quality);
+
+	for (unsigned short i = 0; i < quality; ++i) {
+		float rad = (360 / quality * i) / (360 / PI / 2);
+		float x = cos(rad) * radius_x;
+		float y = sin(rad) * radius_y;
+
+		ellipse.setPoint(i, sf::Vector2f(x, y));
+	};
+	ellipse.setPosition(date.x, date.y);
+	ellipse.setFillColor(Color::Blue);
+	window.draw(ellipse);
 	//desenare nod stop
 	//acelasi lucru ca si pt nod start
 }
@@ -43,43 +73,19 @@ void desenareNodStop(RenderWindow& window, const dateNod& date) {
 void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
 	
 	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
-	rectangle.setOrigin(date.x / 2, date.y / 2);
-	rectangle.setPosition(date.x - 100, date.y);
+	//rectangle.setOrigin(date.x / 2, date.y / 2);
+	rectangle.setPosition(date.x - 75, date.y);
 	rectangle.setFillColor(Color::Red);
 	window.draw(rectangle);
-	Event event;
-	string s="test123  sjdjdj";
-	
-	Font font;
-	font.loadFromFile("Arial.ttf");
-	Text expresieTmp(s, font, 16);
-	expresieTmp.setFillColor(sf::Color(128, 128, 0));
-	expresieTmp.setRotation(90.f);
-	expresieTmp.setScale(2.f, 2.f);
-	expresieTmp.setPosition(rectangle.getOrigin().x, rectangle.getOrigin().y);
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::TextEntered)
-			{
-				if (event.KeyPressed == Keyboard::BackSpace && s.size() != 0) {
-					s.pop_back();
-					window.draw(expresieTmp);
-				}
-				else
-					if (event.text.unicode < 128)
-						s.push_back((char)event.text.unicode);
-				window.draw(expresieTmp);
-			}
-		}
 	//desenare nod atribuire -dreptunghi
 }
 
 void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 	sf::ConvexShape convex;
-	convex.setPosition(date.x, date.y);
+	convex.setPosition(date.x-50, date.y);
 	convex.setPointCount(4);
 	convex.setPoint(0, sf::Vector2f(0, 0));
-	convex.setPoint(1, sf::Vector2f(90, 0));
+	convex.setPoint(1, sf::Vector2f(100, 0));
 	convex.setPoint(2, sf::Vector2f(75, 90));
 	convex.setPoint(3, sf::Vector2f(25, 90));
 	convex.setFillColor(Color::Magenta);
@@ -89,10 +95,10 @@ void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 
 void desenareNodAfisare(RenderWindow& window, const dateNod& date) {
 	sf::ConvexShape convex;
-	convex.setPosition(date.x, date.y);
+	convex.setPosition(date.x-50, date.y);
 	convex.setPointCount(4);
 	convex.setPoint(0, sf::Vector2f(0, 0));
-	convex.setPoint(1, sf::Vector2f(90, 0));
+	convex.setPoint(1, sf::Vector2f(100, 0));
 	convex.setPoint(2, sf::Vector2f(75, 90));
 	convex.setPoint(3, sf::Vector2f(25, 90));
 	convex.setFillColor(Color::Green);
@@ -105,7 +111,7 @@ void desenareNodDaca(RenderWindow& window, const dateNod& date) {
 	triangle.setRadius(75);
 	triangle.setPointCount(3);
 	window.draw(triangle);
-	triangle.setPosition(date.x-50, date.y);
+	triangle.setPosition(date.x-75, date.y);
 	triangle.setFillColor(Color::Yellow);
 	window.draw(triangle);
 	//desenare nod daca - triunghi

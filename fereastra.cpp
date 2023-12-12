@@ -39,17 +39,54 @@ void functieDebugging(RenderWindow & window) {
     window.draw(text5);
     
 }
-
+/*int DubluClick()
+{
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            else if (event.type == sf::Event::MouseButtonReleased)
+            {
+                if (event.mouseButton.button == sf::Mouse::Left && event.mouseButton.clickCount == 2)
+                {
+                    return 1
+                }
+            }
+        }
+    }
+}*/
 void creareFereastra() {
 
     RenderWindow window(VideoMode(1000, 800), "Interschem");
     window.setFramerateLimit(45);
-
+    int ok = 0;
+    sf::Clock clickClock;
+    sf::Time timeBetweenClicks;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+                if (clickClock.getElapsedTime().asSeconds() < 1.0f) {
+                    ok = 1;
+
+                    // Reset the clock for the next click
+                    clickClock.restart();
+                    cout << 1;
+
+                }
+                else {
+                    // Reset the clock for the first click
+                    clickClock.restart();
+                }
+            }
         }
 
         if (Keyboard::isKeyPressed(Keyboard::R))
@@ -58,7 +95,6 @@ void creareFereastra() {
             listaLinii.clear();
 
         }
-
         window.clear(sf::Color::White);
 
         logicaCreareSimbol(window);
@@ -67,9 +103,11 @@ void creareFereastra() {
 
         creareSimbolPtListaArbori(window);
         desenareLinieIntreSimboluri(window);
-
         functieDebugging(window);
-
         window.display();
     }
+ 
+
+    //
+
 }
