@@ -31,14 +31,19 @@ void functieDebugging(RenderWindow& window)
 
 	Text text4("Resetaza lista cu 'Del'.", font, 16);
 	text4.setFillColor(Color::Black);
-	text4.setPosition(810, 0);
+	text4.setPosition(840, 0);
 	window.draw(text4);
+
+	Text text6("Legatura cu RMB", font, 16);
+	text6.setFillColor(Color::Black);
+	text6.setPosition(870, 15);
+	window.draw(text6);
 
 	Vector2i pozMouse = Mouse::getPosition(window);
 	string textPozMouse = "(" + to_string(pozMouse.x) + "," + to_string(pozMouse.y) + ")";
 	Text text5(textPozMouse, font, 16);
 	text5.setFillColor(Color::Black);
-	text5.setPosition(925, 15);
+	text5.setPosition(925, 30);
 	window.draw(text5);
 }
 
