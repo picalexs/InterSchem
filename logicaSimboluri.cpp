@@ -80,7 +80,7 @@ nod* nod2 = nullptr;
 
 void logicaLegaturaIntreSimboluri(RenderWindow& window)
 {
-	if (Mouse::isButtonPressed(Mouse::Left))
+	if (Mouse::isButtonPressed(Mouse::Right))
 	{
 		if (nod1 == nullptr)
 		{
@@ -93,8 +93,11 @@ void logicaLegaturaIntreSimboluri(RenderWindow& window)
 		}
 		return;
 	}
-	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
+	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr) {
+		nod1 = nullptr;
+		nod2 = nullptr;
 		return;
+	}
 	if (creareLegatura(nod1, nod2))
 		cout << "Legatura: tip= " << nod1->date.tip << "->" << nod2->date.tip << ", (" << nod1->date.x << ',' <<
 		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")" << endl;

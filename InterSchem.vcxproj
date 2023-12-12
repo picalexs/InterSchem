@@ -133,7 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="citireExpresie.cpp" />
+    <ClCompile Include="functiiExpresie.cpp" />
     <ClCompile Include="creareSimboluri.cpp" />
     <ClCompile Include="evaluareExpresie.cpp" />
     <ClCompile Include="exemplu.cpp" />
@@ -148,7 +148,7 @@
     <ClCompile Include="verificareZonaSimbol.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="citireExpresie.h" />
+    <ClInclude Include="functiiExpresie.h" />
     <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="evaluareExpresie.h" />
     <ClInclude Include="exemplu.h" />

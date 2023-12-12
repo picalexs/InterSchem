@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    //generareArbore();
+    generareArbore();
     creareFereastra();
     
     return 0;

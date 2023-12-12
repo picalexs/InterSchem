@@ -2,12 +2,12 @@
 #include "desenareSimboluri.h"
 using namespace std;
 
-void creareSimbolStart(RenderWindow& window , const dateNod& date) {
-    desenareNodStart(window,date);
+void creareSimbolStart(RenderWindow& window, const Font& font, const dateNod& date) {
+    desenareNodStart(window, font,date);
 }
 
-void creareSimbolStop(RenderWindow& window, const dateNod& date) {
-    desenareNodStop(window,date);
+void creareSimbolStop(RenderWindow& window,const Font &font, const dateNod& date) {
+    desenareNodStop(window,font,date);
 }
 
 void creareSimbolAtribuire(RenderWindow& window, const dateNod& date) {
@@ -26,12 +26,12 @@ void creareSimbolDaca(RenderWindow& window, const dateNod& date) {
     desenareNodDaca(window,date);
 }
 
-void creareSimbol(RenderWindow& window, const dateNod& date) {
+void creareSimbol(RenderWindow& window, const Font& font, const dateNod& date) {
     switch (date.tip) {
     case 0:
-        creareSimbolStart(window, date); break;
+        creareSimbolStart(window, font, date); break;
     case 1:
-        creareSimbolStop(window, date); break;
+        creareSimbolStop(window,font, date); break;
     case 2:
         creareSimbolAtribuire(window, date); break;
     case 3:
@@ -45,19 +45,19 @@ void creareSimbol(RenderWindow& window, const dateNod& date) {
     }
 }
 
-void creareSimbolPtArbore(RenderWindow& window, const nod *N) {
+void creareSimbolPtArbore(RenderWindow& window, const Font& font, const nod *N) {
     if (N == nullptr)
         return;
-    creareSimbol(window, N->date);
-    creareSimbolPtArbore(window, N->st);
-    creareSimbolPtArbore(window, N->dr);
+    creareSimbol(window,font, N->date);
+    creareSimbolPtArbore(window,font, N->st);
+    creareSimbolPtArbore(window,font, N->dr);
 }
 
-void creareSimbolPtListaArbori(RenderWindow& window) {
+void creareSimbolPtListaArbori(RenderWindow& window, const Font& font) {
     for (const auto& A : listaArbori)
     {
         if (A.radacina == nullptr)
             continue;
-        creareSimbolPtArbore(window, A.radacina);
+        creareSimbolPtArbore(window,font, A.radacina);
     }
 }

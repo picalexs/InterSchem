@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void afisareTextNod(RenderWindow& window, nod* nodCurent);
+void afisareTextNod(RenderWindow& window,const Font &font, const nod* nodCurent);
 
-void afisareTextLista(RenderWindow& window);
+void afisareTextLista(RenderWindow& window,const Font &font);
 
 string citire(const sf::Event& event);
