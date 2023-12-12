@@ -67,10 +67,11 @@ void creareFereastra() {
     RenderWindow window(VideoMode(1000, 800), "Interschem");
     window.setFramerateLimit(45);
     nod* nodDeGasit=nullptr;
-    int ok = 0;
+    string expresieDeCitit;
     bool citireExpresie=false;
     sf::Clock clickClock;
     sf::Time timeBetweenClicks;
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -79,17 +80,23 @@ void creareFereastra() {
             }
             else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                 if (clickClock.getElapsedTime().asSeconds() < 1.0f) {
-                    ok = 1;
-                    cout << 1;
                     nodDeGasit = gasesteNodListaCuPozMouse(window);
                     if (nodDeGasit != nullptr)
+                    {
                         citireExpresie = true;
+                        cout << "Fac dublu click!!!" << endl;
+                    }
 
                 }
                 else {
                     clickClock.restart();
-                    ok = 0;
                 }
+            }
+            if (citireExpresie == true)
+            {
+                expresieDeCitit += citire(event);
+                if (nodDeGasit != nullptr)
+                     nodDeGasit->date.expresie = expresieDeCitit;
             }
         }
 
@@ -99,56 +106,23 @@ void creareFereastra() {
             listaLinii.clear();
 
         }
-        if (Keyboard::isKeyPressed(Keyboard::Enter))
-            citireExpresie = false;
-        /*if (citireExpresie == true)
+        if (Keyboard::isKeyPressed(Keyboard::Enter) && citireExpresie)
         {
-            string s;
-            s=citire(window);
-            cout << s;
-            if(nodDeGasit!=nullptr)
-                nodDeGasit->date.expresie = s;
-        }*/
-        string s;
-        s = citire(window);
-        cout << s;
+            citireExpresie = false;
+            cout << expresieDeCitit << endl;
+            expresieDeCitit.clear();
+            cout << "stop citire"<<endl;
+        }
+
         window.clear(sf::Color::White);
 
         logicaCreareSimbol(window);
         logicaStergereSimbol(window);
         logicaLegaturaIntreSimboluri(window);
 
-
-        /*string s;
-        sf::Font font;
-        if (!font.loadFromFile("arial.ttf")) {
-            std::cerr << "Eroare la incarcarea fontului.\n";
-        }
-        sf::Text text("", font, 24);
-        text.setFillColor(sf::Color::Black);
-        if (ok == 1)
-        {
-            sf::Event event;  // Move the declaration inside the event loop
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window.close();
-                }
-                else if (event.type == sf::Event::TextEntered) {
-                    if (event.text.unicode < 128 && event.text.unicode != 8) {
-                        text.setString(text.getString() + static_cast<char>(event.text.unicode));
-                    }
-                    else if (event.text.unicode == 8 && !text.getString().isEmpty()) {
-                        std::string s = text.getString();
-                        s.pop_back();
-                        text.setString(s);
-                    }
-                }
-            }
-        }
-        window.draw(text);*/
-
         creareSimbolPtListaArbori(window);
         desenareLinieIntreSimboluri(window);
+        afisareTextLista(window);
         functieDebugging(window);
         window.display();
     }

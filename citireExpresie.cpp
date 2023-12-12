@@ -1,35 +1,42 @@
 #include "citireExpresie.h"
 #include "fereastra.h"
-///string s;
-string citire(sf:: RenderWindow& window)
+
+void afisareTextNod(RenderWindow& window, nod* nodCurent) {
+	if (nodCurent == nullptr)
+		return;
+	///afisez pe ecran cu text font nodCurent->date.x  nodCurent->date.y
+	Font font;
+	font.loadFromFile("Arial.ttf");
+	Text text1(nodCurent->date.expresie, font, 16);
+	text1.setFillColor(Color::Black);
+	text1.setPosition(nodCurent->date.x, nodCurent->date.y);
+	window.draw(text1);
+	afisareTextNod(window, nodCurent->st);
+	afisareTextNod(window, nodCurent->dr);
+}
+
+
+void afisareTextLista(RenderWindow& window)
+{
+	for (auto A : listaArbori)
+	{
+		if (A.radacina == nullptr)
+			return;
+		return afisareTextNod(window, A.radacina);
+	}
+}
+
+
+
+string citire(const sf::Event& event)
 {
     string s;
-    sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
-        std::cerr << "Eroare la incarcarea fontului.\n";
-    }
-    sf::Text text("", font, 24);
-    text.setFillColor(sf::Color::Black);
-    
-        sf::Event event;  // Move the declaration inside the event loop
-        while (window.isOpen()) {
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) 
-                    window.close();
-                else
-                if (event.type == sf::Event::TextEntered) {
-                    if (event.text.unicode < 128 && event.text.unicode != 8) {
-                        text.setString(text.getString() + static_cast<char>(event.text.unicode));
-                        std::cout << "ASCII character typed: " << static_cast<char>(event.text.unicode) << std::endl;
-                    }
-                    else if (event.text.unicode == 8 && !text.getString().isEmpty()) {
-                        std::string s = text.getString();
-                        s.pop_back();
-                        text.setString(s);
-                    }
-                }
-            }
+
+    if (event.type == sf::Event::TextEntered) {
+        if (event.text.unicode < 128 && event.text.unicode != 8) {
+            s = static_cast<char>(event.text.unicode);
+            ///std::cout << "ASCII character typed: " << static_cast<char>(event.text.unicode) << std::endl;
         }
-    ///window.draw(text);
+    }
     return s;
 }

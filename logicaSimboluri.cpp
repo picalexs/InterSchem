@@ -14,7 +14,7 @@ void logicaCreareSimbol(const RenderWindow& window)
 			if (!esteTastaApasata[static_cast<Keyboard::Key>(key)])
 			{
 				const Vector2i pozitieMouse = Mouse::getPosition(window);
-				dateNod date = schimbareDate(key - Keyboard::Num1, "expresie de test", pozitieMouse.x, pozitieMouse.y);
+				dateNod date = schimbareDate(key - Keyboard::Num1, "", pozitieMouse.x, pozitieMouse.y);
 				cout << "Creat: tip= " << date.tip << ", (" << date.x << ',' << date.y << ")" << endl;
 
 				arbore ArboreNou;

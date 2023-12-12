@@ -136,6 +136,7 @@ nod* gasesteNodInListaArbori(const dateNod& date) {
 	return nullptr;
 }
 
+
 int numaraNoduri(const nod* N) {
 	if (N == nullptr)
 		return 0;
@@ -282,3 +283,4 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 		}
 	return false;
 }
+
