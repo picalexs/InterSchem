@@ -31,21 +31,21 @@ vector<atom> atomizare(const string& expresie)
 		{
 			if (isdigit(ch) || ch == '.')
 			{
-				atomCurent += ch;
+				atomCurent += ch;//daca e nr concatenam cifrele
 			}
 			else
 			{
-				if (!atomCurent.empty() && esteFunctie(atomCurent))
+				if (!atomCurent.empty() && esteFunctie(atomCurent))//FUNCTIE
 				{
 					atoms.push_back({TipAtom::FUNCTIE, atomCurent});
 					atomCurent.clear();
 				}
-				else if (!atomCurent.empty() && variabile.find(atomCurent) != variabile.end())
+				else if (!atomCurent.empty() && esteVariabila(atomCurent))//VARIABILA
 				{
 					atoms.push_back({TipAtom::VARIABILA, atomCurent});
 					atomCurent.clear();
 				}
-				if (esteOperator(ch))
+				if (esteOperator(ch))//OPERATOR
 				{
 					if (!atomCurent.empty())
 					{
@@ -54,7 +54,7 @@ vector<atom> atomizare(const string& expresie)
 					}
 					atoms.push_back({TipAtom::OPERATOR, string(1, ch)});
 				}
-				else if (ch == '(' || ch == ')')
+				else if (ch == '(' || ch == ')')//PARANTEZA
 				{
 					if (!atomCurent.empty())
 					{
@@ -63,7 +63,7 @@ vector<atom> atomizare(const string& expresie)
 					}
 					atoms.push_back({TipAtom::PARANTEZA, string(1, ch)});
 				}
-				else
+				else//SI...(N), Varia...(bila), C..(os)
 				{
 					atomCurent += ch;
 				}
@@ -73,15 +73,15 @@ vector<atom> atomizare(const string& expresie)
 		{
 			if (!atomCurent.empty())
 			{
-				if (esteFunctie(atomCurent))
+				if (esteFunctie(atomCurent))//FUNCTIE
 				{
 					atoms.push_back({TipAtom::FUNCTIE, atomCurent});
 				}
-				else if (variabile.find(atomCurent) != variabile.end())
+				else if (esteVariabila(atomCurent))//VARIABILA
 				{
 					atoms.push_back({TipAtom::VARIABILA, atomCurent});
 				}
-				else
+				else//NUMAR
 				{
 					atoms.push_back({TipAtom::NUMAR, atomCurent});
 				}
@@ -90,13 +90,13 @@ vector<atom> atomizare(const string& expresie)
 		}
 	}
 
-	if (!atomCurent.empty())
+	if (!atomCurent.empty())//REVERIFICARE pt ultimul atom
 	{
 		if (esteFunctie(atomCurent))
 		{
 			atoms.push_back({TipAtom::FUNCTIE, atomCurent});
 		}
-		else if (variabile.find(atomCurent) != variabile.end())
+		else if (esteVariabila(atomCurent))
 		{
 			atoms.push_back({TipAtom::VARIABILA, atomCurent});
 		}
@@ -121,7 +121,6 @@ void evaluareExpresie()
 
 	for (const auto& token : atom)
 	{
-		cout << "tip ";
 		switch (token.tip)
 		{
 		case TipAtom::NUMAR:

@@ -298,3 +298,7 @@ double obtineValoareVariabila(const string& nume) {
 		return 0;
 	}
 }
+
+bool esteVariabila(const string& token) {
+	return variabile.find(token) != variabile.end();
+}
