@@ -3,4 +3,4 @@
 #include <iostream>
 using namespace std;
 
-int Prioritate(string c);
+void evaluareExpresie();

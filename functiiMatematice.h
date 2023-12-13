@@ -1,35 +1,41 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
-bool DifInf(float x);
+bool DifInf(double x);
 
-float Logaritm(float x);
+double Logaritm(double x);
 
-float Putere(float x, float y);
+double Putere(double x, double y);
 
-float Inmultit(float x, float y);
+double Inmultit(double x, double y);
 
-bool Egal(float x, float y);
+bool Egal(double x, double y);
 
-bool Diferit(float x, float y);
+bool Diferit(double x, double y);
 
-bool MaiMic(float x, float y);
+bool MaiMic(double x, double y);
 
-bool MaiMare(float x, float y);
+bool MaiMare(double x, double y);
 
-float Plus(float x, float y);
+double Plus(double x, double y);
 
-float Minus(float x, float y);
+double Minus(double x, double y);
 
-float Impartit(float x, float y);
+double Impartit(double x, double y);
 
-float Sinus(float x);
+double Sinus(double x);
 
-float Cosinus(float x);
+double Cosinus(double x);
 
-float Tangenta(float x);
+double Tangenta(double x);
 
-float Cotangenta(float x);
+double Cotangenta(double x);
 
-float Modul(float x);
+double Modul(double x);
 
-float Radical(float x);
+double Radical(double x);
+
+bool esteOperator(char ch);
+
+bool esteFunctie(const string& token);

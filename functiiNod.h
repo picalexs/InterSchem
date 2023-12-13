@@ -51,3 +51,7 @@ void stergereNodFaraSubarbore(arbore& A, nod *N);
 bool existaLinie(const pair<dateNod, dateNod>& linie);
 
 bool creareLegatura(nod*& nod1, nod*& nod2);
+
+void seteazaVariabila(const string& nume, double valoare);
+
+double obtineValoareVariabila(const string& nume);

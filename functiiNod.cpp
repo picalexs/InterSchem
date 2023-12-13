@@ -284,3 +284,17 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 	return false;
 }
 
+void seteazaVariabila(const string& nume, double valoare) {
+	variabile[nume] = valoare;
+}
+
+double obtineValoareVariabila(const string& nume) {
+	auto it = variabile.find(nume);
+	if (it != variabile.end()) {
+		return it->second;
+	}
+	else {
+		cout << "Variabila '" << nume << "' nu a fost gasita." << endl;
+		return 0;
+	}
+}

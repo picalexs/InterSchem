@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 using namespace std;
 
 struct dateNod {
@@ -25,3 +26,4 @@ extern vector<string> numeNoduri;
 extern vector<arbore> listaArbori;
 extern vector<pair<dateNod, dateNod>> listaLinii;
 extern vector<dateNod> expresii;
+extern unordered_map<string, double> variabile;
