@@ -142,7 +142,7 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 		float lng = sqrt(x * x + y * y);
 		float unghi = atan2(y, x) * 180 / (PI);
 
-		line.setSize(Vector2f(lng-spatiu, grosimeLinie));
+		line.setSize(Vector2f(lng, grosimeLinie));
 		line.setPosition(mijlocXNod1, mijlocYNod1);
 		line.setRotation(unghi);
 		line.setFillColor(Color::Black);
@@ -155,7 +155,7 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 		triunghi.setPoint(2, sf::Vector2f(0, inaltimeTriunghi / 2));
 		triunghi.setFillColor(sf::Color::Black);
 
-		triunghi.setOrigin(spatiu , -grosimeLinie/2);
+		triunghi.setOrigin( 15, -grosimeLinie/2);
 		triunghi.setPosition(mijlocXNod2, mijlocYNod2);
 		triunghi.setRotation(unghi);
 		window.draw(triunghi);
