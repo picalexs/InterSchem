@@ -39,3 +39,7 @@ double Radical(double x);
 bool esteOperator(char ch);
 
 bool esteFunctie(const string& token);
+
+bool esteCifra(char token);
+
+bool esteNumar(const string& token);

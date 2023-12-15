@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 
 #define infinit FLT_MAX
 #define epsi 0.0001
@@ -118,9 +119,33 @@ double Radical(double x)
 }
 
 bool esteOperator(char ch) {
+    //change "" with '' bellow
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^';
 }
 
 bool esteFunctie(const string& token) {
     return token == "sin" || token == "cos" || token == "ln" || token == "tg" || token == "ctg";
+}
+
+bool esteCifra(char token) {
+    return token == '0' || token=='1' || token=='2' || token=='3' || token=='4' || token=='5' || token=='6' || token=='7' || token=='8' || token=='9';
+}
+
+bool esteNumar(const string& token)
+{
+    int nrPuncte = 0;
+    if(token.empty())
+		return false;
+    if (token[0] != '-' && !esteCifra(token[0]))
+        return false;
+    for (int i = 1; i < token.size(); i++) {
+        if (token[i] == '.') {
+            nrPuncte++;
+            if(nrPuncte>1)
+				return false;
+        }
+        else if (!esteCifra(token[i]))
+            return false;
+    }
+    return true;
 }
