@@ -110,7 +110,7 @@ void creareFereastra()
 
 		logicaCreareSimbol(window);
 		logicaStergereSimbol(window);
-		//logicaLegaturaIntreSimboluri(window);
+		logicaLegaturaIntreSimboluri(window);
 
 		creareSimbolPtListaArbori(window, font);
 
