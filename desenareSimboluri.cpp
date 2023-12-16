@@ -1,4 +1,5 @@
 #include "desenareSimboluri.h"
+#include "functiiNod.h"
 #include <cmath>
 #define PI 3.14159265358979323846
 
@@ -80,7 +81,22 @@ void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
 	
 	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
 	rectangle.setPosition(date.x - 75, date.y);
-	rectangle.setFillColor(Color(247	,218,100));
+	rectangle.setFillColor(Color(247, 218, 100));
+	
+	/*sf::Vector2i pozMouse = sf::Mouse::getPosition();
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+
+		rectangle.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+		date.x = pozMouse.x;
+		date.y = pozMouse.y;
+	}
+	else
+	{
+		//date.x = rectangle.getPosition();
+		//date.y = rectangle.getPosition();
+		rectangle.setPosition(date.x, date.y);
+	}*/
 	window.draw(rectangle);
 }
 
@@ -162,3 +178,23 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 	}
 }
 
+void mutareForma(RenderWindow& window)
+{
+	sf::Vector2i pozMouse = sf::Mouse::getPosition();
+	dateNod date;
+	nod* nodDeGasit = nullptr;
+	nodDeGasit = gasesteNodListaCuPozMouse(window);
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if(nodDeGasit != nullptr)
+	{	
+		nodDeGasit->date.x = pozMouse.x;
+		nodDeGasit->date.y = pozMouse.y;
+		cout << "Mut?";
+	}
+	/*else
+	{
+		//date.x = rectangle.getPosition();
+		//date.y = rectangle.getPosition();
+		///rectangle.setPosition(date.x, date.y);
+	}*/
+}

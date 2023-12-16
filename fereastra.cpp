@@ -113,6 +113,9 @@ void creareFereastra()
 		logicaLegaturaIntreSimboluri(window);
 
 		creareSimbolPtListaArbori(window, font);
+
+		mutareForma(window);
+
 		desenareLinieIntreSimboluri(window);
 		afisareTextLista(window,font);
 		functieDebugging(window);
