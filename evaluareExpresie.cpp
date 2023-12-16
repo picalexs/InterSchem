@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <stack>
+using namespace std;
 
 enum class TipAtom
 {
@@ -28,7 +29,7 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 	int parantezeDeschise = 0;
 	bool esteCazRau = false;
 
-	for (size_t i = 0; i < atomi.size(); ++i)
+	for (int i = 0; i < atomi.size(); ++i)
 	{
 		switch (atomi[i].tip)
 		{
@@ -69,21 +70,29 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			break;
 		case TipAtom::OPERATOR:
 			// Verificam daca operatorul este intre doi atomi corespunzatori
-			if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1)
+			if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1) {
 				esteCazRau = true;
-			else if (i > 0 && atomi[i - 1].val == "(" && ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].
-				val == ")"))
+				//daca avem un op. pe prima pozitie si nu e unar sau avem unul pe ultima pozitie, atunci nu e bine
+			}
+			else if (i > 0 && atomi[i - 1].val == "("
+				&& ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].val == ")")) {
 				esteCazRau = true;
-			else if (i > 0 && atomi[i - 1].tip != TipAtom::NUMAR && atomi[i - 1].tip != TipAtom::VARIABILA && atomi[i -
-				1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA)
+				//daca avem un op. dupa '(' si e diferit de +,- sau urmeaza o paranteza inchisa dupa op., atunci nu e bine
+			}
+			else if (i > 0 && atomi[i - 1].tip != TipAtom::NUMAR && atomi[i - 1].tip != TipAtom::VARIABILA
+				&& atomi[i - 1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA) {
 				esteCazRau = true;
-			else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip !=
-				TipAtom::VARIABILA && atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(")
+				//daca nu avem un nr,var,fct sau '(' inainte de op., atunci nu e bine
+			}
+			else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip != TipAtom::VARIABILA
+				&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(") {
 				esteCazRau = true;
-			else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && ((atomi[i].val != "+" && atomi[i].val != "-") ||
-				atomi[i - 1].val == "("))
+				//daca nu avem un nr, var, fct sau '(' dupa op., atunci nu e bine
+			}
+			else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && (atomi[i - 1].val == "(") ){
 				esteCazRau = true;
-
+				//daca avem (op) nu este bine
+			}
 			if (esteCazRau)
 			{
 				cout << "Eroare: Operatorul " << atomi[i].val << " trebuie sa fie intre doi atomi la pozitia " << i <<
@@ -144,7 +153,7 @@ vector<atom> atomizare(const string& expresie)
 			}
 			else
 			{
-				if (esteNumar(atomCurent))
+				if (esteNumar(atomCurent)) //NUMAR
 				{
 					atomi.push_back({TipAtom::NUMAR, atomCurent});
 					atomCurent.clear();
@@ -274,7 +283,7 @@ map<string, operatori> reguliOperatori = {
 	{"||", {0, false}},
 	{"(", {1, false}},
 	{"+", {2, false}},
-	{"-", {2, false}}, //!!!de adaugat si pentru unar caz
+	{"-", {2, false}},
 	{"*", {3, false}},
 	{"/", {3, false}},
 	{"%", {3, false}},
@@ -296,19 +305,23 @@ vector<atom> ShuntingYard(const vector<atom>& atomi)
 
 	for (const auto& at : atomi)
 	{
-		if (at.tip == TipAtom::NUMAR || at.tip == TipAtom::VARIABILA)
+		switch (at.tip)
+		{
+		case TipAtom::NUMAR:
+		case TipAtom::VARIABILA:
 		{
 			atomiPostfixat.push_back(at);
+			break;
 		}
-		else if (at.tip == TipAtom::OPERATOR || at.tip == TipAtom::FUNCTIE)
+		case TipAtom::OPERATOR:
+		case TipAtom::FUNCTIE:
 		{
 			atom op1 = at;
-
 			while (!coada.empty())
 			{
 				atom op2 = coada.top();
 				if ((!reguliOperatori[op1.val].asociativDreapta && reguliOperatori[op1.val].precedenta <=
-						reguliOperatori[op2.val].precedenta)
+					reguliOperatori[op2.val].precedenta)
 					|| (reguliOperatori[op1.val].asociativDreapta && reguliOperatori[op1.val].precedenta <
 						reguliOperatori[op2.val].precedenta))
 				{
@@ -320,7 +333,8 @@ vector<atom> ShuntingYard(const vector<atom>& atomi)
 			}
 			coada.push(at);
 		}
-		else if (at.tip == TipAtom::PARANTEZA)
+		break;
+		case TipAtom::PARANTEZA:
 		{
 			if (at.val == "(")
 			{
@@ -335,6 +349,8 @@ vector<atom> ShuntingYard(const vector<atom>& atomi)
 				}
 				coada.pop(); // Eliminate ( din coada
 			}
+			break;
+		}
 		}
 	}
 	while (!coada.empty())
@@ -456,7 +472,14 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 			else if (at.val == "ln")
 			{
-				stiva.push(log(op));
+				
+				if (op<0)
+				{
+					cout << "Eroare: Logaritm din numar negativ!" << endl;
+					return 0;
+				}
+				else
+					stiva.push(log(op));
 			}
 			else if (at.val == "abs")
 			{
@@ -505,34 +528,49 @@ void afisareAtomi(const vector<atom>& atomi)
 	}
 }
 
+void stergereSpatii(string& expresie) {
+	for (int i = 0; i < expresie.size();) {
+		if (esteSpatiu(expresie[i]))
+			expresie.erase(i, i + 1);
+		else
+			i++;
+	}
+}
+
 void evaluareExpresie()
 {
+	
 	//cream variabile pentru testare.
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);
 
 	string expresie;
-	//expresie ="-sin(-sin(-cos(-x1)))+ln(-2/2.3)-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(1)))";
-	
+	//expresie ="-sin(-sin(-cos(-x1)))+ln(abs(-2/2.3))-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(2)))";
+
 	do
 	{
 		cout << "Introduceti expresia: " << endl;
 		getline(cin, expresie);
+		stergereSpatii(expresie);
 		vector<atom> atomi = atomizare(expresie);
+
 		if (!esteExpresieCorecta(atomi))
 		{
 			cout << "Expresie incorecta!" << endl;
 			continue;
 		}
-		cout << "Expresia in forma infixata atomizata: " << endl;
+
+		cout << endl << "Expresia in forma infixata atomizata: " << endl;
 		afisareAtomi(atomi);
 		cout << endl;
+
 		cout << "Expresia in forma postfixata atomizata: " << endl;
 		vector<atom> atomiPostfixat = ShuntingYard(atomi);
 		afisareAtomi(atomiPostfixat);
 		cout << endl;
-		cout<<"Rezultatul expresiei: "<< calculeazaExpresiePostfixata(atomiPostfixat) << endl;
+
+		cout << "Rezultatul expresiei: " << calculeazaExpresiePostfixata(atomiPostfixat) << endl;
 		cout << endl;
 	}
 	while (expresie != "stop");
