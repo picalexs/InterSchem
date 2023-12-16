@@ -118,17 +118,25 @@ double Radical(double x)
     return infinit;
 }
 
-bool esteOperator(char ch) {
-    //change "" with '' bellow
-    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^';
+bool esteSpatiu(const char &ch)
+{
+	return ch == ' ';
 }
+
+bool esteOperator(const char& ch) {
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%' || ch == '^' || ch == '<' || ch == '>';
+}
+bool esteOperatorLung(const string& token)
+{
+	return token == "==" || token == "!=" || token == "<=" || token == ">=" || token == "&&" || token == "||";
+}   
 
 bool esteFunctie(const string& token) {
-    return token == "sin" || token == "cos" || token == "ln" || token == "tg" || token == "ctg";
+    return token == "sin" || token == "cos" || token == "ln" || token == "tg" || token == "ctg" || token == "abs" || token=="sqrt";
 }
 
-bool esteCifra(char token) {
-    return token == '0' || token=='1' || token=='2' || token=='3' || token=='4' || token=='5' || token=='6' || token=='7' || token=='8' || token=='9';
+bool esteCifra(const char& ch) {
+    return ch >= '0' && ch <= '9';
 }
 
 bool esteNumar(const string& token)
