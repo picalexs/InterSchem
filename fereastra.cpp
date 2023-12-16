@@ -110,14 +110,14 @@ void creareFereastra()
 
 		logicaCreareSimbol(window);
 		logicaStergereSimbol(window);
-		logicaLegaturaIntreSimboluri(window);
+		//logicaLegaturaIntreSimboluri(window);
 
 		creareSimbolPtListaArbori(window, font);
 
 		mutareForma(window);
 
 		desenareLinieIntreSimboluri(window);
-		afisareTextLista(window,font);
+		afisareTextLista(window, font);
 		functieDebugging(window);
 		window.display();
 	}
