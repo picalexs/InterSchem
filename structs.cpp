@@ -5,4 +5,4 @@ vector<string> numeNoduri = { "Start", "Stop", "Atribuire", "Citire", "Afisare",
 vector<arbore> listaArbori;
 vector<pair<dateNod, dateNod>> listaLinii;
 vector<dateNod> expresii;
-unordered_map<string, double> variabile;
+unordered_map<string,long double> variabile;

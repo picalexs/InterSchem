@@ -288,7 +288,7 @@ void seteazaVariabila(const string& nume, double valoare) {
 	variabile[nume] = valoare;
 }
 
-double obtineValoareVariabila(const string& nume) {
+long double obtineValoareVariabilaDupaNume(const string& nume) {
 	auto it = variabile.find(nume);
 	if (it != variabile.end()) {
 		return it->second;

@@ -26,4 +26,4 @@ extern vector<string> numeNoduri;
 extern vector<arbore> listaArbori;
 extern vector<pair<dateNod, dateNod>> listaLinii;
 extern vector<dateNod> expresii;
-extern unordered_map<string, double> variabile;
+extern unordered_map<string,long double> variabile;
