@@ -591,9 +591,17 @@ long double evaluareExpresie(string& expresie)
 	vector<atom> atomi = atomizare(expresie);
 	if (!esteExpresieCorecta(atomi))
 	{
-		cout << "Expresie incorecta!" << endl;
-		return 0;
+		cout << "Expresie incorecta: " << expresie << endl;
+		return NAN;
 	}
 	vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
 	return calculeazaExpresiePostfixata(atomiPostfixat);
+}
+
+void atribuireConstanteCunoscute()
+{
+	seteazaVariabila("PI", 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899f);
+	seteazaVariabila("e", 2.718281828459045235360287471352662497757247093699959574966967627724076630353f);
+	seteazaVariabila("g", 9.80665f);
+	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890f);
 }

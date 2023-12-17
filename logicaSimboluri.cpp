@@ -1,12 +1,14 @@
 #include "logicaSimboluri.h"
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
-#include "verificareZonaSimbol.h"
+#include "evaluareExpresie.h"
 
 map<Keyboard::Key, bool> esteTastaApasata;
 
 void logicaCreareSimbol(const RenderWindow& window)
 {
+	if (!Keyboard::isKeyPressed(Keyboard::LShift))
+		return;
 	for (int key = Keyboard::Num1; key <= Keyboard::Num6; key++)
 	{
 		if (Keyboard::isKeyPressed(static_cast<Keyboard::Key>(key)))
@@ -78,7 +80,7 @@ void logicaStergereSimbol(const RenderWindow& window)
 nod* nod1 = nullptr;
 nod* nod2 = nullptr;
 
-void logicaLegaturaIntreSimboluri(RenderWindow& window)
+void logicaLegaturaIntreSimboluri(const RenderWindow& window)
 {
 	if (Mouse::isButtonPressed(Mouse::Right))
 	{
@@ -103,4 +105,79 @@ void logicaLegaturaIntreSimboluri(RenderWindow& window)
 		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")" << endl;
 	nod1 = nullptr;
 	nod2 = nullptr;
+}
+
+void logicaSimboluri(const RenderWindow& window)
+{
+	logicaCreareSimbol(window);
+	logicaStergereSimbol(window);
+	logicaLegaturaIntreSimboluri(window);
+}
+
+//caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
+void logicaAtribuire(nod* N) {
+	string expresie = N->date.expresie;
+	string numeVariabila, expresieDeCitit;
+	int nrVariabile = 0, nrVirgule = 0;
+
+	int i = 0;
+	while (i < expresie.size()) {
+		int pozitieEgal = expresie.find('=', i);
+		if (pozitieEgal == string::npos)
+			break;
+		else {
+			numeVariabila = expresie.substr(i, pozitieEgal - i);
+			for (char ch : numeVariabila)
+				if (!isalnum(ch))
+				{
+					cout << "Eroare la atribuire! Numele variabilei nu este corect!" << endl;
+					return;
+				}
+			nrVariabile++;
+			i = pozitieEgal + 1;
+		}
+
+		int pozitieVirgula = expresie.find(',', i);
+		if (pozitieVirgula != string::npos) {
+			expresieDeCitit = expresie.substr(i, pozitieVirgula - i);
+			i = pozitieVirgula + 1;
+			nrVirgule++;
+		}
+		else {
+			expresieDeCitit = expresie.substr(i);
+			i = expresie.size();
+		}
+
+		long double rezultat = evaluareExpresie(expresieDeCitit);
+		if (!isnan(rezultat)) {
+			seteazaVariabila(numeVariabila, rezultat);
+		}
+		else
+		{
+			cout << "Eroare la atribuire! Expresia este gresita!" << endl;
+		}
+	}
+	//sterge ultima virgula daca e in plus
+	if (nrVariabile == nrVirgule)
+	{
+		for (int i = expresie.size() - 1; i >= 0; i--)
+			if (expresie[i] == ',') {
+				expresie.erase(i, 1);
+				N->date.expresie = expresie;
+				return;
+			}
+	}
+}
+
+
+void logicaCitire(nod* N)
+{
+	if (N->date.expresie.empty())
+		return;
+}
+
+void logicaAfisare(nod* N)
+{
+	if (N->date.expresie.empty())
+		return;
 }

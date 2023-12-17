@@ -1,14 +1,15 @@
+#include <iomanip>
+#include <sstream>
 #include "testareArbore.h"
 #include "logicaSimboluri.h"
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
+#include "evaluareExpresie.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"
 
-void functieDebugging(RenderWindow& window)
+void functieDebugging(RenderWindow& window, const Font& font)
 {
-	Font font;
-	font.loadFromFile("Arial.ttf");
 	string textSimboluri = "Nr. de simboluri: " + std::to_string(numarNoduriDinListaArbori());
 	Text text1(textSimboluri, font, 16);
 	text1.setFillColor(Color::Black);
@@ -45,21 +46,39 @@ void functieDebugging(RenderWindow& window)
 	text5.setFillColor(Color::Black);
 	text5.setPosition(925, 30);
 	window.draw(text5);
+
+	string textVariabile = "Variabile:";
+	for (const auto& variabila : variabile) {
+		textVariabile += "\n" + variabila.first + "= ";
+
+		stringstream stream;
+		stream << defaultfloat << setprecision(6) << variabila.second;
+		textVariabile += stream.str();
+	}
+
+	Text textVariabileAfisate(textVariabile, font, 16);
+	textVariabileAfisate.setFillColor(Color::Black);
+	textVariabileAfisate.setPosition(0, 55);
+	window.draw(textVariabileAfisate);
 }
 
 void creareFereastra()
 {
 	RenderWindow window(VideoMode(1000, 800), "Interschem");
 	window.setFramerateLimit(45);
+
 	nod* nodDeGasit = nullptr;
 	string expresieDeCitit;
 	bool citireExpresie = false;
 	Clock timpCeas;
 	Font font;
+
 	if (!font.loadFromFile("Arial.ttf")) {
 		cout << "EROARE NU S-A INCARCAT FONTUL CORECT!!";
 		return;
 	}
+
+	atribuireConstanteCunoscute();//PI, e, g, phi;
 
 	while (window.isOpen())
 	{
@@ -104,19 +123,18 @@ void creareFereastra()
 			citireExpresie = false;
 			cout << "Expresie citita: " << expresieDeCitit << endl;
 			expresieDeCitit.clear();
+			logicaAtribuire(nodDeGasit);
 		}
 
 		window.clear(Color::White);
 
-		logicaCreareSimbol(window);
-		logicaStergereSimbol(window);
-		logicaLegaturaIntreSimboluri(window);
+		logicaSimboluri(window);
 
 		creareSimbolPtListaArbori(window, font);
 		desenareLinieIntreSimboluri(window);
 		afisareTextLista(window, font);
 
-		functieDebugging(window);
+		functieDebugging(window, font);
 		window.display();
 	}
 }

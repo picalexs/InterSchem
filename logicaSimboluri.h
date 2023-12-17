@@ -7,4 +7,8 @@ void logicaCreareSimbol(const RenderWindow& window);
 
 void logicaStergereSimbol(const RenderWindow& window);
 
-void logicaLegaturaIntreSimboluri(RenderWindow& window);
+void logicaLegaturaIntreSimboluri(const RenderWindow& window);
+
+void logicaSimboluri(const RenderWindow& window);
+
+void logicaAtribuire(nod* N);

@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 	//generareArbore();
-	//creareFereastra();
-	testareEvaluator();
+	creareFereastra();
+	//testareEvaluator();
 	return 0;
 }

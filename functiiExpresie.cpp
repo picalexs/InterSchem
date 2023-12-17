@@ -4,6 +4,7 @@ void afisareTextNod(RenderWindow& window, const Font& font, const nod* nodCurent
 {
 	if (nodCurent == nullptr)
 		return;
+
 	Text text1(nodCurent->date.expresie, font, 16);
 	text1.setFillColor(Color::Black);
 	text1.setPosition(nodCurent->date.x, nodCurent->date.y);
