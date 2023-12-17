@@ -381,7 +381,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 		}
 		else if (at.tip == TipAtom::VARIABILA)
 		{
-			stiva.push(obtineValoareVariabilaDupaNume(at.val));
+			stiva.push(obtineValDupaNume(at.val));
 		}
 		else if (at.tip == TipAtom::OPERATOR)
 		{

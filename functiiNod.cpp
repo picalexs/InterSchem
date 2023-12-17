@@ -288,14 +288,14 @@ void seteazaVariabila(const string& nume, long double valoare) {
 	variabile[nume] = valoare;
 }
 
-long double obtineValoareVariabilaDupaNume(const string& nume) {
+long double obtineValDupaNume(const string& nume) {
 	auto it = variabile.find(nume);
 	if (it != variabile.end()) {
 		return it->second;
 	}
 	else {
-		cout << "Variabila '" << nume << "' nu a fost gasita." << endl;
-		return 0;
+		cout << "Variabila \"" << nume << "\" nu a fost gasita." << endl;
+		return NAN;
 	}
 }
 

@@ -12,3 +12,5 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& window);
 void logicaSimboluri(const RenderWindow& window);
 
 void logicaAtribuire(nod* N);
+
+void logicaAfisare(nod* N);

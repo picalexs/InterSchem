@@ -54,6 +54,6 @@ bool creareLegatura(nod*& nod1, nod*& nod2);
 
 void seteazaVariabila(const string& nume, long double valoare);
 
-long double obtineValoareVariabilaDupaNume(const string& nume);
+long double obtineValDupaNume(const string& nume);
 
 bool esteVariabila(const string& token);

@@ -70,6 +70,7 @@ void creareFereastra()
 	nod* nodDeGasit = nullptr;
 	string expresieDeCitit;
 	bool citireExpresie = false;
+	bool esteApasatAfisare = false;
 	Clock timpCeas;
 	Font font;
 
@@ -133,6 +134,17 @@ void creareFereastra()
 				expresieDeCitit.clear();
 				logicaAtribuire(nodDeGasit);
 			}
+		}
+
+		if (!esteApasatAfisare && Keyboard::isKeyPressed(Keyboard::F1))
+		{
+			esteApasatAfisare = true;
+			nod* nodDeAfisat = gasesteNodListaCuPozMouse(window);
+			logicaAfisare(nodDeAfisat);
+		}
+		else if (esteApasatAfisare && !Keyboard::isKeyPressed(Keyboard::F1))
+		{
+			esteApasatAfisare = false;
 		}
 
 		window.clear(Color::White);
