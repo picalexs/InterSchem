@@ -1,6 +1,7 @@
 #pragma once
-#include <string>
 #include <iostream>
 using namespace std;
 
-void evaluareExpresie();
+void testareEvaluator();
+
+long double evaluareExpresie(string& expresie);

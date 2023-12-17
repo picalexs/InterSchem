@@ -70,26 +70,32 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			break;
 		case TipAtom::OPERATOR:
 			// Verificam daca operatorul este intre doi atomi corespunzatori
-			if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1) {
+			if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1)
+			{
 				esteCazRau = true;
 				//daca avem un op. pe prima pozitie si nu e unar sau avem unul pe ultima pozitie, atunci nu e bine
 			}
 			else if (i > 0 && atomi[i - 1].val == "("
-				&& ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].val == ")")) {
+				&& ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].val == ")"))
+			{
 				esteCazRau = true;
 				//daca avem un op. dupa '(' si e diferit de +,- sau urmeaza o paranteza inchisa dupa op., atunci nu e bine
 			}
 			else if (i > 0 && atomi[i - 1].tip != TipAtom::NUMAR && atomi[i - 1].tip != TipAtom::VARIABILA
-				&& atomi[i - 1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA) {
+				&& atomi[i - 1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA)
+			{
 				esteCazRau = true;
 				//daca nu avem un nr,var,fct sau '(' inainte de op., atunci nu e bine
 			}
-			else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip != TipAtom::VARIABILA
-				&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(") {
+			else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip !=
+				TipAtom::VARIABILA
+				&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(")
+			{
 				esteCazRau = true;
 				//daca nu avem un nr, var, fct sau '(' dupa op., atunci nu e bine
 			}
-			else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && (atomi[i - 1].val == "(") ){
+			else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && (atomi[i - 1].val == "("))
+			{
 				esteCazRau = true;
 				//daca avem (op) nu este bine
 			}
@@ -119,10 +125,10 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			}
 			break;
 		case TipAtom::NECUNOSCUT:
-			{
-				cout << "Eroare: Atom necunoscut " << atomi[i].val << " la pozitia " << i << endl;
-				return false;
-			}
+		{
+			cout << "Eroare: Atom necunoscut " << atomi[i].val << " la pozitia " << i << endl;
+			return false;
+		}
 		default:
 			break;
 		}
@@ -155,17 +161,17 @@ vector<atom> atomizare(const string& expresie)
 			{
 				if (esteNumar(atomCurent)) //NUMAR
 				{
-					atomi.push_back({TipAtom::NUMAR, atomCurent});
+					atomi.push_back({ TipAtom::NUMAR, atomCurent });
 					atomCurent.clear();
 				}
 				else if (esteFunctie(atomCurent)) //FUNCTIE
 				{
-					atomi.push_back({TipAtom::FUNCTIE, atomCurent});
+					atomi.push_back({ TipAtom::FUNCTIE, atomCurent });
 					atomCurent.clear();
 				}
 				else if (esteVariabila(atomCurent)) //VARIABILA
 				{
-					atomi.push_back({TipAtom::VARIABILA, atomCurent});
+					atomi.push_back({ TipAtom::VARIABILA, atomCurent });
 					atomCurent.clear();
 				}
 
@@ -174,29 +180,29 @@ vector<atom> atomizare(const string& expresie)
 				{
 					if (!atomCurent.empty())
 					{
-						atomi.push_back({TipAtom::NUMAR, atomCurent});
+						atomi.push_back({ TipAtom::NUMAR, atomCurent });
 						atomCurent.clear();
 					}
-					atomi.push_back({TipAtom::OPERATOR, string(1, ch)});
+					atomi.push_back({ TipAtom::OPERATOR, string(1, ch) });
 				}
 				else if (esteOperatorLung(op)) //OPERATOR LUNG
 				{
 					if (!atomCurent.empty())
 					{
-						atomi.push_back({TipAtom::NUMAR, atomCurent});
+						atomi.push_back({ TipAtom::NUMAR, atomCurent });
 						atomCurent.clear();
 					}
-					atomi.push_back({TipAtom::OPERATOR, op});
+					atomi.push_back({ TipAtom::OPERATOR, op });
 					i++;
 				}
 				else if (ch == '(' || ch == ')') //PARANTEZA
 				{
 					if (!atomCurent.empty())
 					{
-						atomi.push_back({TipAtom::NUMAR, atomCurent});
+						atomi.push_back({ TipAtom::NUMAR, atomCurent });
 						atomCurent.clear();
 					}
-					atomi.push_back({TipAtom::PARANTEZA, string(1, ch)});
+					atomi.push_back({ TipAtom::PARANTEZA, string(1, ch) });
 				}
 				else //SI...(N), Varia...(bila), C..(os), -...(1)
 				{
@@ -210,27 +216,27 @@ vector<atom> atomizare(const string& expresie)
 			{
 				if (esteFunctie(atomCurent))
 				{
-					atomi.push_back({TipAtom::FUNCTIE, atomCurent});
+					atomi.push_back({ TipAtom::FUNCTIE, atomCurent });
 				}
 				else if (esteVariabila(atomCurent))
 				{
-					atomi.push_back({TipAtom::VARIABILA, atomCurent});
+					atomi.push_back({ TipAtom::VARIABILA, atomCurent });
 				}
 				else if (atomCurent.size() == 1 && esteOperator(atomCurent[0]))
 				{
-					atomi.push_back({TipAtom::OPERATOR, atomCurent});
+					atomi.push_back({ TipAtom::OPERATOR, atomCurent });
 				}
 				else if (atomCurent.size() == 2 && esteOperatorLung(atomCurent))
 				{
-					atomi.push_back({TipAtom::OPERATOR, atomCurent});
+					atomi.push_back({ TipAtom::OPERATOR, atomCurent });
 				}
 				else if (esteNumar(atomCurent))
 				{
-					atomi.push_back({TipAtom::NUMAR, atomCurent});
+					atomi.push_back({ TipAtom::NUMAR, atomCurent });
 				}
 				else
 				{
-					atomi.push_back({TipAtom::NECUNOSCUT, atomCurent});
+					atomi.push_back({ TipAtom::NECUNOSCUT, atomCurent });
 				}
 			}
 		}
@@ -240,27 +246,27 @@ vector<atom> atomizare(const string& expresie)
 	{
 		if (esteFunctie(atomCurent))
 		{
-			atomi.push_back({TipAtom::FUNCTIE, atomCurent});
+			atomi.push_back({ TipAtom::FUNCTIE, atomCurent });
 		}
 		else if (esteVariabila(atomCurent))
 		{
-			atomi.push_back({TipAtom::VARIABILA, atomCurent});
+			atomi.push_back({ TipAtom::VARIABILA, atomCurent });
 		}
 		else if (atomCurent.size() == 1 && esteOperator(atomCurent[0]))
 		{
-			atomi.push_back({TipAtom::OPERATOR, atomCurent});
+			atomi.push_back({ TipAtom::OPERATOR, atomCurent });
 		}
 		else if (atomCurent.size() == 2 && esteOperatorLung(atomCurent))
 		{
-			atomi.push_back({TipAtom::OPERATOR, atomCurent});
+			atomi.push_back({ TipAtom::OPERATOR, atomCurent });
 		}
 		else if (esteNumar(atomCurent))
 		{
-			atomi.push_back({TipAtom::NUMAR, atomCurent});
+			atomi.push_back({ TipAtom::NUMAR, atomCurent });
 		}
 		else
 		{
-			atomi.push_back({TipAtom::NECUNOSCUT, atomCurent});
+			atomi.push_back({ TipAtom::NECUNOSCUT, atomCurent });
 		}
 	}
 	return atomi;
@@ -297,7 +303,7 @@ map<string, operatori> reguliOperatori = {
 	{"sqrt", {5, false}}
 };
 
-vector<atom> ShuntingYard(const vector<atom>& atomi)
+vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 {
 	//algoritm de conversie a expresiei din forma infixata in forma postfixata
 	vector<atom> atomiPostfixat;
@@ -320,10 +326,10 @@ vector<atom> ShuntingYard(const vector<atom>& atomi)
 			while (!coada.empty())
 			{
 				atom op2 = coada.top();
-				if ((!reguliOperatori[op1.val].asociativDreapta && reguliOperatori[op1.val].precedenta <=
-					reguliOperatori[op2.val].precedenta)
-					|| (reguliOperatori[op1.val].asociativDreapta && reguliOperatori[op1.val].precedenta <
-						reguliOperatori[op2.val].precedenta))
+				if ((!reguliOperatori[op1.val].asociativDreapta
+					&& reguliOperatori[op1.val].precedenta <= reguliOperatori[op2.val].precedenta)
+					|| (reguliOperatori[op1.val].asociativDreapta
+						&& reguliOperatori[op1.val].precedenta < reguliOperatori[op2.val].precedenta))
 				{
 					atomiPostfixat.push_back(coada.top());
 					coada.pop();
@@ -368,7 +374,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 	{
 		if (at.tip == TipAtom::NUMAR)
 		{
-			stiva.push(stold(at.val));
+			stiva.push(stold(at.val)); //stold converteste stringul in long double
 		}
 		else if (at.tip == TipAtom::VARIABILA)
 		{
@@ -378,13 +384,16 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 		{
 			long double op2 = stiva.top();
 			stiva.pop();
-			if (stiva.empty()) {
-				if (at.val == "-") {
-					stiva.push(-op2);
+			if (stiva.empty())
+			{
+				if (at.val == "-")
+				{
+					stiva.push(-op2); //daca e -, atunci se schimba semnul
 					continue;
 				}
-				else {
-					stiva.push(op2);
+				else
+				{
+					stiva.push(op2); //daca e +, atunci nu se schimba nimic
 					continue;
 				}
 			}
@@ -472,8 +481,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 			else if (at.val == "ln")
 			{
-				
-				if (op<0)
+				if (op < 0)
 				{
 					cout << "Eroare: Logaritm din numar negativ!" << endl;
 					return 0;
@@ -489,7 +497,8 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			{
 				if (op >= 0)
 					stiva.push(sqrt(op));
-				else {
+				else
+				{
 					cout << "Eroare: Radical din numar negativ!" << endl;
 					return 0;
 				}
@@ -528,31 +537,32 @@ void afisareAtomi(const vector<atom>& atomi)
 	}
 }
 
-void stergereSpatii(string& expresie) {
-	for (int i = 0; i < expresie.size();) {
+void stergereSpatii(string& expresie)
+{
+	for (int i = 0; i < expresie.size();)
+	{
 		if (esteSpatiu(expresie[i]))
-			expresie.erase(i, i + 1);
+			expresie.erase(i, 1);
 		else
 			i++;
 	}
 }
 
-void evaluareExpresie()
+void testareEvaluator()
 {
-	
 	//cream variabile pentru testare.
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);
 
-	string expresie;
 	//expresie ="-sin(-sin(-cos(-x1)))+ln(abs(-2/2.3))-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(2)))";
-
+	string expresie;
 	do
 	{
 		cout << "Introduceti expresia: " << endl;
 		getline(cin, expresie);
 		stergereSpatii(expresie);
+		cout << expresie << endl;
 		vector<atom> atomi = atomizare(expresie);
 
 		if (!esteExpresieCorecta(atomi))
@@ -566,12 +576,24 @@ void evaluareExpresie()
 		cout << endl;
 
 		cout << "Expresia in forma postfixata atomizata: " << endl;
-		vector<atom> atomiPostfixat = ShuntingYard(atomi);
+		vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
 		afisareAtomi(atomiPostfixat);
 		cout << endl;
 
 		cout << "Rezultatul expresiei: " << calculeazaExpresiePostfixata(atomiPostfixat) << endl;
 		cout << endl;
+	} while (expresie != "stop");
+}
+
+long double evaluareExpresie(string& expresie)
+{
+	stergereSpatii(expresie);
+	vector<atom> atomi = atomizare(expresie);
+	if (!esteExpresieCorecta(atomi))
+	{
+		cout << "Expresie incorecta!" << endl;
+		return 0;
 	}
-	while (expresie != "stop");
+	vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
+	return calculeazaExpresiePostfixata(atomiPostfixat);
 }

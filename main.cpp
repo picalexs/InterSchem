@@ -4,8 +4,8 @@
 using namespace std;
 
 int main() {
-    //generareArbore();
-    //creareFereastra();
-    evaluareExpresie();
-    return 0;
+	//generareArbore();
+	//creareFereastra();
+	testareEvaluator();
+	return 0;
 }

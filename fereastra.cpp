@@ -114,7 +114,8 @@ void creareFereastra()
 
 		creareSimbolPtListaArbori(window, font);
 		desenareLinieIntreSimboluri(window);
-		afisareTextLista(window,font);
+		afisareTextLista(window, font);
+
 		functieDebugging(window);
 		window.display();
 	}
