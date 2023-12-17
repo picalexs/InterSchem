@@ -29,10 +29,9 @@ string citire(const Event& event)
 
 	if (event.type == Event::TextEntered)
 	{
-		if (event.text.unicode < 128 && event.text.unicode != 8)
+		if (event.text.unicode < 128)
 		{
 			s = static_cast<char>(event.text.unicode);
-			///std::cout << "ASCII character typed: " << static_cast<char>(event.text.unicode) << std::endl;
 		}
 	}
 	return s;

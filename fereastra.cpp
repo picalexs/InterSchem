@@ -105,25 +105,34 @@ void creareFereastra()
 					timpCeas.restart();
 				}
 			}
-			if (citireExpresie == true)
+			if (citireExpresie)
 			{
-				expresieDeCitit += citire(event);
+				string ch = citire(event);
+				if (ch == "\b") {
+					if (!expresieDeCitit.empty()) {
+						expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);
+						cout << "Stergere" << endl;
+					}
+				}
+				else if (!ch.empty())
+					expresieDeCitit += ch;
 				if (nodDeGasit != nullptr)
 					nodDeGasit->date.expresie = expresieDeCitit;
 			}
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Delete))
-		{
-			listaArbori.clear();
-			listaLinii.clear();
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Enter) && citireExpresie)
-		{
-			citireExpresie = false;
-			cout << "Expresie citita: " << expresieDeCitit << endl;
-			expresieDeCitit.clear();
-			logicaAtribuire(nodDeGasit);
+		if (citireExpresie) {
+			if (Keyboard::isKeyPressed(Keyboard::Delete))
+			{
+				listaArbori.clear();
+				listaLinii.clear();
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Enter))
+			{
+				citireExpresie = false;
+				cout << "Expresie citita: " << expresieDeCitit << endl;
+				expresieDeCitit.clear();
+				logicaAtribuire(nodDeGasit);
+			}
 		}
 
 		window.clear(Color::White);

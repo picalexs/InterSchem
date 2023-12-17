@@ -84,7 +84,7 @@ nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date) {
 	pozMouse.y = date.y;
 	if (verificareSimbolInZona(pozMouse, nodCurent->date))
 		return nodCurent;
-	
+
 	nod* nodGasit = gasesteNodRecursiv(nodCurent->st, date);
 	if (nodGasit != nullptr)
 		return nodGasit;
@@ -97,7 +97,7 @@ nod* gasesteNodInArbore(arbore A, const dateNod& date) {
 	return gasesteNodRecursiv(A.radacina, date);
 }
 
-nod* gasesteNodCuPozMouse(const RenderWindow& window, arbore &A) {
+nod* gasesteNodCuPozMouse(const RenderWindow& window, arbore& A) {
 	if (A.radacina == nullptr)
 		return nullptr;
 	Vector2i pozitieMouse = Mouse::getPosition(window);
@@ -165,7 +165,7 @@ void stergereIntregArbore(nod*& N) {
 			poz = i;
 	if (poz == -1)
 		return;
-	
+
 	//nu uita de stergere ceva nod listaArbori[i]...
 	stergereIntregArbore(N->st);
 	stergereIntregArbore(N->dr);
@@ -184,7 +184,7 @@ void stergereArboreCuRadacina(arbore& A) {
 void stergereDinListaArbori(nod* N)
 {
 	for (int i = 0; i < listaArbori.size();) {
-		if (listaArbori[i].radacina == N || listaArbori[i].radacina==nullptr) {
+		if (listaArbori[i].radacina == N || listaArbori[i].radacina == nullptr) {
 			listaArbori.erase(listaArbori.begin() + i);
 		}
 		else {
@@ -241,8 +241,8 @@ bool existaLinie(const pair<dateNod, dateNod>& linie) {
 bool creareLegatura(nod*& nod1, nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
-	if ((nod1->date.tip==5 && nod1->dr != nullptr)
-	  ||(nod1->date.tip!=5 && (nod1->st != nullptr || nod1->dr != nullptr)))
+	if ((nod1->date.tip == 5 && nod1->dr != nullptr)
+		|| (nod1->date.tip != 5 && (nod1->st != nullptr || nod1->dr != nullptr)))
 		return false;
 
 	pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
@@ -278,13 +278,13 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 			}
 			i.nrNoduri = numaraNoduri(i.radacina);
 			stergereDinListaArbori(nod2);
-			
+
 			return true;
 		}
 	return false;
 }
 
-void seteazaVariabila(const string& nume, double valoare) {
+void seteazaVariabila(const string& nume, long double valoare) {
 	variabile[nume] = valoare;
 }
 

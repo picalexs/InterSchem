@@ -2,7 +2,7 @@
 #include "structs.h"
 #include <SFML/Graphics.hpp>
 
-dateNod schimbareDate(int tip, const string& expresie,int x,int y);
+dateNod schimbareDate(int tip, const string& expresie, int x, int y);
 
 void initializareNod(nod& N);
 
@@ -28,7 +28,7 @@ nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date);
 
 nod* gasesteNodInArbore(arbore A, const dateNod& date);
 
-nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, arbore &A);
+nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, arbore& A);
 
 nod* gasesteNodListaCuPozMouse(const sf::RenderWindow& window);
 
@@ -46,13 +46,13 @@ void stergereIntregArbore(nod*& N);
 
 void stergereArboreCuRadacina(arbore& A);
 
-void stergereNodFaraSubarbore(arbore& A, nod *N);
+void stergereNodFaraSubarbore(arbore& A, nod* N);
 
 bool existaLinie(const pair<dateNod, dateNod>& linie);
 
 bool creareLegatura(nod*& nod1, nod*& nod2);
 
-void seteazaVariabila(const string& nume, double valoare);
+void seteazaVariabila(const string& nume, long double valoare);
 
 long double obtineValoareVariabilaDupaNume(const string& nume);
 

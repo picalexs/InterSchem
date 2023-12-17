@@ -116,18 +116,22 @@ void logicaSimboluri(const RenderWindow& window)
 
 //caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
 void logicaAtribuire(nod* N) {
+	if (N == nullptr)
+		return;
 	string expresie = N->date.expresie;
 	string numeVariabila, expresieDeCitit;
 	int nrVariabile = 0, nrVirgule = 0;
 
-	int i = 0;
+	size_t i = 0;
 	while (i < expresie.size()) {
-		int pozitieEgal = expresie.find('=', i);
-		if (pozitieEgal == string::npos)
-			break;
+		const size_t pozitieEgal = expresie.find('=', i);
+		if (pozitieEgal == string::npos) {
+			cout << "Eroare la atribuire! Expresia nu contine '='!" << endl;
+			return;
+		}
 		else {
 			numeVariabila = expresie.substr(i, pozitieEgal - i);
-			for (char ch : numeVariabila)
+			for (const char ch : numeVariabila)
 				if (!isalnum(ch))
 				{
 					cout << "Eroare la atribuire! Numele variabilei nu este corect!" << endl;
@@ -137,7 +141,7 @@ void logicaAtribuire(nod* N) {
 			i = pozitieEgal + 1;
 		}
 
-		int pozitieVirgula = expresie.find(',', i);
+		const size_t pozitieVirgula = expresie.find(',', i);
 		if (pozitieVirgula != string::npos) {
 			expresieDeCitit = expresie.substr(i, pozitieVirgula - i);
 			i = pozitieVirgula + 1;
@@ -145,10 +149,14 @@ void logicaAtribuire(nod* N) {
 		}
 		else {
 			expresieDeCitit = expresie.substr(i);
+			if (expresieDeCitit == "\r") {
+				cout << "Eroare la atribuire! Expresia este goala!" << endl;
+				return;
+			}
 			i = expresie.size();
 		}
 
-		long double rezultat = evaluareExpresie(expresieDeCitit);
+		const long double rezultat = evaluareExpresie(expresieDeCitit);
 		if (!isnan(rezultat)) {
 			seteazaVariabila(numeVariabila, rezultat);
 		}
@@ -160,7 +168,7 @@ void logicaAtribuire(nod* N) {
 	//sterge ultima virgula daca e in plus
 	if (nrVariabile == nrVirgule)
 	{
-		for (int i = expresie.size() - 1; i >= 0; i--)
+		for (size_t i = expresie.size() - 1; i >= 0; i--)
 			if (expresie[i] == ',') {
 				expresie.erase(i, 1);
 				N->date.expresie = expresie;
@@ -169,15 +177,15 @@ void logicaAtribuire(nod* N) {
 	}
 }
 
-
 void logicaCitire(nod* N)
 {
-	if (N->date.expresie.empty())
+	if (N == nullptr || N->date.expresie.empty())
 		return;
+
 }
 
 void logicaAfisare(nod* N)
 {
-	if (N->date.expresie.empty())
+	if (N == nullptr || N->date.expresie.empty())
 		return;
 }

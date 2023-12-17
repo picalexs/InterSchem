@@ -1,5 +1,8 @@
 #include "functiiMatematice.h"
 #include "evaluareExpresie.h"
+
+#include <iomanip>
+
 #include "functiiNod.h"
 #include <iostream>
 #include <vector>
@@ -199,7 +202,7 @@ vector<atom> atomizare(const string& expresie)
 				{
 					if (!atomCurent.empty())
 					{
-						atomi.push_back({ TipAtom::NUMAR, atomCurent });
+						atomi.push_back({ TipAtom::NECUNOSCUT, atomCurent });
 						atomCurent.clear();
 					}
 					atomi.push_back({ TipAtom::PARANTEZA, string(1, ch) });
@@ -505,7 +508,11 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 		}
 	}
-	return stiva.top();
+	long double rezultat = stiva.top();
+	if (abs(rezultat) < 1e-10) {
+		rezultat = 0; // Daca e foarte aproape de 0 il facem 0.
+	}
+	return rezultat;
 }
 
 void afisareAtomi(const vector<atom>& atomi)
@@ -554,6 +561,7 @@ void testareEvaluator()
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);
+	atribuireConstanteCunoscute();//PI,g,e,phi
 
 	//expresie ="-sin(-sin(-cos(-x1)))+ln(abs(-2/2.3))-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(2)))";
 	string expresie;
@@ -580,7 +588,8 @@ void testareEvaluator()
 		afisareAtomi(atomiPostfixat);
 		cout << endl;
 
-		cout << "Rezultatul expresiei: " << calculeazaExpresiePostfixata(atomiPostfixat) << endl;
+		long double rezultat = calculeazaExpresiePostfixata(atomiPostfixat);
+		cout << "Rezultatul expresiei: " << defaultfloat << setprecision(8) << rezultat << endl;
 		cout << endl;
 	} while (expresie != "stop");
 }
@@ -600,8 +609,8 @@ long double evaluareExpresie(string& expresie)
 
 void atribuireConstanteCunoscute()
 {
-	seteazaVariabila("PI", 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899f);
-	seteazaVariabila("e", 2.718281828459045235360287471352662497757247093699959574966967627724076630353f);
+	seteazaVariabila("PI", 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899L);
+	seteazaVariabila("e", 2.718281828459045235360287471352662497757247093699959574966967627724076630353L);
 	seteazaVariabila("g", 9.80665f);
-	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890f);
+	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890L);
 }
