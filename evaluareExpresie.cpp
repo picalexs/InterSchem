@@ -31,7 +31,8 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 {
 	int parantezeDeschise = 0;
 	bool esteCazRau = false;
-
+	if (atomi.empty())
+		return false;
 	for (int i = 0; i < atomi.size(); ++i)
 	{
 		switch (atomi[i].tip)
