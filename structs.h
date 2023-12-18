@@ -25,5 +25,7 @@ struct arbore {
 extern vector<string> numeNoduri;
 extern vector<arbore> listaArbori;
 extern vector<pair<dateNod, dateNod>> listaLinii;
-extern vector<dateNod> expresii;
-extern unordered_map<string,long double> variabile;
+extern unordered_map<string, long double> variabile;
+
+extern vector<string> listaErrori;
+extern vector<string> listaOutput;

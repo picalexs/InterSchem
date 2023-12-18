@@ -1,4 +1,8 @@
 #include "logicaSimboluri.h"
+
+#include <iomanip>
+#include <sstream>
+
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
@@ -123,6 +127,7 @@ void logicaAtribuire(nod* N)
 	if (N == nullptr || N->date.expresie.empty())
 		return;
 	string expresie = N->date.expresie;
+	stergereSpatii(expresie);
 	string numeVariabila, expresieDeCitit;
 	int nrVariabile = 0, nrVirgule = 0;
 
@@ -194,13 +199,19 @@ void logicaCitire(nod* N)
 	getline(cin, N->date.expresie); //temporar
 }
 
+void stergereOutputCandMare()
+{
+	if (listaOutput.size() > 5)
+		listaOutput.erase(listaOutput.begin());
+}
+
 void logicaAfisare(nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
 
 	string expresie = N->date.expresie;
-	expresie[expresie.size()] = '\0';
+	expresie[expresie.size() - 1] = '\0';
 	string output, numeVariabila;
 	size_t i = 0;
 
@@ -223,7 +234,9 @@ void logicaAfisare(nod* N)
 					long double rezultat = evaluareExpresie(numeVariabila);
 					if (!isnan(rezultat))
 					{
-						output += to_string(rezultat);
+						stringstream stream;
+						stream << defaultfloat << setprecision(6) << rezultat;
+						output += stream.str();
 						numeVariabila.clear();
 					}
 				}
@@ -246,12 +259,15 @@ void logicaAfisare(nod* N)
 			long double rezultat = evaluareExpresie(numeVariabila);
 			if (!isnan(rezultat))
 			{
-				output += to_string(rezultat);
+				stringstream stream;
+				stream << defaultfloat << setprecision(6) << to_string(rezultat);
+				output += stream.str();
 				numeVariabila.clear();
 			}
 		}
 	}
-	cout << output << endl;//trebuie schimbat cu afisare pe ecran
+	listaOutput.push_back(output);
+	stergereOutputCandMare();
 }
 
 

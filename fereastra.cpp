@@ -13,7 +13,7 @@ void functieDebugging(RenderWindow& window, const Font& font)
 	string textSimboluri = "Nr. de simboluri: " + std::to_string(numarNoduriDinListaArbori());
 	Text text1(textSimboluri, font, 16);
 	text1.setFillColor(Color::Black);
-	text1.setPosition(0, 0);
+	text1.setPosition(10, 0);
 	window.draw(text1);
 
 	string textArbori = "Nr. de elemente din fiecare arbore:";
@@ -21,13 +21,13 @@ void functieDebugging(RenderWindow& window, const Font& font)
 		textArbori += " " + to_string(numarNoduriDinArbore(listaArbori[i]));
 	Text text2(textArbori, font, 16);
 	text2.setFillColor(Color::Black);
-	text2.setPosition(0, 15);
+	text2.setPosition(10, 15);
 	window.draw(text2);
 
 	string textLegaturi = ("Nr. de legaturi: " + to_string(listaLinii.size()));
 	Text text3(textLegaturi, font, 16);
 	text3.setFillColor(Color::Black);
-	text3.setPosition(0, 30);
+	text3.setPosition(10, 30);
 	window.draw(text3);
 
 	Text text4("Resetaza lista cu 'Del'.", font, 16);
@@ -58,9 +58,22 @@ void functieDebugging(RenderWindow& window, const Font& font)
 
 	Text textVariabileAfisate(textVariabile, font, 16);
 	textVariabileAfisate.setFillColor(Color::Black);
-	textVariabileAfisate.setPosition(0, 55);
+	textVariabileAfisate.setPosition(10, 55);
 	window.draw(textVariabileAfisate);
 }
+
+void afisareListaOutput(RenderWindow& window, const Font& font)
+{
+	int index = 0;
+	for (const auto& output : listaOutput) {
+		Text textOutput(output, font, 16);
+		textOutput.setFillColor(Color::Black);
+		textOutput.setPosition(10, 700 + index * 15);
+		window.draw(textOutput);
+		index++;
+	}
+}
+
 
 void creareFereastra()
 {
@@ -155,6 +168,7 @@ void creareFereastra()
 		desenareLinieIntreSimboluri(window);
 		afisareTextLista(window, font);
 
+		afisareListaOutput(window, font);
 		functieDebugging(window, font);
 		window.display();
 	}
