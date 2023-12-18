@@ -82,21 +82,6 @@ void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
 	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
 	rectangle.setPosition(date.x - 75, date.y);
 	rectangle.setFillColor(Color(247, 218, 100));
-
-	/*sf::Vector2i pozMouse = sf::Mouse::getPosition();
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-
-		rectangle.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-		date.x = pozMouse.x;
-		date.y = pozMouse.y;
-	}
-	else
-	{
-		//date.x = rectangle.getPosition();
-		//date.y = rectangle.getPosition();
-		rectangle.setPosition(date.x, date.y);
-	}*/
 	window.draw(rectangle);
 }
 
@@ -180,7 +165,7 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 
 void mutareForma(RenderWindow& window)
 {
-	if (Mouse::isButtonPressed(Mouse::Left)) {
+	if (Mouse::isButtonPressed(Mouse::Left) && Keyboard::isKeyPressed(Keyboard::V)) {
 		Vector2i pozMouse = Mouse::getPosition(window);
 		nod* nodDeGasit = nullptr;
 		nodDeGasit = gasesteNodListaCuPozMouse(window);

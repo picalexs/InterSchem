@@ -6,7 +6,12 @@ void afisareTextNod(RenderWindow& window, const Font& font, const nod* nodCurent
 		return;
 	Text text1(nodCurent->date.expresie, font, 16);
 	text1.setFillColor(Color::Black);
-	text1.setPosition(nodCurent->date.x, nodCurent->date.y);
+
+	auto center = text1.getGlobalBounds().getSize() / 2.f;
+	auto localBounds = center + text1.getLocalBounds().getPosition();
+	text1.setOrigin(localBounds);
+
+	text1.setPosition(nodCurent->date.x, nodCurent->date.y+25);
 	window.draw(text1);
 	afisareTextNod(window, font, nodCurent->st);
 	afisareTextNod(window, font, nodCurent->dr);
