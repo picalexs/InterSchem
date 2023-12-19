@@ -163,17 +163,3 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 	}
 }
 
-void mutareForma(RenderWindow& window)
-{
-	if (Mouse::isButtonPressed(Mouse::Left) && Keyboard::isKeyPressed(Keyboard::V)) {
-		Vector2i pozMouse = Mouse::getPosition(window);
-		nod* nodDeGasit = nullptr;
-		nodDeGasit = gasesteNodListaCuPozMouse(window);
-		if (nodDeGasit != nullptr)
-		{
-			cout << "Mutat nod la: " << '(' << pozMouse.x << ',' << pozMouse.y << ')' << endl;
-			nodDeGasit->date.x = pozMouse.x;
-			nodDeGasit->date.y = pozMouse.y;
-		}
-	}
-}
