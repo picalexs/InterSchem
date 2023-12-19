@@ -3,4 +3,8 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void nrStartStop(RenderWindow& window, const dateNod& date);
+void nrStartStop(arbore A, RenderWindow& window, const dateNod& date);
+
+void verificare(nod* nodCurent, const dateNod& date);
+
+void parcurgere(nod* nodCurent, const dateNod& date);
