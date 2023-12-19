@@ -11,6 +11,14 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& window);
 
 void logicaSimboluri(const RenderWindow& window);
 
+bool esteActivaCitireaPtAlgoritm();
+
+void opresteCitireaPtAlgoritm();
+
 void logicaAtribuire(nod* N);
 
+void logicaCitire(nod* N);
+
 void logicaAfisare(nod* N);
+
+bool logicaDaca(nod* N);

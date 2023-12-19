@@ -4,3 +4,5 @@
 bool verificareAlgoritm();
 
 void executareAlgoritm();
+
+bool seParcurgeAlgoritmul();

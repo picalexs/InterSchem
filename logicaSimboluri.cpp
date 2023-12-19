@@ -137,14 +137,18 @@ void logicaAtribuire(nod* N)
 		const size_t pozitieEgal = expresie.find('=', i);
 		if (pozitieEgal == string::npos)
 		{
-			cout << "Eroare la atribuire! Expresia nu contine '='!" << endl;
+			string eroare = "Eroare la atribuire! Expresia nu contine '='!";
+			cout << eroare << endl;
+			listaConsola.push_back(eroare);
 			return;
 		}
 		numeVariabila = expresie.substr(i, pozitieEgal - i);
 		for (const char ch : numeVariabila)
 			if (!isalnum(ch))
 			{
-				cout << "Eroare la atribuire! Numele variabilei nu este corect!" << endl;
+				string eroare = "Eroare la atribuire! Numele variabilei nu este corect!";
+				cout << eroare << endl;
+				listaConsola.push_back(eroare);
 				return;
 			}
 		nrVariabile++;
@@ -162,7 +166,9 @@ void logicaAtribuire(nod* N)
 			expresieDeCitit = expresie.substr(i);
 			if (expresieDeCitit == "\r")
 			{
-				cout << "Eroare la atribuire! Expresia este goala!" << endl;
+				string eroare = "Eroare la atribuire! Expresia este goala!";
+				cout << eroare << endl;
+				listaConsola.push_back(eroare);
 				return;
 			}
 			i = expresie.size();
@@ -175,13 +181,15 @@ void logicaAtribuire(nod* N)
 		}
 		else
 		{
-			cout << "Eroare la atribuire! Expresia este gresita!" << endl;
+			string eroare = "Eroare la atribuire! Expresia este gresita!";
+			cout << eroare << endl;
+			listaConsola.push_back(eroare);
 		}
 	}
 	//sterge ultima virgula daca e in plus
 	if (nrVariabile == nrVirgule)
 	{
-		for (size_t i = expresie.size() - 1; i >= 0; i--)
+		for (size_t i = expresie.size() - 1; i > 0; i--)
 			if (expresie[i] == ',')
 			{
 				expresie.erase(i, 1);
@@ -190,20 +198,47 @@ void logicaAtribuire(nod* N)
 			}
 	}
 }
+bool citireActivata = false;
+bool esteActivaCitireaPtAlgoritm()
+{
+	return citireActivata;
+}
+
+void opresteCitireaPtAlgoritm()
+{
+	citireActivata = false;
+}
 
 void logicaCitire(nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
-	cout << "Introduceti valoarea pentru variabila " << N->date.expresie << ": ";
-	getline(cin, N->date.expresie); //temporar
+	string expresie = N->date.expresie;
+	stergereSpatii(expresie);
+	for (char i : expresie)
+		if (!isalnum(i))
+		{
+			string eroare = "Eroare la citire! Numele variabilei nu este corect!";
+			cout << eroare << endl;
+			listaConsola.push_back(eroare);
+			return;
+		}
+	cout << "introduceti valoarea pentru " << N->date.expresie << ": ";
+	int nrCitit = 0;
+	cin >> nrCitit;
+	seteazaVariabila(expresie, nrCitit);
+	return;
+
+	//trebuie schimbat ca sa citeasca din aplicatie.
+	citireActivata = true;
+	listaConsola.push_back("Citire " + N->date.expresie + " la tastatura:");
 }
 
 void stergereOutputCandMare()
 {
-	if (listaOutput.size() > 5) {
-		cout << "Stergere " << listaOutput[0] << " din lista de output" << endl;
-		listaOutput.erase(listaOutput.begin());
+	if (listaConsola.size() > 5) {
+		cout << "Stergere " << listaConsola[0] << " din lista de output" << endl;
+		listaConsola.erase(listaConsola.begin());
 	}
 }
 
@@ -272,7 +307,7 @@ void logicaAfisare(nod* N)
 		}
 	}
 	cout << "S-a adaugat: " << output << " in lista de output" << endl;
-	listaOutput.push_back(output);
+	listaConsola.push_back(output);
 	stergereOutputCandMare();
 }
 
@@ -283,6 +318,6 @@ bool logicaDaca(nod* N)
 		return false;
 	long double rezultat = evaluareExpresie(N->date.expresie);
 	if (rezultat)
-		return false; //stanga este considerat adevarat, dar e notat cu 0/false
-	return true;
+		return true;
+	return false;
 }

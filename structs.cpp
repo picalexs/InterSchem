@@ -7,4 +7,4 @@ vector<pair<dateNod, dateNod>> listaLinii;
 unordered_map<string, long double> variabile;
 
 vector<string> listaErrori;
-vector<string> listaOutput;
+vector<string> listaConsola;

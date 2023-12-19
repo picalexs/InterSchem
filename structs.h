@@ -28,4 +28,4 @@ extern vector<pair<dateNod, dateNod>> listaLinii;
 extern unordered_map<string, long double> variabile;
 
 extern vector<string> listaErrori;
-extern vector<string> listaOutput;
+extern vector<string> listaConsola;
