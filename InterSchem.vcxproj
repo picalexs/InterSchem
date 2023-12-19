@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="convertireCPlusPlus.h" />
+    <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="functiiExpresie.h" />
     <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="evaluareExpresie.h" />

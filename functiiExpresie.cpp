@@ -5,18 +5,20 @@ void afisareTextNod(RenderWindow& window, const Font& font, const nod* nodCurent
 	if (nodCurent == nullptr)
 		return;
 
-	Text text1(nodCurent->date.expresie, font, 16);
-	text1.setFillColor(Color::Black);
+	Text mainText(nodCurent->date.expresie, font, 16);
+	mainText.setFillColor(Color::Black);
+	FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin(static_cast<int>(marginiText.left + marginiText.width / 2), 10);
 
-	auto center = text1.getGlobalBounds().getSize() / 2.f;
-	auto localBounds = center + text1.getLocalBounds().getPosition();
-	text1.setOrigin(localBounds);
+	int xPos = nodCurent->date.x;
+	int yPos = nodCurent->date.y + 25;
+	mainText.setPosition(xPos, yPos);
+	window.draw(mainText);
 
-	text1.setPosition(nodCurent->date.x, nodCurent->date.y+25);
-	window.draw(text1);
 	afisareTextNod(window, font, nodCurent->st);
 	afisareTextNod(window, font, nodCurent->dr);
 }
+
 
 void afisareTextLista(RenderWindow& window, const Font& font)
 {
