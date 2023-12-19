@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="convertireCPlusPlus.cpp" />
     <ClCompile Include="executareAlgoritm.cpp" />
     <ClCompile Include="functiiExpresie.cpp" />
     <ClCompile Include="creareSimboluri.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="executareAlgoritm.h" />
+    <ClInclude Include="convertireCPlusPlus.h" />
     <ClInclude Include="functiiExpresie.h" />
     <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="evaluareExpresie.h" />

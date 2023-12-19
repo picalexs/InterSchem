@@ -16,3 +16,5 @@ void desenareNodAfisare(RenderWindow& window, const dateNod& date);
 void desenareNodDaca(RenderWindow& window, const dateNod& date);
 
 void desenareLinieIntreSimboluri(RenderWindow& window);
+
+void mutareForma(RenderWindow& window);
