@@ -19,9 +19,8 @@ bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
 			return false;
 		}
 	}
-	nrStartStop(nrStart, nrStop, N->st);
-	nrStartStop(nrStart, nrStop, N->dr);
-	return true;
+
+	return nrStartStop(nrStart, nrStop, N->st) && nrStartStop(nrStart, nrStop, N->dr);
 }
 
 bool verificareStartStop(const nod* radacina)

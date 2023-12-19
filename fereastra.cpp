@@ -86,45 +86,22 @@ void afisareListaOutput(RenderWindow& window, const Font& font)
 	}
 }
 
-void logicaInput(const RenderWindow& window, const Event& event)
+void logicaLMB(const RenderWindow& window, Clock& timpCeas, bool& citireExpresie, nod* nodDeGasit, string& expresieDeCitit)
 {
-	static nod* nodDeGasit = nullptr;
-	static string expresieDeCitit;
-	static bool citireExpresie = false;
-	static Clock timpCeas;
-
-	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+	if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
 	{
-
-		if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
+		nodDeGasit = gasesteNodListaCuPozMouse(window);
+		if (nodDeGasit != nullptr)
 		{
-			nodDeGasit = gasesteNodListaCuPozMouse(window);
-			if (nodDeGasit != nullptr)
-			{
-				citireExpresie = true;
-				expresieDeCitit = nodDeGasit->date.expresie;
-				cout << "Citire expresie!" << endl;
-			}
-		}
-		else
-		{
-			if (citireExpresie)
-			{
-				citireExpresie = false;
-				if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
-					expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
-				}
-				cout << "Expresie citita: " << expresieDeCitit << endl;
-				if (nodDeGasit != nullptr)
-					nodDeGasit->date.expresie = expresieDeCitit;
-				expresieDeCitit.clear();
-				logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
-			}
-			timpCeas.restart();
+			citireExpresie = true;
+			expresieDeCitit = nodDeGasit->date.expresie;
+			cout << "Citire expresie!" << endl;
 		}
 	}
-	if (event.type == Event::KeyPressed) {
-		if (event.key.code == Keyboard::Enter) {
+	else
+	{
+		if (citireExpresie)
+		{
 			citireExpresie = false;
 			if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
 				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
@@ -135,21 +112,106 @@ void logicaInput(const RenderWindow& window, const Event& event)
 			expresieDeCitit.clear();
 			logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
 		}
-		if (event.key.code == Keyboard::F1) {//afiseaza informatia din nodul de afisare
-			nod* nodDeAfisat = gasesteNodListaCuPozMouse(window);
-			logicaAfisare(nodDeAfisat);
+		timpCeas.restart();
+	}
+}
+
+void logicaEnter(bool& citireExpresie, nod* nodDeGasit, string& expresieDeCitit)
+{
+	citireExpresie = false;
+	if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
+		expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
+	}
+	cout << "Expresie citita: " << expresieDeCitit << endl;
+	if (nodDeGasit != nullptr)
+		nodDeGasit->date.expresie = expresieDeCitit;
+	expresieDeCitit.clear();
+	logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
+}
+
+void logicaF1(const RenderWindow& window)
+{
+	nod* nodDeAfisat = gasesteNodListaCuPozMouse(window);
+	logicaAfisare(nodDeAfisat);
+}
+
+void logicaF12()
+{
+	executareAlgoritm();
+}
+
+void logicaDelete()
+{
+	listaArbori.clear();
+	listaLinii.clear();
+	listaOutput.clear();
+	variabile.clear();
+	atribuireConstanteCunoscute();//PI, e, g, phi;
+}
+
+
+bool esteApasatLMB = false;
+bool esteApasatEnter = false;
+bool esteApasatF1 = false;
+bool esteApasatF12 = false;
+bool esteApasatDelete = false;
+
+void logicaInput(const Event& event)
+{
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+	{
+		esteApasatLMB = true;
+	}
+	if (event.type == Event::KeyPressed) {
+		if (event.key.code == Keyboard::Enter) {
+			esteApasatEnter = true;
 		}
-		if (event.key.code == Keyboard::F12) {//executa algoritmul
-			executareAlgoritm();
+		if (event.key.code == Keyboard::F1) {
+			esteApasatF1 = true;
 		}
-		if (event.key.code == Keyboard::Delete)//resetaza totul
+		if (event.key.code == Keyboard::F12) {
+			esteApasatF12 = true;
+		}
+		if (event.key.code == Keyboard::Delete)
 		{
-			listaArbori.clear();
-			listaLinii.clear();
-			listaOutput.clear();
-			variabile.clear();
+			esteApasatDelete = true;
 		}
 	}
+}
+
+void logicaExecutareInput(const RenderWindow& window, const Event& event)
+{
+	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
+	static nod* nodDeGasit = nullptr;
+	static string expresieDeCitit;
+	static bool citireExpresie = false;
+	static Clock timpCeas;
+
+	if (esteApasatLMB) {//verificare dublu click -> citire expresie
+		logicaLMB(window, timpCeas, citireExpresie, nodDeGasit, expresieDeCitit);
+		esteApasatLMB = false;
+	}
+	if (esteApasatEnter)//stop citire expresie
+	{
+		logicaEnter(citireExpresie, nodDeGasit, expresieDeCitit);
+		esteApasatEnter = false;
+	}
+	if (esteApasatF1)//afiseaza informatia din nodul de afisare
+	{
+		logicaF1(window);
+		esteApasatF1 = false;
+	}
+	if (esteApasatF12)//executa algoritmul
+	{
+		logicaF12();
+		esteApasatF12 = false;
+	}
+	if (esteApasatDelete)//resetaza totul
+	{
+		logicaDelete();
+		esteApasatDelete = false;
+	}
+
 	if (citireExpresie)
 	{
 		string ch = citire(event);
@@ -189,8 +251,9 @@ void creareFereastra()
 			{
 				window.close();
 			}
-			logicaInput(window, event);
+			logicaInput(event);
 		}
+		logicaExecutareInput(window, event);
 		window.clear(Color::White);
 
 		logicaSimboluri(window);//creare, stergere, legare simboluri
