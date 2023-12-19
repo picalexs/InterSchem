@@ -150,7 +150,6 @@
     <ClCompile Include="verificareZonaSimbol.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="convertireCPlusPlus.h" />
     <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="functiiExpresie.h" />

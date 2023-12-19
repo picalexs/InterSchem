@@ -191,7 +191,7 @@ void logicaExecutareInput(const RenderWindow& window, const Event& event)
 		logicaLMB(window, timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
 		timpApasatLMB.restart();
 	}
-	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.35f) {
+	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
 		if (nodDeMutat == nullptr)
 			nodDeMutat = gasesteNodListaCuPozMouse(window);
 	}
