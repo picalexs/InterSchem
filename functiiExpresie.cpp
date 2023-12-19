@@ -5,15 +5,22 @@ void afisareTextNod(RenderWindow& window, const Font& font, const nod* nodCurent
 	if (nodCurent == nullptr)
 		return;
 
-	Text text1(nodCurent->date.expresie, font, 16);
-	text1.setFillColor(Color::Black);
+	int marimeFont = 16;
+	Text text1("T", font, marimeFont);
+	FloatRect marginiT = text1.getLocalBounds();
+	int inaltimeT = static_cast<int>(marginiT.height);
 
-	auto center = text1.getGlobalBounds().getSize() / 2.f;
-	auto localBounds = center + text1.getLocalBounds().getPosition();
-	text1.setOrigin(localBounds);
+	Text mainText(nodCurent->date.expresie, font, marimeFont);
+	FloatRect marginiText = text1.getLocalBounds();
+	mainText.setFillColor(Color::Black);
+	mainText.setOrigin((int)(marginiText.left + marginiText.width / 2), (int)(marginiText.top + inaltimeT / 2));
 
-	text1.setPosition(nodCurent->date.x, nodCurent->date.y+25);
-	window.draw(text1);
+	int xPos = round(nodCurent->date.x);
+	int yPos = round(nodCurent->date.y + 25);
+
+	mainText.setPosition(xPos, yPos);
+	window.draw(mainText);
+
 	afisareTextNod(window, font, nodCurent->st);
 	afisareTextNod(window, font, nodCurent->dr);
 }
