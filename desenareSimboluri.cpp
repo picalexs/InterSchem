@@ -1,10 +1,11 @@
 #include "desenareSimboluri.h"
+#include "functiiNod.h"
 #include <cmath>
 #define PI 3.14159265358979323846
 
 void desenareLinie(RenderWindow& window, const dateNod& date) {
 	sf::RectangleShape line(sf::Vector2f(500, 4));
-	line.setPosition(date.x/2, date.y/2);
+	line.setPosition(date.x / 2, date.y / 2);
 	line.setFillColor(Color::Black);
 	window.draw(line);
 }
@@ -42,7 +43,7 @@ void desenareElipsa(RenderWindow& window, const dateNod& date, float raza_x, flo
 	window.draw(ellipse);
 }
 
-void desenareNodStart(RenderWindow& window,const Font &font, const dateNod& date) {
+void desenareNodStart(RenderWindow& window, const Font& font, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
@@ -52,14 +53,14 @@ void desenareNodStart(RenderWindow& window,const Font &font, const dateNod& date
 	textStart.setFillColor(Color::Black);
 
 	FloatRect textBounds = textStart.getLocalBounds();
-	textStart.setOrigin(textBounds.left + textBounds.width / 2.0,textBounds.top + textBounds.height/2);
+	textStart.setOrigin(textBounds.left + textBounds.width / 2.0, textBounds.top + textBounds.height / 2);
 	textStart.setPosition(date.x, date.y + raza_y);
 
 	window.draw(textStart);
 }
 
 
-void desenareNodStop(RenderWindow& window,const Font &font, const dateNod& date) {
+void desenareNodStop(RenderWindow& window, const Font& font, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
@@ -77,22 +78,22 @@ void desenareNodStop(RenderWindow& window,const Font &font, const dateNod& date)
 }
 
 void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
-	
+
 	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
 	rectangle.setPosition(date.x - 75, date.y);
-	rectangle.setFillColor(Color(247	,218,100));
+	rectangle.setFillColor(Color(247, 218, 100));
 	window.draw(rectangle);
 }
 
 void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 	sf::ConvexShape convex;
-	convex.setPosition(date.x-100, date.y);
+	convex.setPosition(date.x - 100, date.y);
 	convex.setPointCount(4);
 	convex.setPoint(0, sf::Vector2f(0, 0));
 	convex.setPoint(1, sf::Vector2f(200, 0));
 	convex.setPoint(2, sf::Vector2f(175, 50));
 	convex.setPoint(3, sf::Vector2f(25, 50));
-	convex.setFillColor(Color(148,216,150));
+	convex.setFillColor(Color(148, 216, 150));
 	window.draw(convex);
 }
 
@@ -114,8 +115,8 @@ void desenareNodDaca(RenderWindow& window, const dateNod& date) {
 	triangle.setRadius(75);
 	triangle.setPointCount(3);
 	window.draw(triangle);
-	triangle.setPosition(date.x-75, date.y);
-	triangle.setFillColor(Color(191,147,240));
+	triangle.setPosition(date.x - 75, date.y);
+	triangle.setFillColor(Color(191, 147, 240));
 	window.draw(triangle);
 }
 
@@ -155,10 +156,24 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 		triunghi.setPoint(2, sf::Vector2f(0, inaltimeTriunghi / 2));
 		triunghi.setFillColor(sf::Color::Black);
 
-		triunghi.setOrigin( 15, -grosimeLinie/2);
+		triunghi.setOrigin(15, -grosimeLinie / 2);
 		triunghi.setPosition(mijlocXNod2, mijlocYNod2);
 		triunghi.setRotation(unghi);
 		window.draw(triunghi);
 	}
 }
 
+void mutareForma(RenderWindow& window)
+{
+	if (Mouse::isButtonPressed(Mouse::Left) && Keyboard::isKeyPressed(Keyboard::V)) {
+		Vector2i pozMouse = Mouse::getPosition(window);
+		nod* nodDeGasit = nullptr;
+		nodDeGasit = gasesteNodListaCuPozMouse(window);
+		if (nodDeGasit != nullptr)
+		{
+			cout << "Mutat nod la: " << '(' << pozMouse.x << ',' << pozMouse.y << ')' << endl;
+			nodDeGasit->date.x = pozMouse.x;
+			nodDeGasit->date.y = pozMouse.y;
+		}
+	}
+}

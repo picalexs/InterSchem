@@ -11,7 +11,7 @@ void creareSimbolStop(RenderWindow& window,const Font &font, const dateNod& date
 }
 
 void creareSimbolAtribuire(RenderWindow& window, const dateNod& date) {
-    desenareNodAtribuire(window,date);
+    desenareNodAtribuire(window, date);
 }
 
 void creareSimbolCitire(RenderWindow& window, const dateNod& date) {
