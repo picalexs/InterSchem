@@ -40,6 +40,7 @@ void functieDebugging(RenderWindow& window, const Font& font)
 	text6.setPosition(870, 15);
 	window.draw(text6);
 
+	//deseneaza pozitia de la mouse pe ecran
 	Vector2i pozMouse = Mouse::getPosition(window);
 	string textPozMouse = "(" + to_string(pozMouse.x) + "," + to_string(pozMouse.y) + ")";
 	Text text5(textPozMouse, font, 16);
@@ -47,6 +48,7 @@ void functieDebugging(RenderWindow& window, const Font& font)
 	text5.setPosition(925, 30);
 	window.draw(text5);
 
+	//deseneaza variabilele folosite pe ecran
 	string textVariabile = "Variabile:";
 	for (const auto& variabila : variabile) {
 		textVariabile += "\n" + variabila.first + "= ";
@@ -64,11 +66,20 @@ void functieDebugging(RenderWindow& window, const Font& font)
 
 void afisareListaOutput(RenderWindow& window, const Font& font)
 {
-	int index = 0;
-	for (const auto& output : listaOutput) {
-		Text textOutput(output, font, 16);
-		textOutput.setFillColor(Color::Black);
-		textOutput.setPosition(10, 700 + index * 15);
+	if (listaOutput.empty())
+		return;
+	//deseneaza primul element din listaOutput (ultimul element adaugat) mai intunecat la culoare
+	Text textOutput(listaOutput[listaOutput.size() - 1], font, 16);
+	textOutput.setFillColor(Color::Black);
+	textOutput.setPosition(10, 765);
+	window.draw(textOutput);
+
+	//deseneaza restul elementelor din listaOutput mai gri la culoare
+	int index = 1;
+	for (int i = listaOutput.size() - 2; i >= 0; i--) {
+		Text textOutput(listaOutput[i], font, 16);
+		textOutput.setFillColor(Color(90, 90, 90));
+		textOutput.setPosition(10, 765 - index * 15);
 		window.draw(textOutput);
 		index++;
 	}
@@ -88,7 +99,7 @@ void creareFereastra()
 	Font font;
 
 	if (!font.loadFromFile("Arial.ttf")) {
-		cout << "EROARE NU S-A INCARCAT FONTUL CORECT!!";
+		cout << "EROARE: NU S-A INCARCAT FONTUL CORECT!!";
 		return;
 	}
 
@@ -105,12 +116,13 @@ void creareFereastra()
 			}
 			else if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 			{
-				if (timpCeas.getElapsedTime().asSeconds() < 1.0f)
+				if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
 				{
 					nodDeGasit = gasesteNodListaCuPozMouse(window);
 					if (nodDeGasit != nullptr)
 					{
 						citireExpresie = true;
+						expresieDeCitit = nodDeGasit->date.expresie;
 						cout << "Citire expresie!" << endl;
 					}
 				}
@@ -143,9 +155,18 @@ void creareFereastra()
 			if (Keyboard::isKeyPressed(Keyboard::Enter))
 			{
 				citireExpresie = false;
+				if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
+					expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge \r de la final
+				}
+				else {
+					return;
+				}
+
 				cout << "Expresie citita: " << expresieDeCitit << endl;
+				if (nodDeGasit != nullptr)
+					nodDeGasit->date.expresie = expresieDeCitit;
 				expresieDeCitit.clear();
-				logicaAtribuire(nodDeGasit);
+				logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
 			}
 		}
 

@@ -590,7 +590,7 @@ void testareEvaluator()
 		cout << endl;
 
 		long double rezultat = calculeazaExpresiePostfixata(atomiPostfixat);
-		cout << "Rezultatul expresiei: " << defaultfloat << setprecision(8) << rezultat << endl;
+		cout << "Rezultatul expresiei: " << fixed << setprecision(8) << rezultat << endl;
 		cout << endl;
 	} while (expresie != "stop");
 }

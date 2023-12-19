@@ -201,8 +201,10 @@ void logicaCitire(nod* N)
 
 void stergereOutputCandMare()
 {
-	if (listaOutput.size() > 5)
+	if (listaOutput.size() > 5) {
+		cout << "Stergere " << listaOutput[0] << " din lista de output" << endl;
 		listaOutput.erase(listaOutput.begin());
+	}
 }
 
 void logicaAfisare(nod* N)
@@ -211,16 +213,19 @@ void logicaAfisare(nod* N)
 		return;
 
 	string expresie = N->date.expresie;
-	expresie[expresie.size() - 1] = '\0';
 	string output, numeVariabila;
-	size_t i = 0;
 
 	bool ghilimele = false;
-	for (int i = 0; i < expresie.size(); i++)
+	for (size_t i = 0; i < expresie.size(); i++)
 	{
 		char ch = expresie[i];
 		string opL = expresie.substr(i, 2);
-		if ((!ghilimele && (isalnum(ch) || ch == ' ' || ch == ')' || ch == '(' || esteOperator(ch) || esteOperatorLung(opL)))
+		if (!ghilimele && esteOperatorLung(opL))
+		{
+			numeVariabila += opL;
+			i += 1;
+		}
+		else if ((!ghilimele && (isalnum(ch) || ch == ' ' || ch == ')' || ch == '(' || esteOperator(ch)))
 			|| (ghilimele && (ch > 31 && ch < 127 && ch != 34)))
 		{
 			numeVariabila += ch;
@@ -260,12 +265,13 @@ void logicaAfisare(nod* N)
 			if (!isnan(rezultat))
 			{
 				stringstream stream;
-				stream << defaultfloat << setprecision(6) << to_string(rezultat);
+				stream << defaultfloat << setprecision(6) << rezultat;
 				output += stream.str();
 				numeVariabila.clear();
 			}
 		}
 	}
+	cout << "S-a adaugat: " << output << " in lista de output" << endl;
 	listaOutput.push_back(output);
 	stergereOutputCandMare();
 }
