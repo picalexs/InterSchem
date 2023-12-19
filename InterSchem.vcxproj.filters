@@ -51,7 +51,10 @@
     <ClCompile Include="functiiMatematice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="citireExpresie.cpp">
+    <ClCompile Include="functiiExpresie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="executareAlgoritm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +92,10 @@
     <ClInclude Include="functiiMatematice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="citireExpresie.h">
+    <ClInclude Include="functiiExpresie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="executareAlgoritm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

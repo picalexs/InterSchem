@@ -5,6 +5,7 @@
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
+#include "executareAlgoritm.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"
 
@@ -85,24 +86,98 @@ void afisareListaOutput(RenderWindow& window, const Font& font)
 	}
 }
 
+void logicaInput(const RenderWindow& window, const Event& event)
+{
+	static nod* nodDeGasit = nullptr;
+	static string expresieDeCitit;
+	static bool citireExpresie = false;
+	static Clock timpCeas;
+
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+	{
+
+		if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
+		{
+			nodDeGasit = gasesteNodListaCuPozMouse(window);
+			if (nodDeGasit != nullptr)
+			{
+				citireExpresie = true;
+				expresieDeCitit = nodDeGasit->date.expresie;
+				cout << "Citire expresie!" << endl;
+			}
+		}
+		else
+		{
+			if (citireExpresie)
+			{
+				citireExpresie = false;
+				if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
+					expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
+				}
+				cout << "Expresie citita: " << expresieDeCitit << endl;
+				if (nodDeGasit != nullptr)
+					nodDeGasit->date.expresie = expresieDeCitit;
+				expresieDeCitit.clear();
+				logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
+			}
+			timpCeas.restart();
+		}
+	}
+	if (event.type == Event::KeyPressed) {
+		if (event.key.code == Keyboard::Enter) {
+			citireExpresie = false;
+			if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
+				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
+			}
+			cout << "Expresie citita: " << expresieDeCitit << endl;
+			if (nodDeGasit != nullptr)
+				nodDeGasit->date.expresie = expresieDeCitit;
+			expresieDeCitit.clear();
+			logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
+		}
+		if (event.key.code == Keyboard::F1) {//afiseaza informatia din nodul de afisare
+			nod* nodDeAfisat = gasesteNodListaCuPozMouse(window);
+			logicaAfisare(nodDeAfisat);
+		}
+		if (event.key.code == Keyboard::F12) {//executa algoritmul
+			executareAlgoritm();
+		}
+		if (event.key.code == Keyboard::Delete)//resetaza totul
+		{
+			listaArbori.clear();
+			listaLinii.clear();
+			listaOutput.clear();
+			variabile.clear();
+		}
+	}
+	if (citireExpresie)
+	{
+		string ch = citire(event);
+		if (ch == "\b") {//logica de stergere prin backspace
+			if (!expresieDeCitit.empty()) {
+				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);
+				cout << "Stergere" << endl;
+			}
+		}
+		else if (!ch.empty()) {
+			expresieDeCitit += ch;
+		}
+		if (nodDeGasit != nullptr)//introducerea expresiei citite in nod.
+			nodDeGasit->date.expresie = expresieDeCitit;
+	}
+}
 
 void creareFereastra()
 {
 	RenderWindow window(VideoMode(1000, 800), "Interschem");
-	window.setFramerateLimit(45);
+	window.setFramerateLimit(45);//limita de fps ca sa nu bubuie laptopul :')
+	window.setKeyRepeatEnabled(false);
 
-	nod* nodDeGasit = nullptr;
-	string expresieDeCitit;
-	bool citireExpresie = false;
-	bool esteApasatAfisare = false;
-	Clock timpCeas;
 	Font font;
-
 	if (!font.loadFromFile("Arial.ttf")) {
 		cout << "EROARE: NU S-A INCARCAT FONTUL CORECT!!";
 		return;
 	}
-
 	atribuireConstanteCunoscute();//PI, e, g, phi;
 
 	while (window.isOpen())
@@ -114,83 +189,18 @@ void creareFereastra()
 			{
 				window.close();
 			}
-			else if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
-			{
-				if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
-				{
-					nodDeGasit = gasesteNodListaCuPozMouse(window);
-					if (nodDeGasit != nullptr)
-					{
-						citireExpresie = true;
-						expresieDeCitit = nodDeGasit->date.expresie;
-						cout << "Citire expresie!" << endl;
-					}
-				}
-				else
-				{
-					timpCeas.restart();
-				}
-			}
-			if (citireExpresie)
-			{
-				string ch = citire(event);
-				if (ch == "\b") {
-					if (!expresieDeCitit.empty()) {
-						expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);
-						cout << "Stergere" << endl;
-					}
-				}
-				else if (!ch.empty())
-					expresieDeCitit += ch;
-				if (nodDeGasit != nullptr)
-					nodDeGasit->date.expresie = expresieDeCitit;
-			}
+			logicaInput(window, event);
 		}
-		if (citireExpresie) {
-			if (Keyboard::isKeyPressed(Keyboard::Delete))
-			{
-				listaArbori.clear();
-				listaLinii.clear();
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Enter))
-			{
-				citireExpresie = false;
-				if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
-					expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge \r de la final
-				}
-				else {
-					return;
-				}
-
-				cout << "Expresie citita: " << expresieDeCitit << endl;
-				if (nodDeGasit != nullptr)
-					nodDeGasit->date.expresie = expresieDeCitit;
-				expresieDeCitit.clear();
-				logicaAtribuire(nodDeGasit);//temporar. Va trebui mutat.
-			}
-		}
-
-		if (!esteApasatAfisare && Keyboard::isKeyPressed(Keyboard::F1))
-		{
-			esteApasatAfisare = true;
-			nod* nodDeAfisat = gasesteNodListaCuPozMouse(window);
-			logicaAfisare(nodDeAfisat);
-		}
-		else if (esteApasatAfisare && !Keyboard::isKeyPressed(Keyboard::F1))
-		{
-			esteApasatAfisare = false;
-		}
-
 		window.clear(Color::White);
 
-		logicaSimboluri(window);
+		logicaSimboluri(window);//creare, stergere, legare simboluri
 
-		creareSimbolPtListaArbori(window, font);
-		desenareLinieIntreSimboluri(window);
-		afisareTextLista(window, font);
+		creareSimbolPtListaArbori(window, font);//deseneaza simbolurile din listaArbori
+		desenareLinieIntreSimboluri(window);//deseneaza liniile dintre simboluri
+		afisareTextLista(window, font);//deseneaza textul fiecarui simbol
 
-		afisareListaOutput(window, font);
-		functieDebugging(window, font);
+		afisareListaOutput(window, font);//deseneaza outputul
+		functieDebugging(window, font);//deseneaza informatii de debugging
 		window.display();
 	}
 }
