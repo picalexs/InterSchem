@@ -1,9 +1,7 @@
 #include "functiiMatematice.h"
 #include "evaluareExpresie.h"
-
-#include <iomanip>
-
 #include "functiiNod.h"
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -33,7 +31,7 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 	bool esteCazRau = false;
 	if (atomi.empty())
 		return false;
-	for (int i = 0; i < atomi.size(); ++i)
+	for (size_t i = 0; i < atomi.size(); ++i)
 	{
 		switch (atomi[i].tip)
 		{
@@ -42,8 +40,8 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			{
 				if (atomi.size() > i + 1 && atomi[i + 1].val == ")")
 				{
-					string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
-					cout << eroare << endl;
+					const string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
+					cout << eroare << '\n';
 					listaConsola.push_back(eroare);
 					return false;
 				}
@@ -54,16 +52,16 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			{
 				if (atomi.size() > i + 1 && atomi[i + 1].val == "(")
 				{
-					string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
-					cout << eroare << endl;
+					const string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
+					cout << eroare << '\n';
 					listaConsola.push_back(eroare);
 					return false;
 				}
 				parantezeDeschise--;
 				if (parantezeDeschise < 0)
 				{
-					string eroare = "Eroare: Paranteze inchise in exces la pozitia " + to_string(i);
-					cout << eroare << endl;
+					const string eroare = "Eroare: Paranteze inchise in exces la pozitia " + to_string(i);
+					cout << eroare << '\n';
 					listaConsola.push_back(eroare);
 					return false;
 				}
@@ -73,8 +71,9 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			// Verificam daca functia are paranteze deschise dupa ea
 			if (i + 1 >= atomi.size() || atomi[i + 1].val != "(")
 			{
-				string eroare = "Eroare: Functia " + atomi[i].val + " trebuie sa fie urmata de o paranteza deschisa la pozitia " + to_string(i);
-				cout << eroare << endl;
+				const string eroare = "Eroare: Functia " + atomi[i].val +
+					" trebuie sa fie urmata de o paranteza deschisa la pozitia " + to_string(i);
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return false;
 			}
@@ -112,8 +111,9 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			}
 			if (esteCazRau)
 			{
-				string eroare = "Eroare: Operatorul " + atomi[i].val + " trebuie sa fie intre doi atomi la pozitia " + to_string(i);
-				cout << eroare << endl;
+				const string eroare = "Eroare: Operatorul " + atomi[i].val + " trebuie sa fie intre doi atomi la pozitia " +
+					to_string(i);
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return false;
 			}
@@ -122,8 +122,9 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			// Verificam daca dupa o variabila apare altceva decat un operator sau o paranteza
 			if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
 			{
-				string eroare = "Eroare: Variabila " + atomi[i].val + " trebuie sa fie urmata de un operator la pozitia " + to_string(i);
-				cout << eroare << endl;
+				const string eroare = "Eroare: Variabila " + atomi[i].val +
+					" trebuie sa fie urmata de un operator la pozitia " + to_string(i);
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return false;
 			}
@@ -132,16 +133,16 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			// Verificam daca dupa un numar apare altceva decat un operator sau o paranteza
 			if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
 			{
-				string eroare = atomi[i].val + " trebuie sa fie urmat de un operator la pozitia " + to_string(i);
-				cout << eroare << endl;
+				const string eroare = atomi[i].val + " trebuie sa fie urmat de un operator la pozitia " + to_string(i);
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return false;
 			}
 			break;
 		case TipAtom::NECUNOSCUT:
 		{
-			string eroare = "Eroare: Atom necunoscut " + atomi[i].val + " la pozitia " + to_string(i);
-			cout << eroare << endl;
+			const string eroare = "Eroare: Atom necunoscut " + atomi[i].val + " la pozitia " + to_string(i);
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
@@ -152,8 +153,8 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 
 	if (parantezeDeschise != 0)
 	{
-		string eroare = "Eroare: Paranteze deschise fara inchidere";
-		cout << eroare << endl;
+		const string eroare = "Eroare: Paranteze deschise fara inchidere";
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -340,7 +341,7 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 		case TipAtom::OPERATOR:
 		case TipAtom::FUNCTIE:
 		{
-			atom op1 = at;
+			const atom& op1 = at;
 			while (!coada.empty())
 			{
 				atom op2 = coada.top();
@@ -375,6 +376,7 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 			}
 			break;
 		}
+		default:;
 		}
 	}
 	while (!coada.empty())
@@ -409,14 +411,11 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 					stiva.push(-op2); //daca e -, atunci se schimba semnul
 					continue;
 				}
-				else
-				{
-					stiva.push(op2); //daca e +, atunci nu se schimba nimic
-					continue;
-				}
+				stiva.push(op2); //daca e +, atunci nu se schimba nimic
+				continue;
 			}
 
-			long double op1 = stiva.top();
+			const long double op1 = stiva.top();
 			stiva.pop();
 
 			if (at.val == "+")
@@ -437,7 +436,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 			else if (at.val == "%")
 			{
-				stiva.push(fmod(op1, op2));
+				stiva.push(static_cast<long long>(op1) % static_cast<long long>(op2));
 			}
 			else if (at.val == "^")
 			{
@@ -469,16 +468,16 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 			else if (at.val == "&&")
 			{
-				stiva.push(op1 && op2);
+				stiva.push(static_cast<bool>(op1) && static_cast<bool>(op2));
 			}
 			else if (at.val == "||")
 			{
-				stiva.push(op1 || op2);
+				stiva.push(static_cast<bool>(op1) || static_cast<bool>(op2));
 			}
 		}
 		else if (at.tip == TipAtom::FUNCTIE)
 		{
-			long double op = stiva.top();
+			const long double op = stiva.top();
 			stiva.pop();
 
 			if (at.val == "sin")
@@ -501,13 +500,12 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			{
 				if (op < 0)
 				{
-					string eroare = "Eroare: Logaritm din numar negativ!";
-					cout << eroare << endl;
+					const string eroare = "Eroare: Logaritm din numar negativ!";
+					cout << eroare << '\n';
 					listaConsola.push_back(eroare);
 					return 0;
 				}
-				else
-					stiva.push(log(op));
+				stiva.push(log(op));
 			}
 			else if (at.val == "abs")
 			{
@@ -519,8 +517,8 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 					stiva.push(sqrt(op));
 				else
 				{
-					string eroare = "Eroare: Radical din numar negativ!";
-					cout << eroare << endl;
+					const string eroare = "Eroare: Radical din numar negativ!";
+					cout << eroare << '\n';
 					listaConsola.push_back(eroare);
 					return 0;
 				}
@@ -528,7 +526,8 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 		}
 	}
 	long double rezultat = stiva.top();
-	if (abs(rezultat) < 1e-10) {
+	if (abs(rezultat) < 1e-10)
+	{
 		rezultat = 0; // Daca e foarte aproape de 0 il facem 0.
 	}
 	return rezultat;
@@ -559,7 +558,7 @@ void afisareAtomi(const vector<atom>& atomi)
 			cout << "!! necunoscut";
 			break;
 		}
-		cout << ": " << at.val << endl;
+		cout << ": " << at.val << '\n';
 	}
 }
 
@@ -580,51 +579,51 @@ void testareEvaluator()
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);
-	atribuireConstanteCunoscute();//PI,g,e,phi
+	atribuireConstanteCunoscute(); //PI,g,e,phi
 
 	//expresie ="-sin(-sin(-cos(-x1)))+ln(abs(-2/2.3))-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(2)))";
 	string expresie;
 	do
 	{
-		cout << "Introduceti expresia: " << endl;
+		cout << "Introduceti expresia: " << '\n';
 		getline(cin, expresie);
 		stergereSpatii(expresie);
-		cout << expresie << endl;
+		cout << expresie << '\n';
 		vector<atom> atomi = atomizare(expresie);
 
 		if (!esteExpresieCorecta(atomi))
 		{
-			cout << "Expresie incorecta!" << endl;
+			cout << "Expresie incorecta!" << '\n';
 			continue;
 		}
 
-		cout << endl << "Expresia in forma infixata atomizata: " << endl;
+		cout << '\n' << "Expresia in forma infixata atomizata: " << '\n';
 		afisareAtomi(atomi);
-		cout << endl;
+		cout << '\n';
 
-		cout << "Expresia in forma postfixata atomizata: " << endl;
+		cout << "Expresia in forma postfixata atomizata: " << '\n';
 		vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
 		afisareAtomi(atomiPostfixat);
-		cout << endl;
+		cout << '\n';
 
-		long double rezultat = calculeazaExpresiePostfixata(atomiPostfixat);
+		const long double rezultat = calculeazaExpresiePostfixata(atomiPostfixat);
 		cout << "Rezultatul expresiei: " << fixed << setprecision(8) << rezultat << endl;
-		cout << endl;
+		cout << '\n';
 	} while (expresie != "stop");
 }
 
 long double evaluareExpresie(string& expresie)
 {
 	stergereSpatii(expresie);
-	vector<atom> atomi = atomizare(expresie);
+	const vector<atom> atomi = atomizare(expresie);
 	if (!esteExpresieCorecta(atomi))
 	{
-		string eroare = "Eroare: Expresie incorecta: " + expresie;
-		cout << eroare << endl;
+		const string eroare = "Eroare: Expresie incorecta: " + expresie;
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return NAN;
 	}
-	vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
+	const vector<atom> atomiPostfixat = conversieInPostfixat(atomi);
 	return calculeazaExpresiePostfixata(atomiPostfixat);
 }
 

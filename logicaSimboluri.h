@@ -17,7 +17,7 @@ void opresteCitireaPtAlgoritm();
 
 void logicaAtribuire(nod* N);
 
-void logicaCitire(nod* N);
+void logicaCitire(const nod* N);
 
 void logicaAfisare(nod* N);
 

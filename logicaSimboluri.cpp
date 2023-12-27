@@ -73,8 +73,7 @@ void logicaStergereSimbol(const RenderWindow& window)
 
 			if (nodDeSters != nullptr)
 			{
-				cout << "Sters: tip= " << nodDeSters->date.tip << ", (" << nodDeSters->date.x << ',' << nodDeSters->date
-					.y << ")" << endl;
+				cout << "Sters: tip= " << nodDeSters->date.tip << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
 				stergereLinie(nodDeSters);
 				stergereNodFaraSubarbore(A, nodDeSters);
 				return;
@@ -109,7 +108,7 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& window)
 	}
 	if (creareLegatura(nod1, nod2))
 		cout << "Legatura: tip= " << nod1->date.tip << "->" << nod2->date.tip << ", (" << nod1->date.x << ',' <<
-		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")" << endl;
+		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
 	nod1 = nullptr;
 	nod2 = nullptr;
 }
@@ -128,7 +127,7 @@ void logicaAtribuire(nod* N)
 		return;
 	string expresie = N->date.expresie;
 	stergereSpatii(expresie);
-	string numeVariabila, expresieDeCitit;
+	string expresieDeCitit;
 	int nrVariabile = 0, nrVirgule = 0;
 
 	size_t i = 0;
@@ -137,17 +136,17 @@ void logicaAtribuire(nod* N)
 		const size_t pozitieEgal = expresie.find('=', i);
 		if (pozitieEgal == string::npos)
 		{
-			string eroare = "Eroare la atribuire! Expresia nu contine '='!";
-			cout << eroare << endl;
+			const string eroare = "Eroare la atribuire! Expresia nu contine '='!";
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return;
 		}
-		numeVariabila = expresie.substr(i, pozitieEgal - i);
+		string numeVariabila = expresie.substr(i, pozitieEgal - i);
 		for (const char ch : numeVariabila)
 			if (!isalnum(ch))
 			{
-				string eroare = "Eroare la atribuire! Numele variabilei nu este corect!";
-				cout << eroare << endl;
+				const string eroare = "Eroare la atribuire! Numele variabilei nu este corect!";
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return;
 			}
@@ -166,8 +165,8 @@ void logicaAtribuire(nod* N)
 			expresieDeCitit = expresie.substr(i);
 			if (expresieDeCitit == "\r")
 			{
-				string eroare = "Eroare la atribuire! Expresia este goala!";
-				cout << eroare << endl;
+				const string eroare = "Eroare la atribuire! Expresia este goala!";
+				cout << eroare << '\n';
 				listaConsola.push_back(eroare);
 				return;
 			}
@@ -182,7 +181,7 @@ void logicaAtribuire(nod* N)
 		else
 		{
 			string eroare = "Eroare la atribuire! Expresia este gresita!";
-			cout << eroare << endl;
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 		}
 	}
@@ -209,7 +208,7 @@ void opresteCitireaPtAlgoritm()
 	citireActivata = false;
 }
 
-void logicaCitire(nod* N)
+void logicaCitire(const nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
@@ -218,8 +217,8 @@ void logicaCitire(nod* N)
 	for (char i : expresie)
 		if (!isalnum(i))
 		{
-			string eroare = "Eroare la citire! Numele variabilei nu este corect!";
-			cout << eroare << endl;
+			const string eroare = "Eroare la citire! Numele variabilei nu este corect!";
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return;
 		}
@@ -227,17 +226,12 @@ void logicaCitire(nod* N)
 	int nrCitit = 0;
 	cin >> nrCitit;
 	seteazaVariabila(expresie, nrCitit);
-	return;
-
-	//trebuie schimbat ca sa citeasca din aplicatie.
-	citireActivata = true;
-	listaConsola.push_back("Citire " + N->date.expresie + " la tastatura:");
 }
 
 void stergereOutputCandMare()
 {
 	if (listaConsola.size() > 5) {
-		cout << "Stergere " << listaConsola[0] << " din lista de output" << endl;
+		cout << "Stergere " << listaConsola[0] << " din lista de output\n";
 		listaConsola.erase(listaConsola.begin());
 	}
 }
@@ -316,8 +310,8 @@ bool logicaDaca(nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return false;
-	long double rezultat = evaluareExpresie(N->date.expresie);
-	if (rezultat)
+	const long double rezultat = evaluareExpresie(N->date.expresie);
+	if (static_cast<bool>(rezultat))
 		return true;
 	return false;
 }

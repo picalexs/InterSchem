@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_set>
 #include "structs.h"
 #include <SFML/Graphics.hpp>
 
@@ -26,21 +27,21 @@ bool esteNodInArbore(nod* nodCautat, const nod* radacina);
 
 nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date);
 
-nod* gasesteNodInArbore(arbore A, const dateNod& date);
+nod* gasesteNodInArbore(const arbore& A, const dateNod& date);
 
-nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, arbore& A);
+nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, const arbore& A);
 
 nod* gasesteNodListaCuPozMouse(const sf::RenderWindow& window);
 
 nod* gasesteNodInListaArbori(const dateNod& date);
 
-int numaraNoduri(const nod* N);
+long long numarNoduri(const nod* N);
 
 int numarNoduriDinArbore(arbore A);
 
 int numarNoduriDinListaArbori();
 
-void stergereDinListaArbori(nod* N);
+void stergereDinListaArbori(const nod* N);
 
 void stergereIntregArbore(nod*& N);
 

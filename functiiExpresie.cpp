@@ -2,16 +2,18 @@
 
 void afisareTextNod(RenderWindow& window, const Font& font, const nod* nodCurent)
 {
-	if (nodCurent == nullptr)
+	static unordered_set<const nod*> noduriVizitate;
+	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return;
 
+	noduriVizitate.insert(nodCurent);
 	Text mainText(nodCurent->date.expresie, font, 16);
 	mainText.setFillColor(Color::Black);
-	FloatRect marginiText = mainText.getLocalBounds();
+	const FloatRect marginiText = mainText.getLocalBounds();
 	mainText.setOrigin(static_cast<int>(marginiText.left + marginiText.width / 2), 10);
 
-	int xPos = nodCurent->date.x;
-	int yPos = nodCurent->date.y + 25;
+	const int xPos = nodCurent->date.x;
+	const int yPos = nodCurent->date.y + 25;
 	mainText.setPosition(xPos, yPos);
 	window.draw(mainText);
 
@@ -33,7 +35,6 @@ void afisareTextLista(RenderWindow& window, const Font& font)
 string citire(const Event& event)
 {
 	string s;
-
 	if (event.type == Event::TextEntered)
 	{
 		if (event.text.unicode < 128)

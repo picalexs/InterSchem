@@ -1,6 +1,5 @@
 #include "functiiNod.h"
 #include "verificareZonaSimbol.h"
-#include <vector>
 
 dateNod schimbareDate(const int tip, const string& expresie, const int x, const int y) {
 	dateNod date;
@@ -30,13 +29,13 @@ bool esteNodNull(const nod* N) {
 }
 
 nod* creareNodNull() {
-	nod* N = new nod;
+	const auto N = new nod;
 	initializareNod(*N);
 	return N;
 }
 
 nod* creareNod(const dateNod& date) {
-	nod* N = new nod;
+	const auto N = new nod;
 	atribuireNod(*N, date);
 	return N;
 }
@@ -91,30 +90,28 @@ nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date) {
 	return gasesteNodRecursiv(nodCurent->dr, date);
 }
 
-nod* gasesteNodInArbore(arbore A, const dateNod& date) {
+nod* gasesteNodInArbore(const arbore& A, const dateNod& date) {
 	if (A.radacina == nullptr)
 		return nullptr;
 	return gasesteNodRecursiv(A.radacina, date);
 }
 
-nod* gasesteNodCuPozMouse(const RenderWindow& window, arbore& A) {
+nod* gasesteNodCuPozMouse(const RenderWindow& window, const arbore& A) {
 	if (A.radacina == nullptr)
 		return nullptr;
-	Vector2i pozitieMouse = Mouse::getPosition(window);
 	dateNod nodPePozitieMouse;
-	nodPePozitieMouse.x = pozitieMouse.x;
-	nodPePozitieMouse.y = pozitieMouse.y;
+	nodPePozitieMouse.x = Mouse::getPosition(window).x;
+	nodPePozitieMouse.y = Mouse::getPosition(window).y;
 	return gasesteNodRecursiv(A.radacina, nodPePozitieMouse);
 }
 
 nod* gasesteNodListaCuPozMouse(const RenderWindow& window)
 {
-	Vector2i pozitieMouse = Mouse::getPosition(window);
 	dateNod nodPePozitieMouse;
-	nodPePozitieMouse.x = pozitieMouse.x;
-	nodPePozitieMouse.y = pozitieMouse.y;
+	nodPePozitieMouse.x = Mouse::getPosition(window).x;
+	nodPePozitieMouse.y = Mouse::getPosition(window).y;
 
-	for (auto& A : listaArbori)
+	for (const auto& A : listaArbori)
 	{
 		nod* nodGasit = gasesteNodInArbore(A, nodPePozitieMouse);
 		if (nodGasit != nullptr)
@@ -127,7 +124,7 @@ nod* gasesteNodListaCuPozMouse(const RenderWindow& window)
 
 nod* gasesteNodInListaArbori(const dateNod& date) {
 
-	for (auto A : listaArbori)
+	for (const auto A : listaArbori)
 	{
 		nod* nodGasit = gasesteNodInArbore(A, date);
 		if (nodGasit != nullptr)
@@ -136,14 +133,22 @@ nod* gasesteNodInListaArbori(const dateNod& date) {
 	return nullptr;
 }
 
-
-int numaraNoduri(const nod* N) {
-	if (N == nullptr)
+int numarNoduriRecursiv(const nod* N, unordered_set<const nod*>& noduriVizitate)
+{
+	if (N == nullptr || noduriVizitate.count(N))
 		return 0;
-	return 1 + numaraNoduri(N->st) + numaraNoduri(N->dr);
+	noduriVizitate.insert(N);
+	return 1 + numarNoduriRecursiv(N->st, noduriVizitate) + numarNoduriRecursiv(N->dr, noduriVizitate);
 }
 
-int numarNoduriDinArbore(arbore A) {
+long long numarNoduri(const nod* N) {
+	if (N == nullptr)
+		return 0;
+	unordered_set<const nod*> noduriVizitate;
+	return numarNoduriRecursiv(N, noduriVizitate);
+}
+
+int numarNoduriDinArbore(const arbore A) {
 	if (A.radacina == nullptr)
 		return 0;
 	return A.nrNoduri;
@@ -151,22 +156,24 @@ int numarNoduriDinArbore(arbore A) {
 
 int numarNoduriDinListaArbori() {
 	int nrNoduri = 0;
-	for (auto A : listaArbori)
+	for (const auto A : listaArbori)
 		nrNoduri += numarNoduriDinArbore(A);
 	return nrNoduri;
 }
 
 void stergereIntregArbore(nod*& N) {
-	if (N == nullptr)
+	static unordered_set<const nod*> noduriVizitate;
+	if (N == nullptr || noduriVizitate.count(N))
 		return;
-	int poz = -1;
+
+	size_t poz = -1;
 	for (int i = 0; i < listaArbori.size(); i++)
 		if (esteNodInArbore(N, listaArbori[i].radacina))
 			poz = i;
 	if (poz == -1)
 		return;
 
-	//nu uita de stergere ceva nod listaArbori[i]...
+	noduriVizitate.insert(N);
 	stergereIntregArbore(N->st);
 	stergereIntregArbore(N->dr);
 
@@ -181,7 +188,7 @@ void stergereArboreCuRadacina(arbore& A) {
 	initializareArbore(A);
 }
 
-void stergereDinListaArbori(nod* N)
+void stergereDinListaArbori(const nod* N)
 {
 	for (int i = 0; i < listaArbori.size();) {
 		if (listaArbori[i].radacina == N || listaArbori[i].radacina == nullptr) {
@@ -197,8 +204,8 @@ void stergereNodFaraSubarbore(arbore& A, nod* N) {
 	if (N == nullptr)
 		return;
 
-	nod* subarbore1 = nullptr;
-	nod* subarbore2 = nullptr;
+	const nod* subarbore1 = nullptr;
+	const nod* subarbore2 = nullptr;
 
 	if (N->st != nullptr) {
 		subarbore1 = N->st;
@@ -222,6 +229,7 @@ void stergereNodFaraSubarbore(arbore& A, nod* N) {
 		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
 		listaArbori.insert(listaArbori.begin(), SubarboreNou);
 	}
+
 	stergereDinListaArbori(N);
 	stergereIntregArbore(N);
 }
@@ -242,27 +250,27 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
 	if ((nod1->date.tip == 5 && nod1->dr != nullptr)
-		|| (nod1->date.tip != 5 && (nod1->st != nullptr || nod1->dr != nullptr)))
+		|| (nod1->date.tip != 5 && (nod1->st != nullptr || nod1->dr != nullptr)))//simbolul are deja nr. maxim de fii posibil
 		return false;
 
-	pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
-	pair<dateNod, dateNod> linie2 = make_pair(nod2->date, nod1->date);
+	const pair<dateNod, dateNod> linie1 = make_pair(nod1->date, nod2->date);
+	const pair<dateNod, dateNod> linie2 = make_pair(nod2->date, nod1->date);
 
-	if (existaLinie(linie1) || existaLinie(linie2))
-		return false;
+	/*if (existaLinie(linie1) || existaLinie(linie2))
+		return false;*/
 
-	int poz = -1;
-	for (int i = 0; i < listaArbori.size(); i++)
+	size_t poz = -1;
+	for (size_t i = 0; i < listaArbori.size(); i++)
 		if (listaArbori[i].radacina == nod2) {
 			poz = i;
 			break;
 		}
-	if (poz == -1)
+	if (poz == -1 && nod1->date.tip != 5)
 		return false;
 
-	for (auto& i : listaArbori)
-		if (esteNodInArbore(nod1, i.radacina)) {
-			if (esteNodInArbore(nod2, i.radacina))//nod2 != listaArbori[i].radacina && 
+	for (auto& arb : listaArbori)
+		if (esteNodInArbore(nod1, arb.radacina)) {
+			if (esteNodInArbore(nod2, arb.radacina) && nod1->date.tip != 5)
 				return false;
 
 			listaLinii.push_back(linie1);
@@ -276,25 +284,26 @@ bool creareLegatura(nod*& nod1, nod*& nod2) {
 			else {
 				nod1->st = nod2;
 			}
-			i.nrNoduri = numaraNoduri(i.radacina);
+			arb.nrNoduri = numarNoduri(arb.radacina);
+			if (arb.radacina->date.tip == 5)
+				stergereIntregArbore(nod2);
 			stergereDinListaArbori(nod2);
-
 			return true;
 		}
 	return false;
 }
 
-void seteazaVariabila(const string& nume, long double valoare) {
+void seteazaVariabila(const string& nume, const long double valoare) {
 	variabile[nume] = valoare;
 }
 
 long double obtineValDupaNume(const string& nume) {
-	auto it = variabile.find(nume);
+	const auto it = variabile.find(nume);
 	if (it != variabile.end()) {
 		return it->second;
 	}
 	else {
-		cout << "Variabila \"" << nume << "\" nu a fost gasita." << endl;
+		cout << "Variabila \"" << nume << "\" nu a fost gasita.\n";
 		return NAN;
 	}
 }
