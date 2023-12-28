@@ -1,11 +1,11 @@
 #pragma once
-#include <string>
 #include "functiiNod.h"
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void afisareTextNod(RenderWindow& window,const Font &font, const nod* nodCurent);
+void afisareTextLista(RenderWindow& window, VideoMode& desktop);
 
-void afisareTextLista(RenderWindow& window,const Font &font);
+void functieDebugging(RenderWindow& window, VideoMode& desktop);
 
-string citire(const sf::Event& event);
+void afisareListaOutput(RenderWindow& window, const VideoMode& desktop);
+

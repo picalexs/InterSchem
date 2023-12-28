@@ -1,9 +1,10 @@
 #pragma once
+#include "variabileGlobale.h"
 #include <unordered_set>
 #include "structs.h"
 #include <SFML/Graphics.hpp>
 
-dateNod schimbareDate(int tip, const string& expresie, int x, int y);
+dateNod schimbareDate(int tip, const std::string& expresie, int x, int y);
 
 void initializareNod(nod& N);
 
@@ -49,12 +50,14 @@ void stergereArboreCuRadacina(arbore& A);
 
 void stergereNodFaraSubarbore(arbore& A, nod* N);
 
-bool existaLinie(const pair<dateNod, dateNod>& linie);
+bool existaLinie(const std::pair<dateNod, dateNod>& linie);
 
 bool creareLegatura(nod*& nod1, nod*& nod2);
 
-void seteazaVariabila(const string& nume, long double valoare);
+void seteazaVariabila(const std::string& nume, long double valoare);
 
-long double obtineValDupaNume(const string& nume);
+long double obtineValDupaNume(const std::string& nume);
 
-bool esteVariabila(const string& token);
+bool esteVariabila(const std::string& token);
+
+void atribuireConstanteCunoscute();

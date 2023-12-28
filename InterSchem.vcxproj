@@ -142,11 +142,13 @@
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
+    <ClCompile Include="logicaInput.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="desenareSimboluri.cpp" />
-    <ClCompile Include="structs.cpp" />
     <ClCompile Include="testareArbore.cpp" />
+    <ClCompile Include="variabileGlobale.cpp" />
+    <ClCompile Include="variabileGlobale.h" />
     <ClCompile Include="verificareZonaSimbol.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +162,7 @@
     <ClInclude Include="functiiMatematice.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
+    <ClInclude Include="logicaInput.h" />
     <ClInclude Include="logicaSimboluri.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="testareArbore.h" />

@@ -2,6 +2,7 @@
 #include <ctime>
 #include "functiiNod.h"
 using namespace sf;
+vector<string> numeNoduri = { "Start", "Stop", "Atribuire", "Citire", "Afisare", "Daca" };
 
 void deseneazaArbore(RenderWindow& window, nod* nodCurent, float x, float y, float spacing) {
 	if (nodCurent == nullptr) {

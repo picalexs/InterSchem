@@ -57,6 +57,12 @@
     <ClCompile Include="executareAlgoritm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="convertireCPlusPlus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logicaInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -96,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="executareAlgoritm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="convertireCPlusPlus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logicaInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

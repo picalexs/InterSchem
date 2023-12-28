@@ -1,5 +1,6 @@
 #include "desenareSimboluri.h"
 #include "functiiNod.h"
+
 #include <cmath>
 #define PI 3.14159265358979323846
 
@@ -43,38 +44,19 @@ void desenareElipsa(RenderWindow& window, const dateNod& date, float raza_x, flo
 	window.draw(ellipse);
 }
 
-void desenareNodStart(RenderWindow& window, const Font& font, const dateNod& date) {
+void desenareNodStart(RenderWindow& window, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
 	desenareElipsa(window, date, raza_x, raza_y, calitate, culoare);
-
-	Text textStart("START", font, 24);
-	textStart.setFillColor(Color::Black);
-
-	FloatRect textBounds = textStart.getLocalBounds();
-	textStart.setOrigin(textBounds.left + textBounds.width / 2.0, textBounds.top + textBounds.height / 2);
-	textStart.setPosition(date.x, date.y + raza_y);
-
-	window.draw(textStart);
 }
 
 
-void desenareNodStop(RenderWindow& window, const Font& font, const dateNod& date) {
+void desenareNodStop(RenderWindow& window, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
 	desenareElipsa(window, date, raza_x, raza_y, calitate, culoare);
-
-
-	Text textStart("STOP", font, 24);
-	textStart.setFillColor(Color::Black);
-
-	FloatRect textBounds = textStart.getLocalBounds();
-	textStart.setOrigin(textBounds.left + textBounds.width / 2.0, textBounds.top + textBounds.height / 2);
-	textStart.setPosition(date.x, date.y + raza_y);
-
-	window.draw(textStart);
 }
 
 void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
