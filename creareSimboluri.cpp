@@ -2,69 +2,69 @@
 #include "desenareSimboluri.h"
 using namespace std;
 
-void creareSimbolStart(RenderWindow& window, const dateNod& date) {
-    desenareNodStart(window,date);
+void creareSimbolStart(RenderWindow& fereastraAplicatie,const dateNod& date) {
+    desenareNodStart(fereastraAplicatie, date);
 }
 
-void creareSimbolStop(RenderWindow& window, const dateNod& date) {
-    desenareNodStop(window,date);
+void creareSimbolStop(RenderWindow& fereastraAplicatie,const dateNod& date) {
+    desenareNodStop(fereastraAplicatie, date);
 }
 
-void creareSimbolAtribuire(RenderWindow& window, const dateNod& date) {
-	desenareNodAtribuire(window, date);
+void creareSimbolAtribuire(RenderWindow& fereastraAplicatie,const dateNod& date) {
+	desenareNodAtribuire(fereastraAplicatie, date);
 }
 
-void creareSimbolCitire(RenderWindow& window, const dateNod& date) {
-	desenareNodCitire(window, date);
+void creareSimbolCitire(RenderWindow& fereastraAplicatie,const dateNod& date) {
+	desenareNodCitire(fereastraAplicatie, date);
 }
 
-void creareSimbolAfisare(RenderWindow& window, const dateNod& date) {
-	desenareNodAfisare(window, date);
+void creareSimbolAfisare(RenderWindow& fereastraAplicatie,const dateNod& date) {
+	desenareNodAfisare(fereastraAplicatie, date);
 }
 
-void creareSimbolDaca(RenderWindow& window, const dateNod& date) {
-	desenareNodDaca(window, date);
+void creareSimbolDaca(RenderWindow& fereastraAplicatie,const dateNod& date) {
+	desenareNodDaca(fereastraAplicatie, date);
 }
 
-void creareSimbol(RenderWindow& window, const dateNod& date) {
-    switch (date.tip) {
+void creareSimbol(RenderWindow& fereastraAplicatie, const dateNod& date) {
+	switch (date.tip) {
     case 0:
-        creareSimbolStart(window, date); break;
+		creareSimbolStart(fereastraAplicatie, date); break;
     case 1:
-        creareSimbolStop(window, date); break;
+        creareSimbolStop(fereastraAplicatie, date); break;
     case 2:
-        creareSimbolAtribuire(window, date); break;
+        creareSimbolAtribuire(fereastraAplicatie, date); break;
     case 3:
-        creareSimbolCitire(window, date); break;
+        creareSimbolCitire(fereastraAplicatie, date); break;
     case 4:
-        creareSimbolAfisare(window, date); break;
+        creareSimbolAfisare(fereastraAplicatie, date); break;
     case 5:
-        creareSimbolDaca(window, date); break;
+        creareSimbolDaca(fereastraAplicatie, date); break;
     default: 
         return;
     }
 }
 
-void creareSimbolPtArboreRecursiv(RenderWindow& window, const nod* N, unordered_set<const nod*>& noduriVizitate) {
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const nod* N, unordered_set<const nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N)) {
 		return;
 	}
 	noduriVizitate.insert(N);
-	creareSimbol(window, N->date);
-	creareSimbolPtArboreRecursiv(window, N->st, noduriVizitate);
-	creareSimbolPtArboreRecursiv(window, N->dr, noduriVizitate);
+	creareSimbol(fereastraAplicatie, N->date);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->st, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->dr, noduriVizitate);
 }
 
-void creareSimbolPtArbore(RenderWindow& window, const nod* N) {
+void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, const nod* N) {
 	unordered_set<const nod*> noduriVizitate;
-	creareSimbolPtArboreRecursiv(window, N, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N, noduriVizitate);
 }
 
-void creareSimbolPtListaArbori(RenderWindow& window) {
+void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie) {
 	for (const auto& A : listaArbori)
 	{
 		if (A.radacina == nullptr)
 			continue;
-		creareSimbolPtArbore(window, A.radacina);
+		creareSimbolPtArbore(fereastraAplicatie, A.radacina);
 	}
 }

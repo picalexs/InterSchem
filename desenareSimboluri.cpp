@@ -4,31 +4,31 @@
 #include <cmath>
 #define PI 3.14159265358979323846
 
-void desenareLinie(RenderWindow& window, const dateNod& date) {
+void desenareLinie(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::RectangleShape line(sf::Vector2f(500, 4));
 	line.setPosition(date.x / 2, date.y / 2);
 	line.setFillColor(Color::Black);
-	window.draw(line);
+	fereastraAplicatie.draw(line);
 }
 
-void desenareDreptunghi(RenderWindow& window, const dateNod& date) {
+void desenareDreptunghi(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::RectangleShape rectangle(sf::Vector2f(500, 4));
 	rectangle.setPosition(date.x / 2, date.y / 2);
 	rectangle.setFillColor(Color::Black);
-	window.draw(rectangle);
+	fereastraAplicatie.draw(rectangle);
 }
 
-void desenareTriunghi(RenderWindow& window, const dateNod& date) {
+void desenareTriunghi(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::CircleShape triangle;
 	triangle.setRadius(75);
 	triangle.setPointCount(3);
-	window.draw(triangle);
+	fereastraAplicatie.draw(triangle);
 	triangle.setPosition(date.x - 75, date.y);
 	triangle.setFillColor(Color::Yellow);
-	window.draw(triangle);
+	fereastraAplicatie.draw(triangle);
 }
 
-void desenareElipsa(RenderWindow& window, const dateNod& date, float raza_x, float raza_y, int calitate, Color culoare)
+void desenareElipsa(RenderWindow& fereastraAplicatie, const dateNod& date, float raza_x, float raza_y, int calitate, Color culoare)
 {
 	sf::ConvexShape ellipse;
 	ellipse.setPointCount(calitate);
@@ -39,35 +39,36 @@ void desenareElipsa(RenderWindow& window, const dateNod& date, float raza_x, flo
 		float y = sin(rad) * raza_y;
 		ellipse.setPoint(i, sf::Vector2f(x, y));
 	};
+
 	ellipse.setPosition(date.x, date.y + raza_y);
 	ellipse.setFillColor(culoare);
-	window.draw(ellipse);
+	fereastraAplicatie.draw(ellipse);
 }
 
-void desenareNodStart(RenderWindow& window, const dateNod& date) {
+void desenareNodStart(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
-	desenareElipsa(window, date, raza_x, raza_y, calitate, culoare);
+	desenareElipsa(fereastraAplicatie,date, raza_x, raza_y, calitate, culoare);
 }
 
 
-void desenareNodStop(RenderWindow& window, const dateNod& date) {
+void desenareNodStop(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	float raza_x = 65, raza_y = 25;
 	int calitate = 10;
 	Color culoare(120, 189, 219);
-	desenareElipsa(window, date, raza_x, raza_y, calitate, culoare);
+	desenareElipsa(fereastraAplicatie,date, raza_x, raza_y, calitate, culoare);
 }
 
-void desenareNodAtribuire(RenderWindow& window, const dateNod& date) {
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const dateNod& date) {
 
 	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
 	rectangle.setPosition(date.x - 75, date.y);
 	rectangle.setFillColor(Color(247, 218, 100));
-	window.draw(rectangle);
+	fereastraAplicatie.draw(rectangle);
 }
 
-void desenareNodCitire(RenderWindow& window, const dateNod& date) {
+void desenareNodCitire(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::ConvexShape convex;
 	convex.setPosition(date.x - 100, date.y);
 	convex.setPointCount(4);
@@ -76,10 +77,10 @@ void desenareNodCitire(RenderWindow& window, const dateNod& date) {
 	convex.setPoint(2, sf::Vector2f(175, 50));
 	convex.setPoint(3, sf::Vector2f(25, 50));
 	convex.setFillColor(Color(148, 216, 150));
-	window.draw(convex);
+	fereastraAplicatie.draw(convex);
 }
 
-void desenareNodAfisare(RenderWindow& window, const dateNod& date) {
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::ConvexShape convex;
 	convex.setPosition(date.x - 100, date.y);
 	convex.setPointCount(4);
@@ -88,21 +89,21 @@ void desenareNodAfisare(RenderWindow& window, const dateNod& date) {
 	convex.setPoint(2, sf::Vector2f(200, 50));
 	convex.setPoint(3, sf::Vector2f(0, 50));
 	convex.setFillColor(Color(230, 134, 150));
-	window.draw(convex);
+	fereastraAplicatie.draw(convex);
 }
 
-void desenareNodDaca(RenderWindow& window, const dateNod& date) {
+void desenareNodDaca(RenderWindow& fereastraAplicatie, const dateNod& date) {
 	sf::CircleShape triangle;
 	triangle.setPosition(-200, -200);
 	triangle.setRadius(75);
 	triangle.setPointCount(3);
-	window.draw(triangle);
+	fereastraAplicatie.draw(triangle);
 	triangle.setPosition(date.x - 75, date.y);
 	triangle.setFillColor(Color(191, 147, 240));
-	window.draw(triangle);
+	fereastraAplicatie.draw(triangle);
 }
 
-void desenareLinieIntreSimboluri(RenderWindow& window) {
+void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 	float grosimeLinie = 5;
 	RectangleShape line(Vector2f(0, grosimeLinie));
 	ConvexShape triunghi(3);
@@ -129,7 +130,7 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 		line.setPosition(mijlocXNod1, mijlocYNod1);
 		line.setRotation(unghi);
 		line.setFillColor(Color::Black);
-		window.draw(line);
+		fereastraAplicatie.draw(line);
 
 		float dimTriunghi = 30.0f;
 		float inaltimeTriunghi = dimTriunghi * sqrt(3) / 2;
@@ -141,7 +142,7 @@ void desenareLinieIntreSimboluri(RenderWindow& window) {
 		triunghi.setOrigin(15, -grosimeLinie / 2);
 		triunghi.setPosition(mijlocXNod2, mijlocYNod2);
 		triunghi.setRotation(unghi);
-		window.draw(triunghi);
+		fereastraAplicatie.draw(triunghi);
 	}
 }
 

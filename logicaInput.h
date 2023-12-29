@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+using namespace sf;
 
-void logicaInput(const sf::Event& event);
+void logicaInput(const Event& event);
 
-void logicaExecutareInput(const sf::RenderWindow& window, const sf::Event& event);
+void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const Event& event);

@@ -96,20 +96,20 @@ nod* gasesteNodInArbore(const arbore& A, const dateNod& date) {
 	return gasesteNodRecursiv(A.radacina, date);
 }
 
-nod* gasesteNodCuPozMouse(const RenderWindow& window, const arbore& A) {
+nod* gasesteNodCuPozMouse(const RenderWindow& fereastraAplicatie, const arbore& A) {
 	if (A.radacina == nullptr)
 		return nullptr;
 	dateNod nodPePozitieMouse;
-	nodPePozitieMouse.x = Mouse::getPosition(window).x;
-	nodPePozitieMouse.y = Mouse::getPosition(window).y;
+	nodPePozitieMouse.x = Mouse::getPosition(fereastraAplicatie).x;
+	nodPePozitieMouse.y = Mouse::getPosition(fereastraAplicatie).y;
 	return gasesteNodRecursiv(A.radacina, nodPePozitieMouse);
 }
 
-nod* gasesteNodListaCuPozMouse(const RenderWindow& window)
+nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie)
 {
 	dateNod nodPePozitieMouse;
-	nodPePozitieMouse.x = Mouse::getPosition(window).x;
-	nodPePozitieMouse.y = Mouse::getPosition(window).y;
+	nodPePozitieMouse.x = Mouse::getPosition(fereastraAplicatie).x;
+	nodPePozitieMouse.y = Mouse::getPosition(fereastraAplicatie).y;
 
 	for (const auto& A : listaArbori)
 	{

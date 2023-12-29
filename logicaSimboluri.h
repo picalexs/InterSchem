@@ -3,13 +3,7 @@
 #include "functiiNod.h"
 using namespace sf;
 
-void logicaCreareSimbol(const RenderWindow& window);
-
-void logicaStergereSimbol(const RenderWindow& window);
-
-void logicaLegaturaIntreSimboluri(const RenderWindow& window);
-
-void logicaSimboluri(const RenderWindow& window);
+void logicaSimboluri(const RenderWindow& fereastraAplicatie);
 
 bool esteActivaCitireaPtAlgoritm();
 

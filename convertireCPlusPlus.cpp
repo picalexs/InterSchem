@@ -2,7 +2,7 @@
 #include "convertireCPlusPlus.h"
 
 int nrStart = 0, nrStop = 0;
-void nrStartStop(arbore A, RenderWindow& window, const dateNod& date)
+void nrStartStop(arbore A, const dateNod& date)
 {
 	int ok = 1;
 	if (listaArbori.size() > 1)

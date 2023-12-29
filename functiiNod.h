@@ -30,9 +30,9 @@ nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date);
 
 nod* gasesteNodInArbore(const arbore& A, const dateNod& date);
 
-nod* gasesteNodCuPozMouse(const sf::RenderWindow& window, const arbore& A);
+nod* gasesteNodCuPozMouse(const RenderWindow& fereastraAplicatie, const arbore& A);
 
-nod* gasesteNodListaCuPozMouse(const sf::RenderWindow& window);
+nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie);
 
 nod* gasesteNodInListaArbori(const dateNod& date);
 

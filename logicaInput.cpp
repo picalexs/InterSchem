@@ -3,11 +3,11 @@
 #include "functiiExpresie.h"
 #include "logicaSimboluri.h"
 
-void logicaLMB(const sf::RenderWindow& window, sf::Clock& timpCeas, bool& citireExpresie, nod*& nodDeGasit, string& expresieDeCitit)
+void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, nod*& nodDeGasit, string& expresieDeCitit)
 {
 	if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
 	{
-		nodDeGasit = gasesteNodListaCuPozMouse(window);
+		nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		if (nodDeGasit != nullptr)
 		{
 			citireExpresie = true;
@@ -23,7 +23,7 @@ void logicaLMB(const sf::RenderWindow& window, sf::Clock& timpCeas, bool& citire
 			if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
 				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
 			}
-			cout << "Expresie citita: " << expresieDeCitit << endl;
+			cout << "Expresie citita: " << expresieDeCitit << '\n';
 			if (nodDeGasit != nullptr)
 				nodDeGasit->date.expresie = expresieDeCitit;
 			expresieDeCitit.clear();
@@ -92,7 +92,7 @@ void logicaInput(const Event& event)
 	}
 }
 
-void logicaExecutareInput(const RenderWindow& window, const Event& event)
+void logicaExecutareInput(const RenderWindow& fereastraAplicatie,const Event& event)
 {
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static nod* nodDeGasit = nullptr;
@@ -105,12 +105,12 @@ void logicaExecutareInput(const RenderWindow& window, const Event& event)
 	if (esteApasatLMB) {//verificare dublu click -> citire expresie
 		esteApasatLMB = false;
 		esteRidicatLMB = false;
-		logicaLMB(window, timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
+		logicaLMB(fereastraAplicatie,timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
 		timpApasatLMB.restart();
 	}
 	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
 		if (nodDeMutat == nullptr)
-			nodDeMutat = gasesteNodListaCuPozMouse(window);
+			nodDeMutat = gasesteNodListaCuPozMouse(fereastraAplicatie);
 	}
 	if (esteRidicatLMB)
 	{
@@ -121,8 +121,8 @@ void logicaExecutareInput(const RenderWindow& window, const Event& event)
 	{
 		if (nodDeMutat != nullptr)
 		{
-			nodDeMutat->date.x = Mouse::getPosition(window).x;
-			nodDeMutat->date.y = Mouse::getPosition(window).y;
+			nodDeMutat->date.x = Mouse::getPosition(fereastraAplicatie).x;
+			nodDeMutat->date.y = Mouse::getPosition(fereastraAplicatie).y;
 		}
 	}
 	if (esteApasatF12)//executa algoritmul

@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void nrStartStop(arbore A, RenderWindow& window, const dateNod& date);
+void nrStartStop(arbore A, const dateNod& date);
 
 void verificare(nod* nodCurent, const dateNod& date);
 

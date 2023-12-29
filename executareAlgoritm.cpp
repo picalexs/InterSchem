@@ -9,8 +9,8 @@ bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
 	if (N->date.tip == 0) {
 		nrStart++;
 		if (nrStart > 1) {//am mai mult de un nod start
-			string eroare = "Eroare: Are mai mult de un nod start!";
-			cout << eroare << endl;
+			const string eroare = "Eroare: Are mai mult de un nod start!";
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
@@ -18,16 +18,16 @@ bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
 	else if (N->date.tip == 1) {
 		nrStop++;
 		if (N->st != nullptr || N->dr != nullptr) {//nodul stop nu are voie sa aiba fii
-			string eroare = "Eroare: Are nod stop ca fiu!";
-			cout << eroare << endl;
+			const string eroare = "Eroare: Are nod stop ca fiu!";
+			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
 	}
 	else if (N->dr == nullptr && N->st == nullptr)//se afla un nod diferit de 1 ca frunza
 	{
-		string eroare = "Eroare: Lipseste un nod stop!";
-		cout << eroare << endl;
+		const string eroare = "Eroare: Lipseste un nod stop!";
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -40,8 +40,8 @@ bool verificareStartStop(const nod* radacina)
 	if (!nrStartStop(nrStart, nrStop, radacina))
 		return false;
 	if (nrStop == 0 || nrStart == 0) {
-		string eroare = "Eroare: Nu are nod start sau nod stop!";
-		cout << eroare << endl;
+		const string eroare = "Eroare: Nu are nod start sau nod stop!";
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -51,8 +51,8 @@ bool verificareStartStop(const nod* radacina)
 bool verificareAlgoritm()
 {
 	if (listaArbori.empty() || listaArbori.size() > 1) {
-		string eroare = "Eroare: Nu are forma buna! Nu are exact un \"arbore\" de parcurs";
-		cout << eroare << endl;
+		const string eroare = "Eroare: Nu are forma buna! Nu are exact un \"arbore\" de parcurs";
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -60,14 +60,14 @@ bool verificareAlgoritm()
 		return false;
 	if (listaArbori[0].radacina->date.tip != 0)
 	{
-		string eroare = "Eroare: Nu are nod start la inceput!";
-		cout << eroare << endl;
+		const string eroare = "Eroare: Nu are nod start la inceput!";
+		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
 	if (!verificareStartStop(listaArbori[0].radacina))
 		return false;
-	cout << "Are forma buna!" << endl;
+	cout << "Are forma buna!\n";
 	return true;
 }
 

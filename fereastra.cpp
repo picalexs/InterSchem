@@ -10,12 +10,11 @@ using namespace sf;
 void creareFereastra()
 {
 	VideoMode desktop = VideoMode::getDesktopMode();
-	RenderWindow window(desktop, "Interschem", Style::Default);
-	View view(FloatRect(0, 0, desktop.width, desktop.height));
-	window.setView(view);
-
-	window.setFramerateLimit(60);//limita de fps ca sa nu bubuie laptopul :')
-	window.setKeyRepeatEnabled(false);
+	RenderWindow fereastraAplicatie(desktop, "Interschem", Style::Default); //de schimbat cu Fullscreen dupa
+	const View view(FloatRect(0, 0, desktop.width, desktop.height));
+	fereastraAplicatie.setView(view);
+	fereastraAplicatie.setFramerateLimit(60);//limita de fps ca sa nu bubuie laptopul :')
+	fereastraAplicatie.setKeyRepeatEnabled(false);
 
 	if (fontGlobal.getInfo().family != "Arial")
 		if (!fontGlobal.loadFromFile("Arial.ttf")) {
@@ -25,28 +24,28 @@ void creareFereastra()
 
 	atribuireConstanteCunoscute();//PI, e, g, phi;
 
-	while (window.isOpen())
+	while (fereastraAplicatie.isOpen())
 	{
 		Event event;
-		while (window.pollEvent(event))
+		while (fereastraAplicatie.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 			{
-				window.close();
+				fereastraAplicatie.close();
 			}
 			logicaInput(event);
 		}
-		logicaExecutareInput(window, event);
-		window.clear(Color::White);
+		logicaExecutareInput(fereastraAplicatie,event);
+		fereastraAplicatie.clear(Color::White);
 
-		logicaSimboluri(window);//creare, stergere, legare simboluri
+		logicaSimboluri(fereastraAplicatie);//creare, stergere, legare simboluri
 
-		creareSimbolPtListaArbori(window);//deseneaza simbolurile din listaArbori
-		desenareLinieIntreSimboluri(window);//deseneaza liniile dintre simboluri
-		afisareTextLista(window,desktop);//deseneaza textul fiecarui simbol
-		afisareListaOutput(window, desktop);//deseneaza outputul
+		creareSimbolPtListaArbori(fereastraAplicatie);//deseneaza simbolurile din listaArbori
+		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
+		afisareTextLista(fereastraAplicatie,desktop);//deseneaza textul fiecarui simbol
+		afisareListaOutput(fereastraAplicatie,desktop);//deseneaza outputul
 
-		functieDebugging(window,desktop);//deseneaza informatii de debugging
-		window.display();
+		functieDebugging(fereastraAplicatie,desktop);//deseneaza informatii de debugging
+		fereastraAplicatie.display();
 	}
 }

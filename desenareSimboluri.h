@@ -3,18 +3,17 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void desenareNodStart(RenderWindow& window, const dateNod& date);
+void desenareNodStart(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareNodStop(RenderWindow& window,const dateNod& date);
+void desenareNodStop(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareNodAtribuire(RenderWindow& window, const dateNod& date);
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareNodCitire(RenderWindow& window, const dateNod& date);
+void desenareNodCitire(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareNodAfisare(RenderWindow& window, const dateNod& date);
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareNodDaca(RenderWindow& window, const dateNod& date);
+void desenareNodDaca(RenderWindow& fereastraAplicatie, const dateNod& date);
 
-void desenareLinieIntreSimboluri(RenderWindow& window);
+void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie);
 
-void mutareForma(RenderWindow& window);

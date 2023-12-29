@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void afisareTextLista(RenderWindow& window, VideoMode& desktop);
-
-void functieDebugging(RenderWindow& window, VideoMode& desktop);
-
-void afisareListaOutput(RenderWindow& window, const VideoMode& desktop);
+void afisareTextLista(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+					 
+void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+					 
+void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 

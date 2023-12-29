@@ -1,16 +1,15 @@
-#include "logicaSimboluri.h"
-
 #include <iomanip>
 #include <sstream>
-
 #include "creareSimboluri.h"
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
 #include "functiiMatematice.h"
+#include "logicaSimboluri.h"
+#include "variabileGlobale.h"
 
 map<Keyboard::Key, bool> esteTastaApasata;
 
-void logicaCreareSimbol(const RenderWindow& window)
+void logicaCreareSimbol(const RenderWindow& fereastraAplicatie)
 {
 	if (!Keyboard::isKeyPressed(Keyboard::LControl))
 		return;
@@ -20,7 +19,7 @@ void logicaCreareSimbol(const RenderWindow& window)
 		{
 			if (!esteTastaApasata[static_cast<Keyboard::Key>(key)])
 			{
-				const Vector2i pozitieMouse = Mouse::getPosition(window);
+				const Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 				dateNod date = schimbareDate(key - Keyboard::Num1, "", pozitieMouse.x, pozitieMouse.y);
 				cout << "Creat: tip= " << date.tip << ", (" << date.x << ',' << date.y << ")" << endl;
 
@@ -56,7 +55,7 @@ void stergereLinie(const nod* N)
 
 bool esteApasatStergere = false;
 
-void logicaStergereSimbol(const RenderWindow& window)
+void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 {
 	if (!Keyboard::isKeyPressed(Keyboard::Escape) && esteApasatStergere)
 	{
@@ -69,7 +68,7 @@ void logicaStergereSimbol(const RenderWindow& window)
 		// Parcurgerea listei de arbori si a fiecarui arbore pentru a gasi nodul si a-l sterge daca este gasit
 		for (auto& A : listaArbori)
 		{
-			nod* nodDeSters = gasesteNodCuPozMouse(window, A);
+			nod* nodDeSters = gasesteNodCuPozMouse(fereastraAplicatie,A);
 
 			if (nodDeSters != nullptr)
 			{
@@ -85,15 +84,15 @@ void logicaStergereSimbol(const RenderWindow& window)
 nod* nod1 = nullptr;
 nod* nod2 = nullptr;
 
-void logicaLegaturaIntreSimboluri(const RenderWindow& window)
+void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 {
 	if (Mouse::isButtonPressed(Mouse::Right))
 	{
 		if (nod1 == nullptr)
 		{
-			nod1 = gasesteNodListaCuPozMouse(window);
+			nod1 = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		}
-		nod* nod2Nou = gasesteNodListaCuPozMouse(window);
+		nod* nod2Nou = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		if (nod2 == nullptr || nod2 == nod1 || nod2Nou != nod2)
 		{
 			nod2 = nod2Nou;
@@ -113,11 +112,11 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& window)
 	nod2 = nullptr;
 }
 
-void logicaSimboluri(const RenderWindow& window)
+void logicaSimboluri(const RenderWindow& fereastraAplicatie)
 {
-	logicaCreareSimbol(window);
-	logicaStergereSimbol(window);
-	logicaLegaturaIntreSimboluri(window);
+	logicaCreareSimbol(fereastraAplicatie);
+	logicaStergereSimbol(fereastraAplicatie);
+	logicaLegaturaIntreSimboluri(fereastraAplicatie);
 }
 
 //caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"

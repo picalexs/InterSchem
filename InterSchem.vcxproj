@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +139,6 @@
     <ClCompile Include="functiiExpresie.cpp" />
     <ClCompile Include="creareSimboluri.cpp" />
     <ClCompile Include="evaluareExpresie.cpp" />
-    <ClCompile Include="exemplu.cpp" />
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
@@ -157,7 +157,6 @@
     <ClInclude Include="functiiExpresie.h" />
     <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="evaluareExpresie.h" />
-    <ClInclude Include="exemplu.h" />
     <ClInclude Include="fereastra.h" />
     <ClInclude Include="functiiMatematice.h" />
     <ClInclude Include="functiiNod.h" />
