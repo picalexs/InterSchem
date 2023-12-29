@@ -3,13 +3,22 @@
 #include "functiiExpresie.h"
 #include "logicaSimboluri.h"
 
-void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, nod*& nodDeGasit, string& expresieDeCitit)
+void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
 {
 	if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
 	{
 		nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		if (nodDeGasit != nullptr)
 		{
+			if (nodDeGasit->date.tip == 0 || nodDeGasit->date.tip == 1)
+			{
+				const string eroare = "Nu se poate edita nodul de START/STOP!!";
+				cout << eroare << '\n';
+				listaConsola.push_back(eroare);
+				nodDeGasit = nullptr;
+				return;
+			}
+
 			citireExpresie = true;
 			expresieDeCitit = nodDeGasit->date.expresie;
 			cout << "Citire expresie!" << endl;
@@ -32,7 +41,7 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& ci
 	}
 }
 
-void logicaEnter(bool& citireExpresie, nod* nodDeGasit, string& expresieDeCitit)
+void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit)
 {
 	citireExpresie = false;
 	if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
@@ -92,11 +101,11 @@ void logicaInput(const Event& event)
 	}
 }
 
-void logicaExecutareInput(const RenderWindow& fereastraAplicatie,const Event& event)
+void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const Event& event)
 {
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
-	static nod* nodDeGasit = nullptr;
-	static nod* nodDeMutat = nullptr;
+	static Nod* nodDeGasit = nullptr;
+	static Nod* nodDeMutat = nullptr;
 	static bool citireExpresie = false;
 	static string expresieDeCitit;
 	static Clock timpCeasLMB, timpCeasTastatura, timpApasatLMB;
@@ -105,7 +114,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie,const Event& ev
 	if (esteApasatLMB) {//verificare dublu click -> citire expresie
 		esteApasatLMB = false;
 		esteRidicatLMB = false;
-		logicaLMB(fereastraAplicatie,timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
+		logicaLMB(fereastraAplicatie, timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
 		timpApasatLMB.restart();
 	}
 	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
@@ -121,8 +130,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie,const Event& ev
 	{
 		if (nodDeMutat != nullptr)
 		{
-			nodDeMutat->date.x = Mouse::getPosition(fereastraAplicatie).x;
-			nodDeMutat->date.y = Mouse::getPosition(fereastraAplicatie).y;
+			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
+			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
 		}
 	}
 	if (esteApasatF12)//executa algoritmul
@@ -162,7 +171,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie,const Event& ev
 		else if (!ch.empty()) {
 			expresieDeCitit += ch;
 		}
-		if (nodDeGasit != nullptr)//introducerea expresiei citite in nod.
+		if (nodDeGasit != nullptr)//introducerea expresiei citite in Nod.
 			nodDeGasit->date.expresie = expresieDeCitit;
 	}
 	if (esteApasatEnter)//stop citire expresie

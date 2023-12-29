@@ -4,7 +4,7 @@
 using namespace sf;
 vector<string> numeNoduri = { "Start", "Stop", "Atribuire", "Citire", "Afisare", "Daca" };
 
-void deseneazaArbore(RenderWindow& window, nod* nodCurent, float x, float y, float spacing) {
+void deseneazaArbore(RenderWindow& window, Nod* nodCurent, float x, float y, float spacing) {
 	if (nodCurent == nullptr) {
 		return;
 	}
@@ -65,7 +65,7 @@ void deseneazaArbore(RenderWindow& window, nod* nodCurent, float x, float y, flo
 	}
 }
 
-void adaugaNoduriRandom(nod* nodCurent, int numarNoduri, int& contor, int nivel) {
+void adaugaNoduriRandom(Nod* nodCurent, int numarNoduri, int& contor, int nivel) {
 	if ((contor >= numarNoduri || nivel >= 5) && nodCurent->date.tip != 5) {
 		if (nodCurent->st == nullptr && nodCurent->dr == nullptr && nodCurent->date.tip != 1) {
 			nodCurent->st = creareNod({ 1, "ExpresieStop", 0, 0 });
@@ -77,7 +77,7 @@ void adaugaNoduriRandom(nod* nodCurent, int numarNoduri, int& contor, int nivel)
 	if (nodCurent->date.tip == 0 || nodCurent->date.tip == 5) {
 		for (int i = 0; i < 2; ++i) {
 			int tipNod = rand() % 4 + 2;
-			nod* newNode = creareNod({ tipNod, "Expresie" + numeNoduri[tipNod], 0, 0 });
+			Nod* newNode = creareNod({ tipNod, "Expresie" + numeNoduri[tipNod], 0, 0 });
 			if (i == 0) {
 				nodCurent->st = newNode;
 			}
@@ -108,7 +108,7 @@ void generareArbore() {
 	window.setFramerateLimit(45);
 	srand(time(nullptr));
 
-	arbore A;
+	Arbore A;
 	atribuireArbore(A, { 0, "Expresie", 500, 50 });
 	int contor = 0;
 	adaugaNoduriRandom(A.radacina, 6, contor, 0);

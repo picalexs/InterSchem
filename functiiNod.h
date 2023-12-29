@@ -4,55 +4,55 @@
 #include "structs.h"
 #include <SFML/Graphics.hpp>
 
-dateNod schimbareDate(int tip, const std::string& expresie, int x, int y);
+DateNod schimbareDate(int tip, const std::string& expresie, int x, int y);
 
-void initializareNod(nod& N);
+void initializareNod(Nod& N);
 
-void atribuireNod(nod& N, const dateNod& date);
+void atribuireNod(Nod& N, const DateNod& date);
 
-bool esteNodNull(const nod* N);
+bool esteNodNull(const Nod* N);
 
-nod* creareNodNull();
+Nod* creareNodNull();
 
-nod* creareNod(const dateNod& date);
+Nod* creareNod(const DateNod& date);
 
-void inserareFiu(nod* tata, bool fiu, const dateNod& date);
+void inserareFiu(Nod* tata, bool fiu, const DateNod& date);
 
-void initializareArbore(arbore& A);
+void initializareArbore(Arbore& A);
 
-void atribuireArbore(arbore& A, const dateNod& date);
+void atribuireArbore(Arbore& A, const DateNod& date);
 
-bool esteArboreNull(const arbore& A);
+bool esteArboreNull(const Arbore& A);
 
-bool esteNodInArbore(nod* nodCautat, const nod* radacina);
+bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
 
-nod* gasesteNodRecursiv(nod* nodCurent, const dateNod& date);
+Nod* gasesteNodRecursiv(Nod* nodCurent, const DateNod& date);
 
-nod* gasesteNodInArbore(const arbore& A, const dateNod& date);
+Nod* gasesteNodInArbore(const Arbore& A, const DateNod& date);
 
-nod* gasesteNodCuPozMouse(const RenderWindow& fereastraAplicatie, const arbore& A);
+Nod* gasesteNodCuPozMouse(const RenderWindow& fereastraAplicatie, const Arbore& A);
 
-nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie);
+Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie);
 
-nod* gasesteNodInListaArbori(const dateNod& date);
+Nod* gasesteNodInListaArbori(const DateNod& date);
 
-long long numarNoduri(const nod* N);
+long long numarNoduri(const Nod* N);
 
-int numarNoduriDinArbore(arbore A);
+int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();
 
-void stergereDinListaArbori(const nod* N);
+void stergereDinListaArbori(const Nod* N);
 
-void stergereIntregArbore(nod*& N);
+void stergereIntregArbore(Nod*& N);
 
-void stergereArboreCuRadacina(arbore& A);
+void stergereArboreCuRadacina(Arbore& A);
 
-void stergereNodFaraSubarbore(arbore& A, nod* N);
+void stergereNodFaraSubarbore(Arbore& A, Nod* N);
 
-bool existaLinie(const std::pair<dateNod, dateNod>& linie);
+bool existaLinie(const std::pair<DateNod, DateNod>& linie);
 
-bool creareLegatura(nod*& nod1, nod*& nod2);
+bool creareLegatura(Nod*& nod1, Nod*& nod2);
 
 void seteazaVariabila(const std::string& nume, long double valoare);
 

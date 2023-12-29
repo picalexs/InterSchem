@@ -7,8 +7,8 @@
 using namespace std;
 using namespace sf;
 
-extern vector<arbore> listaArbori;
-extern vector<pair<dateNod, dateNod>> listaLinii;
+extern vector<Arbore> listaArbori;
+extern vector<pair<DateNod, DateNod>> listaLinii;
 extern unordered_map<string, long double> variabile;
 extern vector<string> listaConsola;
 extern Font fontGlobal;

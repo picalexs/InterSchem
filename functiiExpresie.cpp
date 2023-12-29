@@ -3,9 +3,9 @@
 #include <sstream>
 using namespace std;
 
-void afisareTextNod(RenderWindow& fereastraAplicatie,const VideoMode& desktop,const nod* nodCurent)
+void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Nod* nodCurent)
 {
-	static unordered_set<const nod*> noduriVizitate;
+	static unordered_set<const Nod*> noduriVizitate;
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return;
 
@@ -14,15 +14,15 @@ void afisareTextNod(RenderWindow& fereastraAplicatie,const VideoMode& desktop,co
 	noduriVizitate.insert(nodCurent);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin(static_cast<int>((marginiText.left) + marginiText.width / 2), 10);
+	mainText.setOrigin(static_cast<int>((marginiText.left) + marginiText.width / 2), (marginiText.top + marginiText.height) / 2);
 
 	const int xPos = nodCurent->date.x;
-	const int yPos = nodCurent->date.y + 25;
+	const int yPos = nodCurent->date.y;
 	mainText.setPosition(xPos, yPos);
 	fereastraAplicatie.draw(mainText);
 
-	afisareTextNod(fereastraAplicatie,desktop,nodCurent->st);
-	afisareTextNod(fereastraAplicatie,desktop,nodCurent->dr);
+	afisareTextNod(fereastraAplicatie, desktop, nodCurent->st);
+	afisareTextNod(fereastraAplicatie, desktop, nodCurent->dr);
 	noduriVizitate.clear();
 }
 
@@ -41,15 +41,16 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 {
 	if (listaConsola.empty())
 		return;
-	const int marimeFont = desktop.width / 70;
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	const int spatiuY = 10;
 	const int spatiuMargini = 20;
+	const int spatiuJos = desktop.height / 10;
 
 	//deseneaza primul element din listaConsola (ultimul element adaugat) mai intunecat la culoare
 	Text textOutput(listaConsola[listaConsola.size() - 1], fontGlobal, marimeFont);
 	textOutput.setFillColor(Color::Black);
-	int pozY= desktop.height - spatiuMargini - textOutput.getLocalBounds().height;
-	textOutput.setPosition(spatiuMargini,pozY);
+	int pozY = desktop.height - spatiuJos - textOutput.getLocalBounds().height;
+	textOutput.setPosition(spatiuMargini, pozY);
 	fereastraAplicatie.draw(textOutput);
 
 	//deseneaza restul elementelor din listaConsola mai gri la culoare
@@ -57,7 +58,7 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 	for (int i = listaConsola.size() - 2; i >= 0; i--) {
 		Text textOutput(listaConsola[i], fontGlobal, marimeFont);
 		textOutput.setFillColor(Color(90, 90, 90));
-		pozY = desktop.height - spatiuMargini - textOutput.getLocalBounds().height - (index + 1) * (textOutput.getGlobalBounds().height + spatiuY);
+		pozY = desktop.height - spatiuJos - textOutput.getLocalBounds().height - (index + 1) * (textOutput.getGlobalBounds().height + spatiuY);
 		textOutput.setPosition(spatiuMargini, pozY);
 		fereastraAplicatie.draw(textOutput);
 		index++;
@@ -65,7 +66,7 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 }
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	int marimeFont = desktop.width / 70;
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	int pozY = 0;
 	int spatiuY = 10;
 	int spatiuMargini = 20;

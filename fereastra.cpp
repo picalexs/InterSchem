@@ -18,7 +18,7 @@ void creareFereastra()
 
 	if (fontGlobal.getInfo().family != "Arial")
 		if (!fontGlobal.loadFromFile("Arial.ttf")) {
-			cout<<"Eroare la incarcarea fontului.\n";
+			cout << "Eroare la incarcarea fontului.\n";
 			return;
 		}
 
@@ -35,17 +35,17 @@ void creareFereastra()
 			}
 			logicaInput(event);
 		}
-		logicaExecutareInput(fereastraAplicatie,event);
+		logicaExecutareInput(fereastraAplicatie, event);
 		fereastraAplicatie.clear(Color::White);
 
 		logicaSimboluri(fereastraAplicatie);//creare, stergere, legare simboluri
 
-		creareSimbolPtListaArbori(fereastraAplicatie);//deseneaza simbolurile din listaArbori
+		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
-		afisareTextLista(fereastraAplicatie,desktop);//deseneaza textul fiecarui simbol
-		afisareListaOutput(fereastraAplicatie,desktop);//deseneaza outputul
+		afisareTextLista(fereastraAplicatie, desktop);//deseneaza textul fiecarui simbol
+		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
-		functieDebugging(fereastraAplicatie,desktop);//deseneaza informatii de debugging
+		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
 }

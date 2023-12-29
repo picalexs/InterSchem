@@ -19,11 +19,15 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie)
 		{
 			if (!esteTastaApasata[static_cast<Keyboard::Key>(key)])
 			{
-				const Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
-				dateNod date = schimbareDate(key - Keyboard::Num1, "", pozitieMouse.x, pozitieMouse.y);
+				const Vector2f pozitieMouse = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie));
+				DateNod date = schimbareDate(key - Keyboard::Num1, "", pozitieMouse.x, pozitieMouse.y);
+				if (date.tip == 0)
+					date.expresie = "START";
+				else if (date.tip == 1)
+					date.expresie = "STOP";
 				cout << "Creat: tip= " << date.tip << ", (" << date.x << ',' << date.y << ")" << endl;
 
-				arbore ArboreNou;
+				Arbore ArboreNou;
 				atribuireArbore(ArboreNou, date);
 				listaArbori.push_back(ArboreNou);
 
@@ -37,7 +41,7 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie)
 	}
 }
 
-void stergereLinie(const nod* N)
+void stergereLinie(const Nod* N)
 {
 	for (auto it = listaLinii.begin(); it != listaLinii.end();)
 	{
@@ -65,10 +69,10 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 	if (Keyboard::isKeyPressed(Keyboard::Escape) && !esteApasatStergere)
 	{
 		esteApasatStergere = true;
-		// Parcurgerea listei de arbori si a fiecarui arbore pentru a gasi nodul si a-l sterge daca este gasit
+		// Parcurgerea listei de arbori si a fiecarui Arbore pentru a gasi nodul si a-l sterge daca este gasit
 		for (auto& A : listaArbori)
 		{
-			nod* nodDeSters = gasesteNodCuPozMouse(fereastraAplicatie,A);
+			Nod* nodDeSters = gasesteNodCuPozMouse(fereastraAplicatie, A);
 
 			if (nodDeSters != nullptr)
 			{
@@ -81,8 +85,8 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 	}
 }
 
-nod* nod1 = nullptr;
-nod* nod2 = nullptr;
+Nod* nod1 = nullptr;
+Nod* nod2 = nullptr;
 
 void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 {
@@ -92,7 +96,7 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 		{
 			nod1 = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		}
-		nod* nod2Nou = gasesteNodListaCuPozMouse(fereastraAplicatie);
+		Nod* nod2Nou = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		if (nod2 == nullptr || nod2 == nod1 || nod2Nou != nod2)
 		{
 			nod2 = nod2Nou;
@@ -120,7 +124,7 @@ void logicaSimboluri(const RenderWindow& fereastraAplicatie)
 }
 
 //caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
-void logicaAtribuire(nod* N)
+void logicaAtribuire(Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
@@ -207,7 +211,7 @@ void opresteCitireaPtAlgoritm()
 	citireActivata = false;
 }
 
-void logicaCitire(const nod* N)
+void logicaCitire(const Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
@@ -235,7 +239,7 @@ void stergereOutputCandMare()
 	}
 }
 
-void logicaAfisare(nod* N)
+void logicaAfisare(Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
@@ -305,7 +309,7 @@ void logicaAfisare(nod* N)
 }
 
 
-bool logicaDaca(nod* N)
+bool logicaDaca(Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return false;

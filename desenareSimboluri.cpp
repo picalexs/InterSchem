@@ -1,106 +1,216 @@
 #include "desenareSimboluri.h"
 #include "functiiNod.h"
-
 #include <cmath>
 #define PI 3.14159265358979323846
 
-void desenareLinie(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::RectangleShape line(sf::Vector2f(500, 4));
-	line.setPosition(date.x / 2, date.y / 2);
-	line.setFillColor(Color::Black);
+struct Punct
+{
+	float x;
+	float y;
+};
+
+Punct dateNodInPunct(const DateNod& date)
+{
+	Punct punct;
+	punct.x = date.x;
+	punct.y = date.y;
+	return punct;
+}
+
+void desenareLinie(RenderWindow& fereastraAplicatie, const Punct& pA, const Punct& pB, const float& grosime, const Color& culoare) {
+	const float lungime = sqrt((pB.x - pA.x) * (pB.x - pA.x) + (pB.y - pA.y) * (pB.y - pA.y));
+	const float unghi = atan2(pB.y - pA.y, pB.x - pA.x) * 180 / PI;
+
+	RectangleShape line(Vector2f(lungime, grosime));
+	line.rotate(unghi);
+	line.setPosition(pA.x, pA.y);
+	line.setFillColor(culoare);
 	fereastraAplicatie.draw(line);
 }
 
-void desenareDreptunghi(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::RectangleShape rectangle(sf::Vector2f(500, 4));
-	rectangle.setPosition(date.x / 2, date.y / 2);
-	rectangle.setFillColor(Color::Black);
-	fereastraAplicatie.draw(rectangle);
+void desenareDreptunghi(RenderWindow& fereastraAplicatie, const Punct& centru, const float& lungime, const float& latime, const Color& culoare) {
+	Punct pNE, pSE, pSV, pNV;
+	pNE.x = pSE.x = centru.x + lungime / 2;
+	pNV.x = pSV.x = centru.x - lungime / 2;
+	pNE.y = pNV.y = centru.y - latime / 2;
+	pSE.y = pSV.y = centru.y + latime / 2;
+
+	ConvexShape dreptunghi;
+	dreptunghi.setPointCount(4);
+	dreptunghi.setPoint(0, Vector2f(pNE.x, pNE.y));
+	dreptunghi.setPoint(1, Vector2f(pSE.x, pSE.y));
+	dreptunghi.setPoint(2, Vector2f(pSV.x, pSV.y));
+	dreptunghi.setPoint(3, Vector2f(pNV.x, pNV.y));
+	dreptunghi.setFillColor(culoare);
+	fereastraAplicatie.draw(dreptunghi);
 }
 
-void desenareTriunghi(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::CircleShape triangle;
-	triangle.setRadius(75);
-	triangle.setPointCount(3);
-	fereastraAplicatie.draw(triangle);
-	triangle.setPosition(date.x - 75, date.y);
-	triangle.setFillColor(Color::Yellow);
-	fereastraAplicatie.draw(triangle);
+void desenareClopote(RenderWindow& fereastraAplicatie, const Punct& centru, const float& lungime, const float& inaltime, const int& calitate, const Color& culoareSimbol, const Color& culoareDA, const Color& culoareNU) {
+	ConvexShape clopoteDA, clopoteNU;
+	clopoteDA.setPointCount(calitate / 4 + 2);
+	clopoteNU.setPointCount(calitate / 4 + 2);
+	for (int i = 0; i <= calitate / 4; i++) {
+		const float rad = (360 / calitate * i + 180) / (360 / PI / 2);
+		const float x = cos(rad) * inaltime;
+		const float y = sin(rad) * inaltime;
+		clopoteDA.setPoint(i, Vector2f(x - lungime / 2, y + inaltime / 2));
+		clopoteNU.setPoint(i, Vector2f(lungime / 2 - x, y + inaltime / 2));
+
+	}
+	Vector2f primulPunct = clopoteDA.getPoint(0);
+	Vector2f ultimulPunct = clopoteDA.getPoint(calitate / 4);
+	clopoteDA.setPoint(calitate / 4 + 1, Vector2f(ultimulPunct.x, primulPunct.y));
+	clopoteDA.setPosition(centru.x, centru.y);
+	clopoteDA.setFillColor(culoareDA);
+	fereastraAplicatie.draw(clopoteDA);
+
+	primulPunct = clopoteNU.getPoint(0);
+	ultimulPunct = clopoteNU.getPoint(calitate / 4);
+	clopoteNU.setPoint(calitate / 4 + 1, Vector2f(ultimulPunct.x, primulPunct.y));
+	clopoteNU.setPosition(centru.x, centru.y);
+	clopoteNU.setFillColor(culoareNU);
+	fereastraAplicatie.draw(clopoteNU);
+
+	desenareDreptunghi(fereastraAplicatie, centru, lungime, inaltime, culoareSimbol);
+
 }
 
-void desenareElipsa(RenderWindow& fereastraAplicatie, const dateNod& date, float raza_x, float raza_y, int calitate, Color culoare)
+void desenareElipsa(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoare)
 {
-	sf::ConvexShape ellipse;
-	ellipse.setPointCount(calitate);
+	ConvexShape elipsa;
+	elipsa.setPointCount(calitate);
+	for (int i = 0; i < calitate; i++) {
+		const float rad = (360 / calitate * i) / (360 / PI / 2);
+		const float x = cos(rad) * raza_x;
+		const float y = sin(rad) * raza_y;
+		elipsa.setPoint(i, Vector2f(x, y));
+	}
 
-	for (int i = 0; i < calitate; ++i) {
-		float rad = (360 / calitate * i) / (360 / PI / 2);
-		float x = cos(rad) * raza_x;
-		float y = sin(rad) * raza_y;
-		ellipse.setPoint(i, sf::Vector2f(x, y));
-	};
-
-	ellipse.setPosition(date.x, date.y + raza_y);
-	ellipse.setFillColor(culoare);
-	fereastraAplicatie.draw(ellipse);
+	elipsa.setPosition(centru.x, centru.y);
+	elipsa.setFillColor(culoare);
+	fereastraAplicatie.draw(elipsa);
 }
 
-void desenareNodStart(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	float raza_x = 65, raza_y = 25;
-	int calitate = 10;
-	Color culoare(120, 189, 219);
-	desenareElipsa(fereastraAplicatie,date, raza_x, raza_y, calitate, culoare);
+void desenareCapsula(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoare)
+{
+	Punct centruDr;
+	Punct centruSt = centruDr = centru;
+	centruSt.x -= raza_x / 2;
+	centruDr.x += raza_x / 2;
+	desenareElipsa(fereastraAplicatie, centruSt, raza_y, raza_y, calitate, culoare);
+	desenareElipsa(fereastraAplicatie, centruDr, raza_y, raza_y, calitate, culoare);
+	desenareDreptunghi(fereastraAplicatie, centru, raza_x, raza_y * 2, culoare);
+}
+
+void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const float& bazaMica, const float& bazaMare, const float& inaltime, const Color& culoare)
+{
+	Punct pStangaSus, pDreaptaSus, pStangaJos, pDreaptaJos;
+	pStangaSus.x = centru.x - bazaMica / 2;
+	pDreaptaSus.x = centru.x + bazaMica / 2;
+	pStangaJos.x = centru.x - bazaMare / 2;
+	pDreaptaJos.x = centru.x + bazaMare / 2;
+	pStangaSus.y = pDreaptaSus.y = centru.y - inaltime / 2;
+	pStangaJos.y = pDreaptaJos.y = centru.y + inaltime / 2;
+
+	ConvexShape trapez;
+	trapez.setPointCount(4);
+	trapez.setPoint(0, Vector2f(pStangaSus.x, pStangaSus.y));
+	trapez.setPoint(1, Vector2f(pStangaJos.x, pStangaJos.y));
+	trapez.setPoint(2, Vector2f(pDreaptaJos.x, pDreaptaJos.y));
+	trapez.setPoint(3, Vector2f(pDreaptaSus.x, pDreaptaSus.y));
+	trapez.setFillColor(culoare);
+	fereastraAplicatie.draw(trapez);
+}
+
+void modificareLungimePtExpresie(const VideoMode& desktop, const DateNod& date, const float& lungimeSimbol, float& lungime)
+{
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
+	const Text textExpresie(date.expresie, fontGlobal, marimeFont);
+	const float lngText = textExpresie.getLocalBounds().width;
+	const float raport = lngText / lungimeSimbol + 0.4f;
+	if (raport > 1.0f) {
+		lungime *= raport;
+	}
+}
+
+void desenareNodStart(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	const Color culoare(120, 189, 219);
+	const int calitate = 12;
+	const float inaltimeSimbol = desktop.height / 40;
+	const float lungimeSimbol = desktop.width / 20;
+
+	float raza_x = lungimeSimbol;
+	const float raza_y = inaltimeSimbol;
+
+	modificareLungimePtExpresie(desktop, date, lungimeSimbol, raza_x);
+
+	const Punct centru = dateNodInPunct(date);
+	desenareCapsula(fereastraAplicatie, centru, raza_x, raza_y, calitate, culoare);
 }
 
 
-void desenareNodStop(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	float raza_x = 65, raza_y = 25;
-	int calitate = 10;
-	Color culoare(120, 189, 219);
-	desenareElipsa(fereastraAplicatie,date, raza_x, raza_y, calitate, culoare);
+void desenareNodStop(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	desenareNodStart(fereastraAplicatie, desktop, date);
 }
 
-void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const dateNod& date) {
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	const Color culoare(236, 222, 96);
+	const float latimeSimbol = desktop.height / 25;
+	const float lungimeSimbol = desktop.width / 15;
 
-	sf::RectangleShape rectangle(sf::Vector2f(150, 50));
-	rectangle.setPosition(date.x - 75, date.y);
-	rectangle.setFillColor(Color(247, 218, 100));
-	fereastraAplicatie.draw(rectangle);
+	float lungime = lungimeSimbol;
+	const float latime = latimeSimbol;
+
+	modificareLungimePtExpresie(desktop, date, lungimeSimbol, lungime);
+
+	const Punct centru = dateNodInPunct(date);
+	desenareDreptunghi(fereastraAplicatie, centru, lungime, latime, culoare);
 }
 
-void desenareNodCitire(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::ConvexShape convex;
-	convex.setPosition(date.x - 100, date.y);
-	convex.setPointCount(4);
-	convex.setPoint(0, sf::Vector2f(0, 0));
-	convex.setPoint(1, sf::Vector2f(200, 0));
-	convex.setPoint(2, sf::Vector2f(175, 50));
-	convex.setPoint(3, sf::Vector2f(25, 50));
-	convex.setFillColor(Color(148, 216, 150));
-	fereastraAplicatie.draw(convex);
+void desenareNodCitire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	const Color culoare(102, 210, 102);
+	const float inaltimeSimbol = desktop.height / 25;
+	const float lungimeSimbol = desktop.width / 15;
+
+	float bazaMare = lungimeSimbol;
+	float bazaMica = bazaMare - 50;
+	const float inaltime = inaltimeSimbol;
+
+	modificareLungimePtExpresie(desktop, date, lungimeSimbol, bazaMare);
+	bazaMica = bazaMare - 50;
+	const Punct centru = dateNodInPunct(date);
+	desenareTrapez(fereastraAplicatie, centru, bazaMica, bazaMare, inaltime, culoare);
 }
 
-void desenareNodAfisare(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::ConvexShape convex;
-	convex.setPosition(date.x - 100, date.y);
-	convex.setPointCount(4);
-	convex.setPoint(0, sf::Vector2f(25, 0));
-	convex.setPoint(1, sf::Vector2f(175, 0));
-	convex.setPoint(2, sf::Vector2f(200, 50));
-	convex.setPoint(3, sf::Vector2f(0, 50));
-	convex.setFillColor(Color(230, 134, 150));
-	fereastraAplicatie.draw(convex);
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	const Color culoare(255, 102, 102);
+	const float inaltimeSimbol = desktop.height / 25;
+	const float lungimeSimbol = desktop.width / 15;
+
+	float bazaMare = lungimeSimbol;
+	float bazaMica = bazaMare - 50;
+	const float inaltime = inaltimeSimbol;
+
+	modificareLungimePtExpresie(desktop, date, lungimeSimbol, bazaMare);
+	bazaMica = bazaMare - 50;
+	const Punct centru = dateNodInPunct(date);
+	desenareTrapez(fereastraAplicatie, centru, bazaMare, bazaMica, inaltime, culoare);
 }
 
-void desenareNodDaca(RenderWindow& fereastraAplicatie, const dateNod& date) {
-	sf::CircleShape triangle;
-	triangle.setPosition(-200, -200);
-	triangle.setRadius(75);
-	triangle.setPointCount(3);
-	fereastraAplicatie.draw(triangle);
-	triangle.setPosition(date.x - 75, date.y);
-	triangle.setFillColor(Color(191, 147, 240));
-	fereastraAplicatie.draw(triangle);
+void desenareNodDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+	const Color culoareSimbol(192, 192, 192);
+	const Color culoareDA(30, 222, 30);
+	const Color culoareNU(212, 68, 52);
+	const int calitate = 20;
+	const float inaltimeSimbol = desktop.height / 25;
+	const float lungimeSimbol = desktop.width / 15;
+
+	float lungime = lungimeSimbol;
+	const float latime = inaltimeSimbol;
+	modificareLungimePtExpresie(desktop, date, lungimeSimbol, lungime);
+
+	const Punct centru = dateNodInPunct(date);
+	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDA, culoareNU);
 }
 
 void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
@@ -134,10 +244,10 @@ void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 
 		float dimTriunghi = 30.0f;
 		float inaltimeTriunghi = dimTriunghi * sqrt(3) / 2;
-		triunghi.setPoint(0, sf::Vector2f(0, -inaltimeTriunghi / 2));
-		triunghi.setPoint(1, sf::Vector2f(dimTriunghi, 0));
-		triunghi.setPoint(2, sf::Vector2f(0, inaltimeTriunghi / 2));
-		triunghi.setFillColor(sf::Color::Black);
+		triunghi.setPoint(0, Vector2f(0, -inaltimeTriunghi / 2));
+		triunghi.setPoint(1, Vector2f(dimTriunghi, 0));
+		triunghi.setPoint(2, Vector2f(0, inaltimeTriunghi / 2));
+		triunghi.setFillColor(Color::Black);
 
 		triunghi.setOrigin(15, -grosimeLinie / 2);
 		triunghi.setPosition(mijlocXNod2, mijlocYNod2);

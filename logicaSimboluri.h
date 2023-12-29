@@ -9,10 +9,10 @@ bool esteActivaCitireaPtAlgoritm();
 
 void opresteCitireaPtAlgoritm();
 
-void logicaAtribuire(nod* N);
+void logicaAtribuire(Nod* N);
 
-void logicaCitire(const nod* N);
+void logicaCitire(const Nod* N);
 
-void logicaAfisare(nod* N);
+void logicaAfisare(Nod* N);
 
-bool logicaDaca(nod* N);
+bool logicaDaca(Nod* N);

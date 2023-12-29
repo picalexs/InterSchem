@@ -2,14 +2,14 @@
 #include "evaluareExpresie.h"
 #include "logicaSimboluri.h"
 
-bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
+bool nrStartStop(int& nrStart, int& nrStop, const Nod* N)
 {
 	if (N == nullptr)
 		return true;
 	if (N->date.tip == 0) {
 		nrStart++;
-		if (nrStart > 1) {//am mai mult de un nod start
-			const string eroare = "Eroare: Are mai mult de un nod start!";
+		if (nrStart > 1) {//am mai mult de un Nod start
+			const string eroare = "Eroare: Are mai mult de un Nod start!";
 			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
@@ -18,15 +18,15 @@ bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
 	else if (N->date.tip == 1) {
 		nrStop++;
 		if (N->st != nullptr || N->dr != nullptr) {//nodul stop nu are voie sa aiba fii
-			const string eroare = "Eroare: Are nod stop ca fiu!";
+			const string eroare = "Eroare: Are Nod stop ca fiu!";
 			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
 	}
-	else if (N->dr == nullptr && N->st == nullptr)//se afla un nod diferit de 1 ca frunza
+	else if (N->dr == nullptr && N->st == nullptr)//se afla un Nod diferit de 1 ca frunza
 	{
-		const string eroare = "Eroare: Lipseste un nod stop!";
+		const string eroare = "Eroare: Lipseste un Nod stop!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -34,13 +34,13 @@ bool nrStartStop(int& nrStart, int& nrStop, const nod* N)
 	return nrStartStop(nrStart, nrStop, N->st) && nrStartStop(nrStart, nrStop, N->dr);
 }
 
-bool verificareStartStop(const nod* radacina)
+bool verificareStartStop(const Nod* radacina)
 {
 	int nrStart = 0, nrStop = 0;
 	if (!nrStartStop(nrStart, nrStop, radacina))
 		return false;
 	if (nrStop == 0 || nrStart == 0) {
-		const string eroare = "Eroare: Nu are nod start sau nod stop!";
+		const string eroare = "Eroare: Nu are Nod start sau Nod stop!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -60,7 +60,7 @@ bool verificareAlgoritm()
 		return false;
 	if (listaArbori[0].radacina->date.tip != 0)
 	{
-		const string eroare = "Eroare: Nu are nod start la inceput!";
+		const string eroare = "Eroare: Nu are Nod start la inceput!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -71,7 +71,7 @@ bool verificareAlgoritm()
 	return true;
 }
 
-void parcurgereAlgoritm(nod* N)
+void parcurgereAlgoritm(Nod* N)
 {
 	if (N == nullptr)
 		return;
