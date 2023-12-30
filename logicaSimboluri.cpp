@@ -75,7 +75,7 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 			{
 				cout << "Sters: tip= " << nodDeSters->date.tip << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
 				stergereLinie(nodDeSters);
-				stergereNodFaraSubarbore(A, nodDeSters);
+				stergereNod(nodDeSters);
 				return;
 			}
 		}

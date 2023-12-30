@@ -117,7 +117,7 @@ void generareArbore() {
 			if (event.type == Event::Closed)
 				window.close();
 			if (Keyboard::isKeyPressed(Keyboard::R)) {
-				stergereIntregArbore(A.radacina);
+				stergereNod(A.radacina);
 				A.radacina = nullptr;
 				A.nrNoduri = 0;
 				atribuireArbore(A, { 0, "Expresie", 400, 50 });

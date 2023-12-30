@@ -37,19 +37,11 @@ Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie);
 
 Nod* gasesteNodInListaArbori(const DateNod& date);
 
-long long numarNoduri(const Nod* N);
-
 int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();
 
-void stergereDinListaArbori(const Nod* N);
-
-void stergereIntregArbore(Nod*& N);
-
-void stergereArboreCuRadacina(Arbore& A);
-
-void stergereNodFaraSubarbore(Arbore& A, Nod* N);
+void stergereNod(Nod* N);
 
 bool existaLinie(const std::pair<DateNod, DateNod>& linie);
 

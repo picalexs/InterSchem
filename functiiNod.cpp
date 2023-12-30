@@ -142,7 +142,7 @@ int numarNoduriRecursiv(const Nod* N, unordered_set<const Nod*>& noduriVizitate)
 	return 1 + numarNoduriRecursiv(N->st, noduriVizitate) + numarNoduriRecursiv(N->dr, noduriVizitate);
 }
 
-long long numarNoduri(const Nod* N) {
+int numarNoduri(const Nod* N) {
 	if (N == nullptr)
 		return 0;
 	unordered_set<const Nod*> noduriVizitate;
@@ -162,78 +162,101 @@ int numarNoduriDinListaArbori() {
 	return nrNoduri;
 }
 
-void stergereIntregArbore(Nod*& N) {
+void stergereTotSubNod(Nod*& N) {
 	static unordered_set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 
-	size_t poz = -1;
-	for (int i = 0; i < listaArbori.size(); i++)
-		if (esteNodInArbore(N, listaArbori[i].radacina))
-			poz = i;
-	if (poz == -1)
-		return;
-
 	noduriVizitate.insert(N);
-	stergereIntregArbore(N->st);
-	stergereIntregArbore(N->dr);
+	stergereTotSubNod(N->st);
+	stergereTotSubNod(N->dr);
 
 	N = nullptr;
 	delete N;
+	noduriVizitate.clear();
 }
 
-void stergereArboreCuRadacina(Arbore& A) {
-	if (A.radacina == nullptr)
-		return;
-	stergereIntregArbore(A.radacina);
-	initializareArbore(A);
-}
-
-void stergereDinListaArbori(const Nod* N)
-{
+void stergereDinListaArbori(const Nod* N) {
 	for (int i = 0; i < listaArbori.size();) {
-		if (listaArbori[i].radacina == N || listaArbori[i].radacina == nullptr) {
+		if (listaArbori[i].radacina == N) {
 			listaArbori.erase(listaArbori.begin() + i);
+			break;
 		}
-		else {
-			++i;
-		}
+		++i;
 	}
 }
 
-void stergereNodFaraSubarbore(Arbore& A, Nod* N) {
+bool esteRadacina(const Nod* N)
+{
+	for (const auto& A : listaArbori)
+	{
+		if (A.radacina == N)
+			return true;
+	}
+	return false;
+}
+
+//gaseste nodul tata al nodului cautat daca exista legatura intre ei
+Nod* gasesteNodTata(Nod* N, Nod*& nodCautat) {
+	static unordered_set<const Nod*> noduriVizitate;
+	if (N == nullptr || noduriVizitate.count(N))
+		return nullptr;
+	if (N->st == nodCautat || N->dr == nodCautat)
+		return N;
+
+	noduriVizitate.insert(N);
+	Nod* nodTata = gasesteNodTata(N->st, nodCautat);
+	if (nodTata == nullptr)
+		nodTata = gasesteNodTata(N->dr, nodCautat);
+
+	N = nullptr;
+	delete N;
+	noduriVizitate.clear();
+	return nodTata;
+}
+
+void stergereNod(Nod* N) {
 	if (N == nullptr)
 		return;
+	Nod* subarbore1 = N->st;
+	Nod* subarbore2 = N->dr;
 
-	const Nod* subarbore1 = nullptr;
-	const Nod* subarbore2 = nullptr;
-
-	if (N->st != nullptr) {
-		subarbore1 = N->st;
-		N->st = nullptr;
+	if (esteRadacina(N))
+	{
+		stergereDinListaArbori(N);
 	}
-	if (N->dr != nullptr) {
-		subarbore2 = N->dr;
-		N->dr = nullptr;
+	else
+	{
+		Nod* nodTata = nullptr;
+		int poz = -1;
+		for (int i = 0; i < listaArbori.size(); i++)
+		{
+			nodTata = gasesteNodTata(listaArbori[i].radacina, N);
+			if (nodTata != nullptr) {
+				poz = i;
+				break;
+			}
+		}
+		if (nodTata->st == N)
+			nodTata->st = nullptr;
+		else
+			nodTata->dr = nullptr;
+		listaArbori[poz].nrNoduri -= numarNoduri(N);
 	}
+	N->st = nullptr;
+	N->dr = nullptr;
 
-	if (subarbore1 != nullptr) {
-		Arbore SubarboreNou;
-		atribuireArbore(SubarboreNou, subarbore1->date);
-		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
-		listaArbori.insert(listaArbori.begin(), SubarboreNou);
+	if (subarbore1 != nullptr)
+	{
+		listaArbori.push_back(Arbore{ subarbore1, numarNoduri(subarbore1) });
 	}
-
-	if (subarbore2 != nullptr) {
-		Arbore SubarboreNou;
-		atribuireArbore(SubarboreNou, subarbore2->date);
-		SubarboreNou.nrNoduri = numarNoduriDinArbore(SubarboreNou);
-		listaArbori.insert(listaArbori.begin(), SubarboreNou);
+	if (subarbore2 != nullptr)
+	{
+		listaArbori.push_back(Arbore{ subarbore2, numarNoduri(subarbore2) });
 	}
-
-	stergereDinListaArbori(N);
-	stergereIntregArbore(N);
+	stergereTotSubNod(N);
 }
+
 
 bool existaLinie(const pair<DateNod, DateNod>& linie) {
 	for (const auto& L : listaLinii)
@@ -287,7 +310,7 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 			}
 			arb.nrNoduri = numarNoduri(arb.radacina);
 			if (arb.radacina->date.tip == 5)
-				stergereIntregArbore(nod2);
+				stergereTotSubNod(nod2);
 			stergereDinListaArbori(nod2);
 			return true;
 		}
