@@ -5,8 +5,6 @@
 
 void logicaAtribuire(Nod* N);
 
-bool esteActivaCitireaPtAlgoritm();
-
 void opresteCitireaPtAlgoritm();
 
 void logicaCitire(const Nod* N);

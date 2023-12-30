@@ -122,97 +122,57 @@ void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const
 	fereastraAplicatie.draw(trapez);
 }
 
-void modificareLungimePtExpresie(const VideoMode& desktop, DateNod& date, const float& lungimeSimbol, float& lungimeDeModificat)
-{
-	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	const Text textExpresie(date.expresie, fontGlobal, marimeFont);
-	const float lngText = textExpresie.getLocalBounds().width;
-	const float raport = lngText / lungimeSimbol + 0.4f;
-	if (raport > 1.0f) {
-		lungimeDeModificat *= raport;
-	}
-}
-
-void desenareNodStart(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void desenareNodStart(RenderWindow& fereastraAplicatie, DateNod& date) {
 	const Color culoare(120, 189, 219);
 	constexpr int calitate = 18;
-
-	float raza_x = date.lungimeSimbol;
 	const float raza_y = date.inaltimeSimbol;
-
-	modificareLungimePtExpresie(desktop, date, date.lungimeSimbol, raza_x);
-
-	date.lungimeSimbol = raza_x;
+	const float raza_x = date.lungimeSimbol;
 	const Punct centru = dateNodInPunct(date);
 	desenareCapsula(fereastraAplicatie, centru, raza_x, raza_y, calitate, culoare);
-
 }
 
 
-void desenareNodStop(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodStart(fereastraAplicatie, desktop, date);
+void desenareNodStop(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodStart(fereastraAplicatie, date);
 }
 
-void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, DateNod& date) {
 	const Color culoare(236, 222, 96);
-	const float latimeSimbol = desktop.height / 25;
-	const float lungimeSimbol = desktop.width / 15;
-
-	float lungime = lungimeSimbol;
-	const float latime = latimeSimbol;
-
-	modificareLungimePtExpresie(desktop, date, lungimeSimbol, lungime);
-	date.lungimeSimbol = lungime;
-
+	const float latimeSimbol = date.inaltimeSimbol;
+	const float lungimeSimbol = date.lungimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareDreptunghi(fereastraAplicatie, centru, lungime, latime, culoare);
+	desenareDreptunghi(fereastraAplicatie, centru, lungimeSimbol, latimeSimbol, culoare);
 }
 
-void desenareNodCitire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void desenareNodCitire(RenderWindow& fereastraAplicatie, DateNod& date) {
 	const Color culoare(102, 210, 102);
-	const float inaltimeSimbol = desktop.height / 25;
-	const float lungimeSimbol = desktop.width / 15;
-
-	float bazaMare = lungimeSimbol;
-	float bazaMica = bazaMare - 50;
+	const float inaltimeSimbol = date.inaltimeSimbol;
+	const float lungimeSimbol = date.lungimeSimbol;
+	const float bazaMare = lungimeSimbol;
+	const float bazaMica = bazaMare - 50;
 	const float inaltime = inaltimeSimbol;
-
-	modificareLungimePtExpresie(desktop, date, lungimeSimbol, bazaMare);
-	date.lungimeSimbol = bazaMare;
-	bazaMica = bazaMare - 50;
 	const Punct centru = dateNodInPunct(date);
 	desenareTrapez(fereastraAplicatie, centru, bazaMica, bazaMare, inaltime, culoare);
 }
 
-void desenareNodAfisare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, DateNod& date) {
 	const Color culoare(255, 102, 102);
-	const float inaltimeSimbol = desktop.height / 25;
-	const float lungimeSimbol = desktop.width / 15;
-
-	float bazaMare = lungimeSimbol;
-	float bazaMica = bazaMare - 50;
+	const float inaltimeSimbol = date.inaltimeSimbol;
+	const float lungimeSimbol = date.lungimeSimbol;
+	const float bazaMare = lungimeSimbol;
+	const float bazaMica = bazaMare - 50;
 	const float inaltime = inaltimeSimbol;
-
-	modificareLungimePtExpresie(desktop, date, lungimeSimbol, bazaMare);
-	date.lungimeSimbol = bazaMare;
-	bazaMica = bazaMare - 50;
 	const Punct centru = dateNodInPunct(date);
 	desenareTrapez(fereastraAplicatie, centru, bazaMare, bazaMica, inaltime, culoare);
 }
 
-void desenareNodDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void desenareNodDaca(RenderWindow& fereastraAplicatie, DateNod& date) {
 	const Color culoareSimbol(192, 192, 192);
 	const Color culoareDA(30, 222, 30);
 	const Color culoareNU(212, 68, 52);
 	constexpr int calitate = 32;
-	const float inaltimeSimbol = desktop.height / 25;
-	const float lungimeSimbol = desktop.width / 7;
-
-	float lungime = lungimeSimbol;
-	const float latime = inaltimeSimbol;
-	modificareLungimePtExpresie(desktop, date, lungimeSimbol, lungime);
-	date.lungimeSimbol = lungime;
-
+	const float lungime = date.lungimeSimbol;
+	const float latime = date.inaltimeSimbol;
 	const Punct centru = dateNodInPunct(date);
 	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDA, culoareNU);
 }

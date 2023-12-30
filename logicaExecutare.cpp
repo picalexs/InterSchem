@@ -81,16 +81,6 @@ void logicaAtribuire(Nod* N)
 			}
 	}
 }
-bool citireActivata = false;
-bool esteActivaCitireaPtAlgoritm()
-{
-	return citireActivata;
-}
-
-void opresteCitireaPtAlgoritm()
-{
-	citireActivata = false;
-}
 
 void logicaCitire(const Nod* N)
 {

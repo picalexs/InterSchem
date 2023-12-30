@@ -5,10 +5,6 @@ using namespace sf;
 
 void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
-bool esteActivaCitireaPtAlgoritm();
-
-void opresteCitireaPtAlgoritm();
-
 void logicaAtribuire(Nod* N);
 
 void logicaCitire(const Nod* N);

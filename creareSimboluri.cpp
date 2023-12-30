@@ -2,69 +2,69 @@
 #include "desenareSimboluri.h"
 using namespace std;
 
-void creareSimbolStart(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodStart(fereastraAplicatie, desktop, date);
+void creareSimbolStart(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodStart(fereastraAplicatie, date);
 }
 
-void creareSimbolStop(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodStop(fereastraAplicatie, desktop, date);
+void creareSimbolStop(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodStop(fereastraAplicatie, date);
 }
 
-void creareSimbolAtribuire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodAtribuire(fereastraAplicatie, desktop, date);
+void creareSimbolAtribuire(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodAtribuire(fereastraAplicatie, date);
 }
 
-void creareSimbolCitire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodCitire(fereastraAplicatie, desktop, date);
+void creareSimbolCitire(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodCitire(fereastraAplicatie, date);
 }
 
-void creareSimbolAfisare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodAfisare(fereastraAplicatie, desktop, date);
+void creareSimbolAfisare(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodAfisare(fereastraAplicatie, date);
 }
 
-void creareSimbolDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
-	desenareNodDaca(fereastraAplicatie, desktop, date);
+void creareSimbolDaca(RenderWindow& fereastraAplicatie, DateNod& date) {
+	desenareNodDaca(fereastraAplicatie, date);
 }
 
-void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date) {
+void creareSimbol(RenderWindow& fereastraAplicatie, DateNod& date) {
 	switch (date.tip) {
 	case 0:
-		creareSimbolStart(fereastraAplicatie, desktop, date); break;
+		creareSimbolStart(fereastraAplicatie, date); break;
 	case 1:
-		creareSimbolStop(fereastraAplicatie, desktop, date); break;
+		creareSimbolStop(fereastraAplicatie, date); break;
 	case 2:
-		creareSimbolAtribuire(fereastraAplicatie, desktop, date); break;
+		creareSimbolAtribuire(fereastraAplicatie, date); break;
 	case 3:
-		creareSimbolCitire(fereastraAplicatie, desktop, date); break;
+		creareSimbolCitire(fereastraAplicatie, date); break;
 	case 4:
-		creareSimbolAfisare(fereastraAplicatie, desktop, date); break;
+		creareSimbolAfisare(fereastraAplicatie, date); break;
 	case 5:
-		creareSimbolDaca(fereastraAplicatie, desktop, date); break;
+		creareSimbolDaca(fereastraAplicatie, date); break;
 	default:
 		return;
 	}
 }
 
-void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N)) {
 		return;
 	}
 	noduriVizitate.insert(N);
-	creareSimbol(fereastraAplicatie, desktop, N->date);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate);
+	creareSimbol(fereastraAplicatie, N->date);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->st, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->dr, noduriVizitate);
 }
 
-void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
+void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, Nod* N) {
 	unordered_set<const Nod*> noduriVizitate;
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N, noduriVizitate);
 }
 
-void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop) {
+void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie) {
 	for (const auto& A : listaArbori)
 	{
 		if (A.radacina == nullptr)
 			continue;
-		creareSimbolPtArbore(fereastraAplicatie, desktop, A.radacina);
+		creareSimbolPtArbore(fereastraAplicatie, A.radacina);
 	}
 }

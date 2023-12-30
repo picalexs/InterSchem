@@ -2,6 +2,7 @@
 #include "executareAlgoritm.h"
 #include "functiiExpresie.h"
 #include "logicaSimboluri.h"
+#include "dimensiuniSimboluri.h"
 
 void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
 {
@@ -12,9 +13,6 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& ci
 		{
 			if (nodDeGasit->date.tip == 0 || nodDeGasit->date.tip == 1)
 			{
-				const string eroare = "Nu se poate edita nodul de START/STOP!!";
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
 				nodDeGasit = nullptr;
 				return;
 			}
@@ -40,22 +38,24 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& ci
 		timpCeas.restart();
 	}
 }
-
-void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit)
-{
+void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit) {
+	if (nodDeGasit == nullptr)
+		return;
 	citireExpresie = false;
-	if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
-		expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
-	}
-	cout << "Expresie citita: " << expresieDeCitit << endl;
-	if (esteActivaCitireaPtAlgoritm()) {
+	if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r') {
+		expresieDeCitit.pop_back();
+
+		cout << "Expresie citita: " << expresieDeCitit << endl;
 		listaConsola.push_back(expresieDeCitit);
-		opresteCitireaPtAlgoritm();
-	}
-	else if (nodDeGasit != nullptr)
 		nodDeGasit->date.expresie = expresieDeCitit;
-	expresieDeCitit.clear();
+	}
+
+	if (expresieDeCitit.empty() || (expresieDeCitit.size() == 1 && expresieDeCitit.back() == '\r')) {
+		nodDeGasit = nullptr;
+		expresieDeCitit.clear();
+	}
 }
+
 
 void logicaF12()
 {
@@ -101,7 +101,7 @@ void logicaInput(const Event& event)
 	}
 }
 
-void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const Event& event)
+void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static Nod* nodDeGasit = nullptr;
@@ -164,12 +164,14 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const Event& e
 
 		if (ch == "\b") {//logica de stergere prin backspace
 			if (!expresieDeCitit.empty()) {
-				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);
+				expresieDeCitit.pop_back();
+				modificareLungimePtExpresie(desktop, nodDeGasit->date);
 				cout << "Stergere" << endl;
 			}
 		}
 		else if (!ch.empty()) {
 			expresieDeCitit += ch;
+			modificareLungimePtExpresie(desktop, nodDeGasit->date);
 		}
 		if (nodDeGasit != nullptr)//introducerea expresiei citite in Nod.
 			nodDeGasit->date.expresie = expresieDeCitit;

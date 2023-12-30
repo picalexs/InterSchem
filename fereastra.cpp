@@ -35,12 +35,12 @@ void creareFereastra()
 			}
 			logicaInput(event);
 		}
-		logicaExecutareInput(fereastraAplicatie, event);
+		logicaExecutareInput(fereastraAplicatie, desktop, event);
 		fereastraAplicatie.clear(Color::White);
 
 		logicaSimboluri(fereastraAplicatie, desktop);//creare, stergere, legare simboluri
 
-		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
+		creareSimbolPtListaArbori(fereastraAplicatie);//deseneaza simbolurile din listaArbori
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareTextLista(fereastraAplicatie, desktop);//deseneaza textul fiecarui simbol
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
