@@ -5,4 +5,6 @@ using namespace sf;
 
 Vector2f dimensiuniSimbol(const VideoMode& desktop, const int& tip);
 
-void modificareLungimePtExpresie(const VideoMode& desktop, DateNod& date);
+void modificareLungimeSimbol(const VideoMode& desktop, DateNod& date);
+
+void reseteazaModificareDimensiune();

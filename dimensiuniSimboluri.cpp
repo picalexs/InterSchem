@@ -51,7 +51,8 @@ Vector2f dimensiuniSimbol(const VideoMode& desktop, const int& tip)
 	}
 }
 
-void modificareLungimePtExpresie(const sf::VideoMode& desktop, DateNod& date) {
+bool modificatDimensiune = false;
+void modificareLungimeSimbol(const VideoMode& desktop, DateNod& date) {
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	const Text textExpresie(date.expresie, fontGlobal, marimeFont);
 	const float lungimeText = textExpresie.getLocalBounds().width;
@@ -60,7 +61,6 @@ void modificareLungimePtExpresie(const sf::VideoMode& desktop, DateNod& date) {
 		spatiuMargine = 100.0f;
 	const float raport = (lungimeText + 2 * spatiuMargine) / date.lungimeSimbol;
 
-	static bool modificatDimensiune = false;
 	if (modificatDimensiune)
 		date.lungimeSimbol *= raport;
 	else if (raport >= 1.0f) {
@@ -69,3 +69,7 @@ void modificareLungimePtExpresie(const sf::VideoMode& desktop, DateNod& date) {
 	}
 }
 
+void reseteazaModificareDimensiune()
+{
+	modificatDimensiune = false;
+}

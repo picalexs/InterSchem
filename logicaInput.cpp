@@ -1,7 +1,6 @@
 #include "logicaInput.h"
 #include "executareAlgoritm.h"
 #include "functiiExpresie.h"
-#include "logicaSimboluri.h"
 #include "dimensiuniSimboluri.h"
 
 void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
@@ -18,6 +17,7 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& ci
 			}
 
 			citireExpresie = true;
+			reseteazaModificareDimensiune();
 			expresieDeCitit = nodDeGasit->date.expresie;
 			cout << "Citire expresie!" << endl;
 		}
@@ -154,8 +154,10 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 				ch = static_cast<char>(event.text.unicode);
 			}
 		}
+		else
+			ultimaTastaApasata = '\0';
 
-		//daca tasta e apasata in continuu, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
+		//daca tasta e apasata prelungit, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
 		if (ultimaTastaApasata == ch[0] && timpCeasTastatura.getElapsedTime().asSeconds() < 0.35f)
 			return;
 		if (ultimaTastaApasata != ch)
@@ -165,13 +167,13 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		if (ch == "\b") {//logica de stergere prin backspace
 			if (!expresieDeCitit.empty()) {
 				expresieDeCitit.pop_back();
-				modificareLungimePtExpresie(desktop, nodDeGasit->date);
-				cout << "Stergere" << endl;
+				modificareLungimeSimbol(desktop, nodDeGasit->date);
+				cout << "Stergere\n";
 			}
 		}
 		else if (!ch.empty()) {
 			expresieDeCitit += ch;
-			modificareLungimePtExpresie(desktop, nodDeGasit->date);
+			modificareLungimeSimbol(desktop, nodDeGasit->date);
 		}
 		if (nodDeGasit != nullptr)//introducerea expresiei citite in Nod.
 			nodDeGasit->date.expresie = expresieDeCitit;
