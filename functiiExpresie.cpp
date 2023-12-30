@@ -1,6 +1,5 @@
 #include "functiiExpresie.h"
-#include <iomanip>
-#include <sstream>
+#include "functiiMatematice.h"
 using namespace std;
 
 void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Nod* nodCurent)
@@ -36,11 +35,19 @@ void afisareTextLista(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	}
 }
 
+void stergereOutputCandMare(const int& dimensiuneMax)
+{
+	if (listaConsola.size() > dimensiuneMax) {
+		cout << "Stergere " << listaConsola[0] << " din lista de output\n";
+		listaConsola.erase(listaConsola.begin());
+	}
+}
 
 void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	if (listaConsola.empty())
 		return;
+	stergereOutputCandMare(10);
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	const int spatiuY = 10;
 	const int spatiuMargini = 20;
@@ -54,14 +61,12 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 	fereastraAplicatie.draw(textOutput);
 
 	//deseneaza restul elementelor din listaConsola mai gri la culoare
-	int index = 0;
 	for (int i = listaConsola.size() - 2; i >= 0; i--) {
 		Text textOutput(listaConsola[i], fontGlobal, marimeFont);
 		textOutput.setFillColor(Color(90, 90, 90));
-		pozY = desktop.height - spatiuJos - textOutput.getLocalBounds().height - (index + 1) * (textOutput.getGlobalBounds().height + spatiuY);
+		pozY -= textOutput.getGlobalBounds().height + spatiuY;
 		textOutput.setPosition(spatiuMargini, pozY);
 		fereastraAplicatie.draw(textOutput);
-		index++;
 	}
 }
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
@@ -132,3 +137,13 @@ void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	fereastraAplicatie.draw(textVariabileAfisate);
 }
 
+void stergereSpatii(string& expresie)
+{
+	for (int i = 0; i < expresie.size();)
+	{
+		if (esteSpatiu(expresie[i]))
+			expresie.erase(i, 1);
+		else
+			i++;
+	}
+}

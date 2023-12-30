@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="convertireCPlusPlus.cpp" />
+    <ClCompile Include="dimensiuniSimboluri.cpp" />
     <ClCompile Include="executareAlgoritm.cpp" />
     <ClCompile Include="functiiExpresie.cpp" />
     <ClCompile Include="creareSimboluri.cpp" />
@@ -142,17 +143,17 @@
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
+    <ClCompile Include="logicaExecutare.cpp" />
     <ClCompile Include="logicaInput.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="desenareSimboluri.cpp" />
+    <ClCompile Include="structs.cpp" />
     <ClCompile Include="testareArbore.cpp" />
-    <ClCompile Include="variabileGlobale.cpp" />
-    <ClCompile Include="variabileGlobale.h" />
-    <ClCompile Include="verificareZonaSimbol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="convertireCPlusPlus.h" />
+    <ClInclude Include="dimensiuniSimboluri.h" />
     <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="functiiExpresie.h" />
     <ClInclude Include="creareSimboluri.h" />
@@ -161,11 +162,11 @@
     <ClInclude Include="functiiMatematice.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
+    <ClInclude Include="logicaExecutare.h" />
     <ClInclude Include="logicaInput.h" />
     <ClInclude Include="logicaSimboluri.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="testareArbore.h" />
-    <ClInclude Include="verificareZonaSimbol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

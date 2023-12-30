@@ -1,5 +1,3 @@
-#include <SFML/Graphics.hpp>
-#include <ctime>
 #include "functiiNod.h"
 using namespace sf;
 vector<string> numeNoduri = { "Start", "Stop", "Atribuire", "Citire", "Afisare", "Daca" };

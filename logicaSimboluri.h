@@ -3,7 +3,7 @@
 #include "functiiNod.h"
 using namespace sf;
 
-void logicaSimboluri(const RenderWindow& fereastraAplicatie);
+void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 bool esteActivaCitireaPtAlgoritm();
 

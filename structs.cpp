@@ -1,4 +1,4 @@
-#include "variabileGlobale.h"
+#include "structs.h"
 
 vector<Arbore> listaArbori;
 vector<pair<DateNod, DateNod>> listaLinii;

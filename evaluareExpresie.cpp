@@ -1,13 +1,8 @@
 #include "functiiMatematice.h"
 #include "evaluareExpresie.h"
 #include "functiiNod.h"
-#include "variabileGlobale.h"
-#include <iomanip>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <map>
-#include <stack>
+#include "structs.h"
+#include "functiiExpresie.h"
 
 enum class TipAtom
 {
@@ -562,20 +557,9 @@ void afisareAtomi(const vector<atom>& atomi)
 	}
 }
 
-void stergereSpatii(string& expresie)
-{
-	for (int i = 0; i < expresie.size();)
-	{
-		if (esteSpatiu(expresie[i]))
-			expresie.erase(i, 1);
-		else
-			i++;
-	}
-}
-
 void testareEvaluator()
 {
-	//cream variabile pentru testare.
+	//variabile pentru testare.
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);

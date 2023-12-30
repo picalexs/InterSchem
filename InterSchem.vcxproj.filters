@@ -24,9 +24,6 @@
     <ClCompile Include="functiiNod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="structs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="desenareSimboluri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,13 +36,7 @@
     <ClCompile Include="fereastra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="verificareZonaSimbol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="evaluareExpresie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="exemplu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="functiiMatematice.cpp">
@@ -61,6 +52,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="logicaInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dimensiuniSimboluri.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logicaExecutare.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,13 +86,7 @@
     <ClInclude Include="fereastra.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="verificareZonaSimbol.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="evaluareExpresie.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="exemplu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="functiiMatematice.h">
@@ -108,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dimensiuniSimboluri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logicaExecutare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

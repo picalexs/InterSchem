@@ -38,7 +38,7 @@ void creareFereastra()
 		logicaExecutareInput(fereastraAplicatie, event);
 		fereastraAplicatie.clear(Color::White);
 
-		logicaSimboluri(fereastraAplicatie);//creare, stergere, legare simboluri
+		logicaSimboluri(fereastraAplicatie, desktop);//creare, stergere, legare simboluri
 
 		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri

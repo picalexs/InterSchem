@@ -1,15 +1,10 @@
-#include <iomanip>
-#include <sstream>
-#include "creareSimboluri.h"
-#include "desenareSimboluri.h"
-#include "evaluareExpresie.h"
-#include "functiiMatematice.h"
 #include "logicaSimboluri.h"
-#include "variabileGlobale.h"
+#include "dimensiuniSimboluri.h"
+#include "structs.h"
 
 map<Keyboard::Key, bool> esteTastaApasata;
 
-void logicaCreareSimbol(const RenderWindow& fereastraAplicatie)
+void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	if (!Keyboard::isKeyPressed(Keyboard::LControl))
 		return;
@@ -19,8 +14,10 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie)
 		{
 			if (!esteTastaApasata[static_cast<Keyboard::Key>(key)])
 			{
+				int tip = key - Keyboard::Num1;
+				const Vector2f dimensiuni = dimensiuniSimbol(desktop, tip);
 				const Vector2f pozitieMouse = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie));
-				DateNod date = schimbareDate(key - Keyboard::Num1, "", pozitieMouse.x, pozitieMouse.y);
+				DateNod date = schimbareDate(tip, "", pozitieMouse.x, pozitieMouse.y, dimensiuni.x, dimensiuni.y);
 				if (date.tip == 0)
 					date.expresie = "START";
 				else if (date.tip == 1)
@@ -116,205 +113,9 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 	nod2 = nullptr;
 }
 
-void logicaSimboluri(const RenderWindow& fereastraAplicatie)
+void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	logicaCreareSimbol(fereastraAplicatie);
+	logicaCreareSimbol(fereastraAplicatie, desktop);
 	logicaStergereSimbol(fereastraAplicatie);
 	logicaLegaturaIntreSimboluri(fereastraAplicatie);
-}
-
-//caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
-void logicaAtribuire(Nod* N)
-{
-	if (N == nullptr || N->date.expresie.empty())
-		return;
-	string expresie = N->date.expresie;
-	stergereSpatii(expresie);
-	string expresieDeCitit;
-	int nrVariabile = 0, nrVirgule = 0;
-
-	size_t i = 0;
-	while (i < expresie.size())
-	{
-		const size_t pozitieEgal = expresie.find('=', i);
-		if (pozitieEgal == string::npos)
-		{
-			const string eroare = "Eroare la atribuire! Expresia nu contine '='!";
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-			return;
-		}
-		string numeVariabila = expresie.substr(i, pozitieEgal - i);
-		for (const char ch : numeVariabila)
-			if (!isalnum(ch))
-			{
-				const string eroare = "Eroare la atribuire! Numele variabilei nu este corect!";
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
-				return;
-			}
-		nrVariabile++;
-		i = pozitieEgal + 1;
-
-		const size_t pozitieVirgula = expresie.find(',', i);
-		if (pozitieVirgula != string::npos)
-		{
-			expresieDeCitit = expresie.substr(i, pozitieVirgula - i);
-			i = pozitieVirgula + 1;
-			nrVirgule++;
-		}
-		else
-		{
-			expresieDeCitit = expresie.substr(i);
-			if (expresieDeCitit == "\r")
-			{
-				const string eroare = "Eroare la atribuire! Expresia este goala!";
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
-				return;
-			}
-			i = expresie.size();
-		}
-
-		const long double rezultat = evaluareExpresie(expresieDeCitit);
-		if (!isnan(rezultat))
-		{
-			seteazaVariabila(numeVariabila, rezultat);
-		}
-		else
-		{
-			string eroare = "Eroare la atribuire! Expresia este gresita!";
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-		}
-	}
-	//sterge ultima virgula daca e in plus
-	if (nrVariabile == nrVirgule)
-	{
-		for (size_t i = expresie.size() - 1; i > 0; i--)
-			if (expresie[i] == ',')
-			{
-				expresie.erase(i, 1);
-				N->date.expresie = expresie;
-				return;
-			}
-	}
-}
-bool citireActivata = false;
-bool esteActivaCitireaPtAlgoritm()
-{
-	return citireActivata;
-}
-
-void opresteCitireaPtAlgoritm()
-{
-	citireActivata = false;
-}
-
-void logicaCitire(const Nod* N)
-{
-	if (N == nullptr || N->date.expresie.empty())
-		return;
-	string expresie = N->date.expresie;
-	stergereSpatii(expresie);
-	for (char i : expresie)
-		if (!isalnum(i))
-		{
-			const string eroare = "Eroare la citire! Numele variabilei nu este corect!";
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-			return;
-		}
-	cout << "introduceti valoarea pentru " << N->date.expresie << ": ";
-	int nrCitit = 0;
-	cin >> nrCitit;
-	seteazaVariabila(expresie, nrCitit);
-}
-
-void stergereOutputCandMare()
-{
-	if (listaConsola.size() > 5) {
-		cout << "Stergere " << listaConsola[0] << " din lista de output\n";
-		listaConsola.erase(listaConsola.begin());
-	}
-}
-
-void logicaAfisare(Nod* N)
-{
-	if (N == nullptr || N->date.expresie.empty())
-		return;
-
-	string expresie = N->date.expresie;
-	string output, numeVariabila;
-
-	bool ghilimele = false;
-	for (size_t i = 0; i < expresie.size(); i++)
-	{
-		char ch = expresie[i];
-		string opL = expresie.substr(i, 2);
-		if (!ghilimele && esteOperatorLung(opL))
-		{
-			numeVariabila += opL;
-			i += 1;
-		}
-		else if ((!ghilimele && (isalnum(ch) || ch == ' ' || ch == ')' || ch == '(' || esteOperator(ch)))
-			|| (ghilimele && (ch > 31 && ch < 127 && ch != 34)))
-		{
-			numeVariabila += ch;
-		}
-		else
-		{
-			if (!ghilimele)
-			{
-				if (!numeVariabila.empty())
-				{
-					long double rezultat = evaluareExpresie(numeVariabila);
-					if (!isnan(rezultat))
-					{
-						stringstream stream;
-						stream << defaultfloat << setprecision(6) << rezultat;
-						output += stream.str();
-						numeVariabila.clear();
-					}
-				}
-			}
-			else
-			{
-				output += numeVariabila;
-				numeVariabila.clear();
-			}
-			if (ch == '"')
-			{
-				ghilimele = !ghilimele;
-			}
-		}
-	}
-	if (!ghilimele)
-	{
-		if (!numeVariabila.empty())
-		{
-			long double rezultat = evaluareExpresie(numeVariabila);
-			if (!isnan(rezultat))
-			{
-				stringstream stream;
-				stream << defaultfloat << setprecision(6) << rezultat;
-				output += stream.str();
-				numeVariabila.clear();
-			}
-		}
-	}
-	cout << "S-a adaugat: " << output << " in lista de output" << endl;
-	listaConsola.push_back(output);
-	stergereOutputCandMare();
-}
-
-
-bool logicaDaca(Nod* N)
-{
-	if (N == nullptr || N->date.expresie.empty())
-		return false;
-	const long double rezultat = evaluareExpresie(N->date.expresie);
-	if (static_cast<bool>(rezultat))
-		return true;
-	return false;
 }

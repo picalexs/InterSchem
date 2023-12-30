@@ -1,10 +1,9 @@
 #pragma once
-#include "variabileGlobale.h"
-#include <unordered_set>
 #include "structs.h"
+#include <unordered_set>
 #include <SFML/Graphics.hpp>
 
-DateNod schimbareDate(int tip, const std::string& expresie, int x, int y);
+DateNod schimbareDate(int tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);
 
 void initializareNod(Nod& N);
 
@@ -25,6 +24,8 @@ void atribuireArbore(Arbore& A, const DateNod& date);
 bool esteArboreNull(const Arbore& A);
 
 bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
+
+bool verificareSimbolInZona(const Vector2i& pozitieMouse, const DateNod& date);
 
 Nod* gasesteNodRecursiv(Nod* nodCurent, const DateNod& date);
 

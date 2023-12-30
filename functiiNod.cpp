@@ -1,26 +1,23 @@
 #include "functiiNod.h"
-#include "verificareZonaSimbol.h"
 
-DateNod schimbareDate(const int tip, const string& expresie, const int x, const int y) {
+DateNod schimbareDate(const int tip, const string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol) {
 	DateNod date;
 	date.tip = tip;
 	date.expresie = expresie;
 	date.x = x;
 	date.y = y;
+	date.lungimeSimbol = lungimeSimbol;
+	date.inaltimeSimbol = inaltimeSimbol;
 	return date;
 }
 
 void initializareNod(Nod& N) {
-	N.date.tip = -1;
-	N.date.expresie.clear();
-	N.date.x = 0; N.date.y = 0;
+	schimbareDate(-1, "", 0, 0, 0, 0);
 	N.st = nullptr; N.dr = nullptr;
 }
 
 void atribuireNod(Nod& N, const DateNod& date) {
-	N.date.tip = date.tip;
-	N.date.expresie = date.expresie;
-	N.date.x = date.x; N.date.y = date.y;
+	N.date = schimbareDate(date.tip, date.expresie, date.x, date.y, date.lungimeSimbol, date.inaltimeSimbol);
 	N.st = nullptr; N.dr = nullptr;
 }
 
@@ -73,6 +70,10 @@ bool esteNodInArbore(Nod* nodCautat, const Nod* radacina) {
 	if (radacina == nodCautat)
 		return true;
 	return (esteNodInArbore(nodCautat, radacina->st) || esteNodInArbore(nodCautat, radacina->dr));
+}
+
+bool verificareSimbolInZona(const Vector2i& pozitieMouse, const DateNod& date) {
+	return (abs(date.x - pozitieMouse.x) <= date.lungimeSimbol / 2 && abs(date.y - pozitieMouse.y) <= date.inaltimeSimbol / 2);
 }
 
 Nod* gasesteNodRecursiv(Nod* nodCurent, const DateNod& date) {
@@ -311,7 +312,6 @@ long double obtineValDupaNume(const string& nume) {
 bool esteVariabila(const string& token) {
 	return variabile.find(token) != variabile.end();
 }
-
 
 void atribuireConstanteCunoscute()
 {
