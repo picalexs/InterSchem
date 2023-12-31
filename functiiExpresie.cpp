@@ -2,39 +2,6 @@
 #include "functiiMatematice.h"
 using namespace std;
 
-void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Nod* nodCurent)
-{
-	static unordered_set<const Nod*> noduriVizitate;
-	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
-		return;
-
-	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	Text mainText(nodCurent->date.expresie, fontGlobal, marimeFont);
-	noduriVizitate.insert(nodCurent);
-	mainText.setFillColor(Color::Black);
-	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin(static_cast<int>((marginiText.left) + marginiText.width / 2), (marginiText.top + marginiText.height) / 2);
-
-	const int xPos = nodCurent->date.x;
-	const int yPos = nodCurent->date.y;
-	mainText.setPosition(xPos, yPos);
-	fereastraAplicatie.draw(mainText);
-
-	afisareTextNod(fereastraAplicatie, desktop, nodCurent->st);
-	afisareTextNod(fereastraAplicatie, desktop, nodCurent->dr);
-	noduriVizitate.clear();
-}
-
-void afisareTextLista(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
-{
-	for (const auto a : listaArbori)
-	{
-		if (a.radacina == nullptr)
-			continue;
-		afisareTextNod(fereastraAplicatie, desktop, a.radacina);
-	}
-}
-
 void stergereOutputCandMare(const int& dimensiuneMax)
 {
 	if (listaConsola.size() > dimensiuneMax) {

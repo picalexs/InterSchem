@@ -8,7 +8,7 @@ struct Punct
 	float y;
 };
 
-Punct dateNodInPunct(DateNod& date)
+Punct dateNodInPunct(const DateNod& date)
 {
 	Punct punct;
 	punct.x = date.x;
@@ -122,7 +122,7 @@ void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const
 	fereastraAplicatie.draw(trapez);
 }
 
-void desenareNodStart(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodStart(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	const Color culoare(120, 189, 219);
 	constexpr int calitate = 18;
 	const float raza_y = date.inaltimeSimbol;
@@ -132,11 +132,11 @@ void desenareNodStart(RenderWindow& fereastraAplicatie, DateNod& date) {
 }
 
 
-void desenareNodStop(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodStop(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	desenareNodStart(fereastraAplicatie, date);
 }
 
-void desenareNodAtribuire(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	const Color culoare(236, 222, 96);
 	const float latimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
@@ -144,7 +144,7 @@ void desenareNodAtribuire(RenderWindow& fereastraAplicatie, DateNod& date) {
 	desenareDreptunghi(fereastraAplicatie, centru, lungimeSimbol, latimeSimbol, culoare);
 }
 
-void desenareNodCitire(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodCitire(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	const Color culoare(102, 210, 102);
 	const float inaltimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
@@ -155,7 +155,7 @@ void desenareNodCitire(RenderWindow& fereastraAplicatie, DateNod& date) {
 	desenareTrapez(fereastraAplicatie, centru, bazaMica, bazaMare, inaltime, culoare);
 }
 
-void desenareNodAfisare(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	const Color culoare(255, 102, 102);
 	const float inaltimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
@@ -166,7 +166,7 @@ void desenareNodAfisare(RenderWindow& fereastraAplicatie, DateNod& date) {
 	desenareTrapez(fereastraAplicatie, centru, bazaMare, bazaMica, inaltime, culoare);
 }
 
-void desenareNodDaca(RenderWindow& fereastraAplicatie, DateNod& date) {
+void desenareNodDaca(RenderWindow& fereastraAplicatie, const DateNod& date) {
 	const Color culoareSimbol(192, 192, 192);
 	const Color culoareDA(30, 222, 30);
 	const Color culoareNU(212, 68, 52);
@@ -177,7 +177,21 @@ void desenareNodDaca(RenderWindow& fereastraAplicatie, DateNod& date) {
 	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDA, culoareNU);
 }
 
-void creareSimbol(RenderWindow& fereastraAplicatie, DateNod& date) {
+
+void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date)
+{
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
+	Text mainText(date.expresie, fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin(static_cast<int>((marginiText.left) + marginiText.width / 2), (marginiText.top + marginiText.height) / 2);
+	const int xPos = date.x;
+	const int yPos = date.y;
+	mainText.setPosition(xPos, yPos);
+	fereastraAplicatie.draw(mainText);
+}
+
+void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
 	switch (date.tip) {
 	case 0:
 		desenareNodStart(fereastraAplicatie, date); break;
@@ -194,29 +208,30 @@ void creareSimbol(RenderWindow& fereastraAplicatie, DateNod& date) {
 	default:
 		break;
 	}
+	afisareTextNod(fereastraAplicatie, desktop, date);
 }
 
-void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N)) {
 		return;
 	}
 	noduriVizitate.insert(N);
-	creareSimbol(fereastraAplicatie, N->date);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->st, noduriVizitate);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->dr, noduriVizitate);
+	creareSimbol(fereastraAplicatie, desktop, N->date);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate);
 }
 
-void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, Nod* N) {
+void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
 	unordered_set<const Nod*> noduriVizitate;
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, N, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N, noduriVizitate);
 }
 
-void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie) {
+void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop) {
 	for (const auto& A : listaArbori)
 	{
 		if (A.radacina == nullptr)
 			continue;
-		creareSimbolPtArbore(fereastraAplicatie, A.radacina);
+		creareSimbolPtArbore(fereastraAplicatie, desktop, A.radacina);
 	}
 }
 

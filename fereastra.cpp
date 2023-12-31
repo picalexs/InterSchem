@@ -39,9 +39,8 @@ void creareFereastra()
 
 		logicaSimboluri(fereastraAplicatie, desktop);//creare, stergere, legare simboluri
 
-		creareSimbolPtListaArbori(fereastraAplicatie);//deseneaza simbolurile din listaArbori
+		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
-		afisareTextLista(fereastraAplicatie, desktop);//deseneaza textul fiecarui simbol
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
 		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
