@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include "creareSimboluri.h"
 #include "desenareSimboluri.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"

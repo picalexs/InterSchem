@@ -138,7 +138,6 @@
     <ClCompile Include="dimensiuniSimboluri.cpp" />
     <ClCompile Include="executareAlgoritm.cpp" />
     <ClCompile Include="functiiExpresie.cpp" />
-    <ClCompile Include="creareSimboluri.cpp" />
     <ClCompile Include="evaluareExpresie.cpp" />
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
@@ -156,7 +155,6 @@
     <ClInclude Include="dimensiuniSimboluri.h" />
     <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="functiiExpresie.h" />
-    <ClInclude Include="creareSimboluri.h" />
     <ClInclude Include="evaluareExpresie.h" />
     <ClInclude Include="fereastra.h" />
     <ClInclude Include="functiiMatematice.h" />

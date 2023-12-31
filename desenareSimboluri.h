@@ -4,17 +4,10 @@
 #include <cmath>
 using namespace sf;
 
-void desenareNodStart(RenderWindow& fereastraAplicatie, DateNod& date);
+void creareSimbol(RenderWindow& fereastraAplicatie, DateNod& date);
 
-void desenareNodStop(RenderWindow& fereastraAplicatie, DateNod& date);
+void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, Nod* N);
 
-void desenareNodAtribuire(RenderWindow& fereastraAplicatie, DateNod& date);
-
-void desenareNodCitire(RenderWindow& fereastraAplicatie, DateNod& date);
-
-void desenareNodAfisare(RenderWindow& fereastraAplicatie, DateNod& date);
-
-void desenareNodDaca(RenderWindow& fereastraAplicatie, DateNod& date);
+void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie);
 
 void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie);
-

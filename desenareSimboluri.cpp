@@ -177,6 +177,49 @@ void desenareNodDaca(RenderWindow& fereastraAplicatie, DateNod& date) {
 	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDA, culoareNU);
 }
 
+void creareSimbol(RenderWindow& fereastraAplicatie, DateNod& date) {
+	switch (date.tip) {
+	case 0:
+		desenareNodStart(fereastraAplicatie, date); break;
+	case 1:
+		desenareNodStop(fereastraAplicatie, date); break;
+	case 2:
+		desenareNodAtribuire(fereastraAplicatie, date); break;
+	case 3:
+		desenareNodCitire(fereastraAplicatie, date); break;
+	case 4:
+		desenareNodAfisare(fereastraAplicatie, date); break;
+	case 5:
+		desenareNodDaca(fereastraAplicatie, date); break;
+	default:
+		break;
+	}
+}
+
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
+	if (N == nullptr || noduriVizitate.count(N)) {
+		return;
+	}
+	noduriVizitate.insert(N);
+	creareSimbol(fereastraAplicatie, N->date);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->st, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N->dr, noduriVizitate);
+}
+
+void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, Nod* N) {
+	unordered_set<const Nod*> noduriVizitate;
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, N, noduriVizitate);
+}
+
+void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie) {
+	for (const auto& A : listaArbori)
+	{
+		if (A.radacina == nullptr)
+			continue;
+		creareSimbolPtArbore(fereastraAplicatie, A.radacina);
+	}
+}
+
 void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 	float grosimeLinie = 5;
 	RectangleShape line(Vector2f(0, grosimeLinie));

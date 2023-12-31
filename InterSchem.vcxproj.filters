@@ -30,9 +30,6 @@
     <ClCompile Include="logicaSimboluri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="creareSimboluri.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fereastra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,9 +75,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaSimboluri.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="creareSimboluri.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fereastra.h">
