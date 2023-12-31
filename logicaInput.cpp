@@ -118,8 +118,27 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		timpApasatLMB.restart();
 	}
 	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
-		if (nodDeMutat == nullptr)
+		if (nodDeMutat == nullptr) {
 			nodDeMutat = gasesteNodListaCuPozMouse(fereastraAplicatie);
+			if (nodDeMutat != nullptr)
+			{
+				int pozDeMutat = -1;
+				Nod* nodGasit = nullptr;
+				for (int i = listaArbori.size() - 1; i >= 0; --i) {
+					nodGasit = gasesteNodInArbore(listaArbori[i], nodDeMutat->date);
+					if (nodGasit != nullptr) {
+						pozDeMutat = i;
+						break;
+					}
+				}
+				if (pozDeMutat != -1) {
+					//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
+					const Arbore arboreDeMutat = listaArbori[pozDeMutat];
+					listaArbori.erase(listaArbori.begin() + pozDeMutat);
+					listaArbori.push_back(arboreDeMutat);
+				}
+			}
+		}
 	}
 	if (esteRidicatLMB)
 	{

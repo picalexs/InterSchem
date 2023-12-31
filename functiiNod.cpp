@@ -119,22 +119,22 @@ Nod* gasesteNodCuPozMouse(const RenderWindow& fereastraAplicatie, const Arbore& 
 	return gasesteNod(A.radacina, nodPePozitieMouse);
 }
 
-Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie)
-{
+Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie) {
 	DateNod nodPePozitieMouse;
 	nodPePozitieMouse.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 	nodPePozitieMouse.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
 
-	for (const auto& A : listaArbori)
-	{
-		Nod* nodGasit = gasesteNodInArbore(A, nodPePozitieMouse);
-		if (nodGasit != nullptr)
-		{
+	Nod* nodGasit = nullptr;
+	for (int i = listaArbori.size() - 1; i >= 0; --i) {
+		nodGasit = gasesteNodInArbore(listaArbori[i], nodPePozitieMouse);
+		if (nodGasit != nullptr) {
 			return nodGasit;
 		}
 	}
-	return nullptr;
+	return nodGasit;
 }
+
+
 
 Nod* gasesteNodInListaArbori(const DateNod& date) {
 	for (const auto A : listaArbori)

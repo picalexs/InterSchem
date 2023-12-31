@@ -16,18 +16,18 @@ Punct dateNodInPunct(const DateNod& date)
 	return punct;
 }
 
-void desenareLinie(RenderWindow& fereastraAplicatie, const Punct& pA, const Punct& pB, const float& grosime, const Color& culoare) {
+void desenareLinie(RenderWindow& fereastraAplicatie, const Punct& pA, const Punct& pB, const float& grosime, const Color& culoareSimbol) {
 	const float lungime = sqrt((pB.x - pA.x) * (pB.x - pA.x) + (pB.y - pA.y) * (pB.y - pA.y));
 	const float unghi = static_cast<float> (atan2(pB.y - pA.y, pB.x - pA.x) * 180 / PI);
 
 	RectangleShape line(Vector2f(lungime, grosime));
 	line.rotate(unghi);
 	line.setPosition(pA.x, pA.y);
-	line.setFillColor(culoare);
+	line.setFillColor(culoareSimbol);
 	fereastraAplicatie.draw(line);
 }
 
-void desenareDreptunghi(RenderWindow& fereastraAplicatie, const Punct& centru, const float& lungime, const float& latime, const Color& culoare) {
+void desenareDreptunghi(RenderWindow& fereastraAplicatie, const Punct& centru, const float& lungime, const float& latime, const Color& culoareSimbol) {
 	Punct pNE, pSE, pSV, pNV;
 	pNE.x = pSE.x = centru.x + lungime / 2;
 	pNV.x = pSV.x = centru.x - lungime / 2;
@@ -40,7 +40,7 @@ void desenareDreptunghi(RenderWindow& fereastraAplicatie, const Punct& centru, c
 	dreptunghi.setPoint(1, Vector2f(pSE.x, pSE.y));
 	dreptunghi.setPoint(2, Vector2f(pSV.x, pSV.y));
 	dreptunghi.setPoint(3, Vector2f(pNV.x, pNV.y));
-	dreptunghi.setFillColor(culoare);
+	dreptunghi.setFillColor(culoareSimbol);
 	fereastraAplicatie.draw(dreptunghi);
 }
 
@@ -74,7 +74,7 @@ void desenareClopote(RenderWindow& fereastraAplicatie, const Punct& centru, cons
 
 }
 
-void desenareElipsa(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoare)
+void desenareElipsa(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoareSimbol)
 {
 	ConvexShape elipsa;
 	elipsa.setPointCount(calitate);
@@ -86,23 +86,23 @@ void desenareElipsa(RenderWindow& fereastraAplicatie, const Punct& centru, const
 	}
 
 	elipsa.setPosition(centru.x, centru.y);
-	elipsa.setFillColor(culoare);
+	elipsa.setFillColor(culoareSimbol);
 	fereastraAplicatie.draw(elipsa);
 }
 
-void desenareCapsula(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoare)
+void desenareCapsula(RenderWindow& fereastraAplicatie, const Punct& centru, const float& raza_x, const float& raza_y, const int& calitate, const Color& culoareSimbol)
 {
 	Punct centruDr;
 	Punct centruSt = centruDr = centru;
 	const float razaNoua = raza_x - raza_y;
 	centruSt.x -= razaNoua / 2;
 	centruDr.x += razaNoua / 2;
-	desenareElipsa(fereastraAplicatie, centruSt, raza_y / 2, raza_y / 2, calitate, culoare);
-	desenareElipsa(fereastraAplicatie, centruDr, raza_y / 2, raza_y / 2, calitate, culoare);
-	desenareDreptunghi(fereastraAplicatie, centru, razaNoua, raza_y, culoare);
+	desenareElipsa(fereastraAplicatie, centruSt, raza_y / 2, raza_y / 2, calitate, culoareSimbol);
+	desenareElipsa(fereastraAplicatie, centruDr, raza_y / 2, raza_y / 2, calitate, culoareSimbol);
+	desenareDreptunghi(fereastraAplicatie, centru, razaNoua, raza_y, culoareSimbol);
 }
 
-void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const float& bazaMica, const float& bazaMare, const float& inaltime, const Color& culoare)
+void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const float& bazaMica, const float& bazaMare, const float& inaltime, const Color& culoareSimbol)
 {
 	Punct pStangaSus, pDreaptaSus, pStangaJos, pDreaptaJos;
 	pStangaSus.x = centru.x - bazaMica / 2;
@@ -118,63 +118,56 @@ void desenareTrapez(RenderWindow& fereastraAplicatie, const Punct& centru, const
 	trapez.setPoint(1, Vector2f(pStangaJos.x, pStangaJos.y));
 	trapez.setPoint(2, Vector2f(pDreaptaJos.x, pDreaptaJos.y));
 	trapez.setPoint(3, Vector2f(pDreaptaSus.x, pDreaptaSus.y));
-	trapez.setFillColor(culoare);
+	trapez.setFillColor(culoareSimbol);
 	fereastraAplicatie.draw(trapez);
 }
 
-void desenareNodStart(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	const Color culoare(120, 189, 219);
+void desenareNodStart(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol) {
 	constexpr int calitate = 18;
 	const float raza_y = date.inaltimeSimbol;
 	const float raza_x = date.lungimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareCapsula(fereastraAplicatie, centru, raza_x, raza_y, calitate, culoare);
+	desenareCapsula(fereastraAplicatie, centru, raza_x, raza_y, calitate, culoareSimbol);
 }
 
 
-void desenareNodStop(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	desenareNodStart(fereastraAplicatie, date);
+void desenareNodStop(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol) {
+	desenareNodStart(fereastraAplicatie, date, culoareSimbol);
 }
 
-void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	const Color culoare(236, 222, 96);
+void desenareNodAtribuire(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol) {
 	const float latimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareDreptunghi(fereastraAplicatie, centru, lungimeSimbol, latimeSimbol, culoare);
+	desenareDreptunghi(fereastraAplicatie, centru, lungimeSimbol, latimeSimbol, culoareSimbol);
 }
 
-void desenareNodCitire(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	const Color culoare(102, 210, 102);
+void desenareNodCitire(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol) {
 	const float inaltimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
 	const float bazaMare = lungimeSimbol;
 	const float bazaMica = bazaMare - 50;
 	const float inaltime = inaltimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareTrapez(fereastraAplicatie, centru, bazaMica, bazaMare, inaltime, culoare);
+	desenareTrapez(fereastraAplicatie, centru, bazaMica, bazaMare, inaltime, culoareSimbol);
 }
 
-void desenareNodAfisare(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	const Color culoare(255, 102, 102);
+void desenareNodAfisare(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol) {
 	const float inaltimeSimbol = date.inaltimeSimbol;
 	const float lungimeSimbol = date.lungimeSimbol;
 	const float bazaMare = lungimeSimbol;
 	const float bazaMica = bazaMare - 50;
 	const float inaltime = inaltimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareTrapez(fereastraAplicatie, centru, bazaMare, bazaMica, inaltime, culoare);
+	desenareTrapez(fereastraAplicatie, centru, bazaMare, bazaMica, inaltime, culoareSimbol);
 }
 
-void desenareNodDaca(RenderWindow& fereastraAplicatie, const DateNod& date) {
-	const Color culoareSimbol(192, 192, 192);
-	const Color culoareDA(30, 222, 30);
-	const Color culoareNU(212, 68, 52);
+void desenareNodDaca(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol, const Color& culoareDa, const Color& culoareNu) {
 	constexpr int calitate = 32;
 	const float lungime = date.lungimeSimbol;
 	const float latime = date.inaltimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDA, culoareNU);
+	desenareClopote(fereastraAplicatie, centru, lungime, latime, calitate, culoareSimbol, culoareDa, culoareNu);
 }
 
 
@@ -191,39 +184,97 @@ void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, 
 	fereastraAplicatie.draw(mainText);
 }
 
-void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& date) {
+Color scadereCulori(const Color& color1, const Color& color2) {
+	int red = color1.r - color2.r;
+	int green = color1.g - color2.g;
+	int blue = color1.b - color2.b;
+
+	red = (red < 0) ? 0 : (red > 255) ? 255 : red;
+	green = (green < 0) ? 0 : (green > 255) ? 255 : green;
+	blue = (blue < 0) ? 0 : (blue > 255) ? 255 : blue;
+	return { static_cast<Uint8>(red), static_cast<Uint8>(green), static_cast<Uint8>(blue) };
+}
+
+void determinareCulori(const int& tip, const bool& isOutline, Color& culoareSimbol, Color& culoareDa, Color& culoareNu)
+{
+	switch (tip) {
+	case 0: culoareSimbol = Color(120, 189, 219); break;
+	case 1: culoareSimbol = Color(120, 189, 219); break;
+	case 2: culoareSimbol = Color(236, 222, 96); break;
+	case 3: culoareSimbol = Color(102, 210, 102); break;
+	case 4: culoareSimbol = Color(255, 102, 102); break;
+	case 5:
+		culoareSimbol = Color(192, 192, 192);
+		culoareDa = Color(30, 222, 30);
+		culoareNu = Color(212, 68, 52);
+		break;
+	default: culoareSimbol = Color::Green; break;
+	}
+
+	if (isOutline) {
+		const Color culoareOutline(50, 50, 50);
+		culoareSimbol = scadereCulori(culoareSimbol, culoareOutline);
+		culoareDa = scadereCulori(culoareDa, culoareOutline);
+		culoareNu = scadereCulori(culoareNu, culoareOutline);
+	}
+}
+
+void creareSimbol(RenderWindow& fereastraAplicatie, const DateNod& date, const bool isOutline) {
+	Color culoareSimbol;
+	Color culoareDa;
+	Color culoareNu;
+	determinareCulori(date.tip, isOutline, culoareSimbol, culoareDa, culoareNu);
+
 	switch (date.tip) {
 	case 0:
-		desenareNodStart(fereastraAplicatie, date); break;
+		desenareNodStart(fereastraAplicatie, date, culoareSimbol); break;
 	case 1:
-		desenareNodStop(fereastraAplicatie, date); break;
+		desenareNodStop(fereastraAplicatie, date, culoareSimbol); break;
 	case 2:
-		desenareNodAtribuire(fereastraAplicatie, date); break;
+		desenareNodAtribuire(fereastraAplicatie, date, culoareSimbol); break;
 	case 3:
-		desenareNodCitire(fereastraAplicatie, date); break;
+		desenareNodCitire(fereastraAplicatie, date, culoareSimbol); break;
 	case 4:
-		desenareNodAfisare(fereastraAplicatie, date); break;
+		desenareNodAfisare(fereastraAplicatie, date, culoareSimbol); break;
 	case 5:
-		desenareNodDaca(fereastraAplicatie, date); break;
+		desenareNodDaca(fereastraAplicatie, date, culoareSimbol, culoareDa, culoareNu); break;
 	default:
 		break;
 	}
-	afisareTextNod(fereastraAplicatie, desktop, date);
 }
 
-void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, unordered_set<const Nod*>& noduriVizitate) {
+void desenareOutline(RenderWindow& fereastraAplicatie, const Nod*& nodCuOutline)
+{
+	const int marimeOutline = 20;
+	DateNod dateTmp = nodCuOutline->date;
+	dateTmp.lungimeSimbol += marimeOutline;
+	dateTmp.inaltimeSimbol += marimeOutline;
+	creareSimbol(fereastraAplicatie, dateTmp, true);
+}
+
+Nod* verificareOutline(const RenderWindow& fereastraAplicatie)
+{
+	return gasesteNodListaCuPozMouse(fereastraAplicatie);
+}
+
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, unordered_set<const Nod*>& noduriVizitate, const bool& isOutline) {
 	if (N == nullptr || noduriVizitate.count(N)) {
 		return;
 	}
 	noduriVizitate.insert(N);
-	creareSimbol(fereastraAplicatie, desktop, N->date);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate);
+	const Nod* nodCuOutline = verificareOutline(fereastraAplicatie);
+	if (nodCuOutline != nullptr && noduriVizitate.count(nodCuOutline))
+		desenareOutline(fereastraAplicatie, nodCuOutline);
+
+	creareSimbol(fereastraAplicatie, N->date, isOutline);
+	afisareTextNod(fereastraAplicatie, desktop, N->date);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate, isOutline);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate, isOutline);
 }
 
 void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
 	unordered_set<const Nod*> noduriVizitate;
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N, noduriVizitate, false);
 }
 
 void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop) {
