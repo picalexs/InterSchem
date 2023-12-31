@@ -127,7 +127,7 @@ void desenareNodStart(RenderWindow& fereastraAplicatie, const DateNod& date, con
 	const float raza_y = date.inaltimeSimbol;
 	const float raza_x = date.lungimeSimbol;
 	const Punct centru = dateNodInPunct(date);
-	desenareCapsula(fereastraAplicatie, centru, raza_x, raza_y, calitate, culoareSimbol);
+	desenareCapsula(fereastraAplicatie, centru, raza_x + 8, raza_y + 8, calitate, culoareSimbol);
 }
 
 
@@ -163,7 +163,7 @@ void desenareNodAfisare(RenderWindow& fereastraAplicatie, const DateNod& date, c
 }
 
 void desenareNodDaca(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol, const Color& culoareDa, const Color& culoareNu) {
-	constexpr int calitate = 32;
+	constexpr int calitate = 48;
 	const float lungime = date.lungimeSimbol;
 	const float latime = date.inaltimeSimbol;
 	const Punct centru = dateNodInPunct(date);
@@ -195,7 +195,7 @@ Color scadereCulori(const Color& color1, const Color& color2) {
 	return { static_cast<Uint8>(red), static_cast<Uint8>(green), static_cast<Uint8>(blue) };
 }
 
-void determinareCulori(const int& tip, const bool& isOutline, Color& culoareSimbol, Color& culoareDa, Color& culoareNu)
+void determinareCulori(const int tip, const bool& isOutline, Color& culoareSimbol, Color& culoareDa, Color& culoareNu)
 {
 	switch (tip) {
 	case 0: culoareSimbol = Color(120, 189, 219); break;
@@ -212,19 +212,15 @@ void determinareCulori(const int& tip, const bool& isOutline, Color& culoareSimb
 	}
 
 	if (isOutline) {
-		const Color culoareOutline(50, 50, 50);
+
+		const Color culoareOutline(30, 30, 30);
 		culoareSimbol = scadereCulori(culoareSimbol, culoareOutline);
-		culoareDa = scadereCulori(culoareDa, culoareOutline);
-		culoareNu = scadereCulori(culoareNu, culoareOutline);
+		culoareDa = culoareNu = culoareSimbol;
 	}
 }
 
-void creareSimbol(RenderWindow& fereastraAplicatie, const DateNod& date, const bool isOutline) {
-	Color culoareSimbol;
-	Color culoareDa;
-	Color culoareNu;
-	determinareCulori(date.tip, isOutline, culoareSimbol, culoareDa, culoareNu);
-
+void switchDesen(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol, const Color& culoareDa, const Color& culoareNu)
+{
 	switch (date.tip) {
 	case 0:
 		desenareNodStart(fereastraAplicatie, date, culoareSimbol); break;
@@ -243,38 +239,49 @@ void creareSimbol(RenderWindow& fereastraAplicatie, const DateNod& date, const b
 	}
 }
 
-void desenareOutline(RenderWindow& fereastraAplicatie, const Nod*& nodCuOutline)
+void creareSimbol(RenderWindow& fereastraAplicatie, const DateNod& date, const bool isOutline) {
+	Color culoareSimbol;
+	Color culoareDa;
+	Color culoareNu;
+	if (!isOutline)
+	{
+		constexpr int marimeContur = 15;
+		const Color culoareContur = Color(0, 0, 0);
+		DateNod dateContur = date;
+		dateContur.lungimeSimbol += marimeContur;
+		dateContur.inaltimeSimbol += marimeContur;
+		switchDesen(fereastraAplicatie, dateContur, culoareSimbol, culoareDa, culoareNu);
+	}
+
+	determinareCulori(date.tip, isOutline, culoareSimbol, culoareDa, culoareNu);
+	switchDesen(fereastraAplicatie, date, culoareSimbol, culoareDa, culoareNu);
+
+}
+
+void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod)
 {
-	const int marimeOutline = 20;
-	DateNod dateTmp = nodCuOutline->date;
+	const int marimeOutline = 30;
+	DateNod dateTmp = dateNod;
 	dateTmp.lungimeSimbol += marimeOutline;
 	dateTmp.inaltimeSimbol += marimeOutline;
 	creareSimbol(fereastraAplicatie, dateTmp, true);
 }
 
-Nod* verificareOutline(const RenderWindow& fereastraAplicatie)
-{
-	return gasesteNodListaCuPozMouse(fereastraAplicatie);
-}
-
-void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, unordered_set<const Nod*>& noduriVizitate, const bool& isOutline) {
-	if (N == nullptr || noduriVizitate.count(N)) {
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
+	static unordered_set<const Nod*> noduriVizitate;
+	if (N == nullptr || noduriVizitate.count(N))
 		return;
-	}
+
+	const Nod* nodCuOutline = gasesteNodListaCuPozMouse(fereastraAplicatie);
 	noduriVizitate.insert(N);
-	const Nod* nodCuOutline = verificareOutline(fereastraAplicatie);
-	if (nodCuOutline != nullptr && noduriVizitate.count(nodCuOutline))
-		desenareOutline(fereastraAplicatie, nodCuOutline);
-
-	creareSimbol(fereastraAplicatie, N->date, isOutline);
+	if (nodCuOutline == N) {
+		desenareOutline(fereastraAplicatie, N->date);
+	}
+	creareSimbol(fereastraAplicatie, N->date, false);
 	afisareTextNod(fereastraAplicatie, desktop, N->date);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate, isOutline);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate, isOutline);
-}
-
-void creareSimbolPtArbore(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
-	unordered_set<const Nod*> noduriVizitate;
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N, noduriVizitate, false);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr);
+	noduriVizitate.clear();
 }
 
 void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop) {
@@ -282,7 +289,7 @@ void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode
 	{
 		if (A.radacina == nullptr)
 			continue;
-		creareSimbolPtArbore(fereastraAplicatie, desktop, A.radacina);
+		creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, A.radacina);
 	}
 }
 
