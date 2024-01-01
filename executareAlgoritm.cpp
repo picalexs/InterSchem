@@ -1,11 +1,14 @@
 #include "executareAlgoritm.h"
+
+#include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
 #include "logicaSimboluri.h"
 
-bool nrStartStop(int& nrStart, int& nrStop, const Nod* N)
+bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, unordered_set<const Nod*>& noduriVizitate)
 {
-	if (N == nullptr)
+	if (N == nullptr || noduriVizitate.count(N))
 		return true;
+	noduriVizitate.insert(N);
 	if (N->date.tip == TipNod::START) {
 		nrStart++;
 		if (nrStart > 1) {//am mai mult de un Nod start
@@ -31,13 +34,14 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N)
 		listaConsola.push_back(eroare);
 		return false;
 	}
-	return nrStartStop(nrStart, nrStop, N->st) && nrStartStop(nrStart, nrStop, N->dr);
+	return nrStartStop(nrStart, nrStop, N->st, noduriVizitate) && nrStartStop(nrStart, nrStop, N->dr, noduriVizitate);
 }
 
 bool verificareStartStop(const Nod* radacina)
 {
+	unordered_set<const Nod*> noduriVizitate;
 	int nrStart = 0, nrStop = 0;
-	if (!nrStartStop(nrStart, nrStop, radacina))
+	if (!nrStartStop(nrStart, nrStop, radacina, noduriVizitate))
 		return false;
 	if (nrStop == 0 || nrStart == 0) {
 		const string eroare = "Eroare: Nu are Nod start sau Nod stop!";
@@ -48,7 +52,7 @@ bool verificareStartStop(const Nod* radacina)
 	return true;
 }
 
-bool verificareAlgoritm()
+bool esteAlgoritmCorect()
 {
 	if (listaArbori.empty() || listaArbori.size() > 1) {
 		const string eroare = "Eroare: Nu are forma buna! Nu are exact un \"arbore\" de parcurs";
@@ -71,53 +75,63 @@ bool verificareAlgoritm()
 	return true;
 }
 
-void parcurgereAlgoritm(Nod* N)
+Nod* passParcurgere(Nod* N)
 {
 	if (N == nullptr)
-		return;
+		return nullptr;
 	switch (N->date.tip)
 	{
 	case TipNod::START:
-		parcurgereAlgoritm(N->st);
-		return;
+		return N->st;
 	case TipNod::STOP:
-		return;
+		return nullptr;
 	case TipNod::ATRIBUIRE:
 		logicaAtribuire(N);
-		parcurgereAlgoritm(N->st);
-		return;
+		return N->st;
 	case TipNod::CITIRE:
 		logicaCitire(N);
-		parcurgereAlgoritm(N->st);
-		return;
+		return N->st;
 	case TipNod::AFISARE:
 		logicaAfisare(N);
-		parcurgereAlgoritm(N->st);
-		return;
+		return N->st;
 	case TipNod::DACA:
 		if (logicaDaca(N)) {
-			parcurgereAlgoritm(N->st);
+			return N->st;
 		}
-		else {
-			parcurgereAlgoritm(N->dr);
-		}
+		return N->dr;
 	case TipNod::NEDEFINIT:
 		cout << "NOD NEDEFINIT!!\n";
 	}
-
+	return nullptr;
 }
 
-bool esteParcurgereaActiva = false;
+bool seParcurge = false;
+Nod* nodParcurgere = nullptr;
 void executareAlgoritm()
 {
-	if (!verificareAlgoritm())//daca nu are forma corecta iesim.
-		return;
-	esteParcurgereaActiva = true;
-	parcurgereAlgoritm(listaArbori[0].radacina);
-	esteParcurgereaActiva = false;
+	if (seParcurge == false) {
+		if (!esteAlgoritmCorect())
+			return;
+		nodParcurgere = listaArbori[0].radacina;
+		seParcurge = true;
+	}
+	cout << "Executare nod cu expresia: " << nodParcurgere->date.expresie << '\n';
+	nodParcurgere = passParcurgere(nodParcurgere);
+	if (nodParcurgere == nullptr)
+	{
+		seParcurge = false;
+		cout << "S-a terminat executarea algoritmului!\n";
+	}
 }
 
 bool seParcurgeAlgoritmul()
 {
-	return esteParcurgereaActiva;
+	return seParcurge;
 }
+
+Nod* nodCurentDeParcurgere()
+{
+	return nodParcurgere;
+}
+
+

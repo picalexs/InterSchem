@@ -81,14 +81,15 @@ void logicaAtribuire(Nod* N)
 			}
 	}
 }
-
+bool seCiteste = false;
+string numeVariabila;
 void logicaCitire(const Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
-	string expresie = N->date.expresie;
-	stergereSpatii(expresie);
-	for (char i : expresie)
+	numeVariabila = N->date.expresie;
+	stergereSpatii(numeVariabila);
+	for (char i : numeVariabila)
 		if (!isalnum(i))
 		{
 			const string eroare = "Eroare la citire! Numele variabilei nu este corect!";
@@ -96,10 +97,17 @@ void logicaCitire(const Nod* N)
 			listaConsola.push_back(eroare);
 			return;
 		}
-	cout << "introduceti valoarea pentru " << N->date.expresie << ": ";
-	int nrCitit = 0;
-	cin >> nrCitit;
-	seteazaVariabila(expresie, nrCitit);
+	seCiteste = true;
+}
+
+bool seCitestePtParcurgere()
+{
+	return seCiteste;
+}
+
+string getNumeVariabila()
+{
+	return numeVariabila;
 }
 
 void logicaAfisare(Nod* N)

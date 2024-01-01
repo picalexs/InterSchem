@@ -2,6 +2,7 @@
 #include "executareAlgoritm.h"
 #include "functiiExpresie.h"
 #include "dimensiuniSimboluri.h"
+#include "evaluareExpresie.h"
 
 void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
 {
@@ -101,20 +102,53 @@ void logicaInput(const Event& event)
 	}
 }
 
-void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
+void citireExpresie(const Event& event, string& expresieDeCitit)
+{
+	string ch;
+	static char ultimaTastaApasata;
+	static Clock timpCeasTastatura;
+	if (event.type == Event::TextEntered)
+	{
+		if (event.text.unicode < 128)
+		{
+			ch = static_cast<char>(event.text.unicode);
+		}
+	}
+	else
+		ultimaTastaApasata = '\0';
+
+	//daca tasta e apasata prelungit, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
+	if (ultimaTastaApasata == ch[0] && timpCeasTastatura.getElapsedTime().asSeconds() < 0.35f)
+		return;
+	if (ultimaTastaApasata != ch)
+		timpCeasTastatura.restart();
+	ultimaTastaApasata = ch[0];
+
+	if (ch == "\b") {//logica de stergere prin backspace
+		if (!expresieDeCitit.empty()) {
+			expresieDeCitit.pop_back();
+			cout << "Stergere\n";
+		}
+	}
+	else if (!ch.empty()) {
+		expresieDeCitit += ch;
+	}
+}
+
+void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static Nod* nodDeGasit = nullptr;
 	static Nod* nodDeMutat = nullptr;
-	static bool citireExpresie = false;
+	static bool seCitesteExpresie = false;
 	static string expresieDeCitit;
-	static Clock timpCeasLMB, timpCeasTastatura, timpApasatLMB;
-	static char ultimaTastaApasata;
+	static Clock timpCeasLMB, timpApasatLMB;
+
 
 	if (esteApasatLMB) {//verificare dublu click -> citire expresie
 		esteApasatLMB = false;
 		esteRidicatLMB = false;
-		logicaLMB(fereastraAplicatie, timpCeasLMB, citireExpresie, nodDeGasit, expresieDeCitit);
+		logicaLMB(fereastraAplicatie, timpCeasLMB, seCitesteExpresie, nodDeGasit, expresieDeCitit);
 		timpApasatLMB.restart();
 	}
 	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
@@ -123,7 +157,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			if (nodDeMutat != nullptr)
 			{
 				int pozDeMutat = -1;
-				Nod* nodGasit = nullptr;
+				const Nod* nodGasit = nullptr;
 				for (int i = listaArbori.size() - 1; i >= 0; --i) {
 					nodGasit = gasesteNodInArbore(listaArbori[i], nodDeMutat->date);
 					if (nodGasit != nullptr) {
@@ -163,43 +197,29 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		logicaDelete();
 		esteApasatDelete = false;
 	}
-	if (citireExpresie)
+	if (seCitesteExpresie)
 	{
-		string ch;
-		if (event.type == Event::TextEntered)
-		{
-			if (event.text.unicode < 128)
-			{
-				ch = static_cast<char>(event.text.unicode);
-			}
-		}
-		else
-			ultimaTastaApasata = '\0';
-
-		//daca tasta e apasata prelungit, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
-		if (ultimaTastaApasata == ch[0] && timpCeasTastatura.getElapsedTime().asSeconds() < 0.35f)
-			return;
-		if (ultimaTastaApasata != ch)
-			timpCeasTastatura.restart();
-		ultimaTastaApasata = ch[0];
-
-		if (ch == "\b") {//logica de stergere prin backspace
-			if (!expresieDeCitit.empty()) {
-				expresieDeCitit.pop_back();
-				modificareLungimeSimbol(desktop, nodDeGasit->date);
-				cout << "Stergere\n";
-			}
-		}
-		else if (!ch.empty()) {
-			expresieDeCitit += ch;
-			modificareLungimeSimbol(desktop, nodDeGasit->date);
-		}
-		if (nodDeGasit != nullptr)//introducerea expresiei citite in Nod.
+		citireExpresie(event, expresieDeCitit);
+		modificareLungimeSimbol(desktop, nodDeGasit->date);
+		if (nodDeGasit != nullptr)
 			nodDeGasit->date.expresie = expresieDeCitit;
 	}
+	static bool seCitesteParcurgere = false;
+	if (seCitestePtParcurgere())
+	{
+		citireExpresie(event, expresieDeCitit);
+		seCitesteParcurgere = true;
+	}
+	else if (seCitesteParcurgere)
+	{
+		const long double rezultat = evaluareExpresie(expresieDeCitit);
+		seteazaVariabila(getNumeVariabila(), rezultat);
+		seCitesteParcurgere = false;
+	}
+
 	if (esteApasatEnter)//stop citire expresie
 	{
-		logicaEnter(citireExpresie, nodDeGasit, expresieDeCitit);
+		logicaEnter(seCitesteExpresie, nodDeGasit, expresieDeCitit);
 		esteApasatEnter = false;
 	}
 }

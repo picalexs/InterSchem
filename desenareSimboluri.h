@@ -8,6 +8,6 @@ void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode
 
 void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie);
 
-void desenareOutline(RenderWindow& fereastraAplicatie, const VideoMode& desktop, DateNod& date);
+void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod, const int marimeOutline);
 
 Nod* verificareOutline(const RenderWindow& fereastraAplicatie);

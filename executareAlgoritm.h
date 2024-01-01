@@ -1,8 +1,14 @@
 #pragma once
 #include "functiiNod.h"
 
-bool verificareAlgoritm();
+bool esteAlgoritmCorect();
 
 void executareAlgoritm();
 
+bool seCitestePtParcurgere();
+
+string getNumeVariabila();
+
 bool seParcurgeAlgoritmul();
+
+Nod* nodCurentDeParcurgere();

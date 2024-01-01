@@ -301,7 +301,8 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 
 	const pair<DateNod, DateNod> linie1 = make_pair(nod1->date, nod2->date);
 	const pair<DateNod, DateNod> linie2 = make_pair(nod2->date, nod1->date);
-	if (existaLinie(linie1) || existaLinie(linie2))
+	if (existaLinie(linie1)
+		|| (existaLinie(linie2) && nod1->date.tip != TipNod::DACA && nod2->date.tip != TipNod::DACA))
 		return false;
 
 	const int pozArbore1 = pozitiaArboreleNodului(nod1);

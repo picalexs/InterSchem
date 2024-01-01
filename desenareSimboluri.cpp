@@ -1,4 +1,6 @@
 #include "desenareSimboluri.h"
+
+#include "executareAlgoritm.h"
 #include "functiiNod.h"
 #define PI 3.14159265358979323846
 
@@ -80,8 +82,8 @@ void desenareElipsa(RenderWindow& fereastraAplicatie, const Punct& centru, const
 	elipsa.setPointCount(calitate);
 	for (int i = 0; i < calitate; i++) {
 		const double rad = (360.0 / calitate * i) / (360 / PI / 2);
-		const float x = cos(rad) * raza_x;
-		const float y = sin(rad) * raza_y;
+		const float x = static_cast<float>(cos(rad)) * raza_x;
+		const float y = static_cast<float>(sin(rad)) * raza_y;
 		elipsa.setPoint(i, Vector2f(x, y));
 	}
 
@@ -177,9 +179,9 @@ void afisareTextNod(RenderWindow& fereastraAplicatie, const VideoMode& desktop, 
 	Text mainText(date.expresie, fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin(static_cast<int>((marginiText.left) + marginiText.width / 2), (marginiText.top + marginiText.height) / 2);
-	const int xPos = date.x;
-	const int yPos = date.y;
+	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
+	const float xPos = date.x;
+	const float yPos = date.y;
 	mainText.setPosition(xPos, yPos);
 	fereastraAplicatie.draw(mainText);
 }
@@ -258,9 +260,8 @@ void creareSimbol(RenderWindow& fereastraAplicatie, const DateNod& date, const b
 
 }
 
-void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod)
+void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod, const int marimeOutline)
 {
-	const int marimeOutline = 30;
 	DateNod dateTmp = dateNod;
 	dateTmp.lungimeSimbol += marimeOutline;
 	dateTmp.inaltimeSimbol += marimeOutline;
@@ -274,13 +275,30 @@ void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoM
 
 	const Nod* nodCuOutline = gasesteNodListaCuPozMouse(fereastraAplicatie);
 	noduriVizitate.insert(N);
-	if (nodCuOutline == N) {
-		desenareOutline(fereastraAplicatie, N->date);
+	if (nodCuOutline == N)
+	{
+		desenareOutline(fereastraAplicatie, N->date, 30);
 	}
+
 	creareSimbol(fereastraAplicatie, N->date, false);
 	afisareTextNod(fereastraAplicatie, desktop, N->date);
 	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st);
 	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr);
+	noduriVizitate.clear();
+}
+
+void creareOutlineParcurgereRecursiv(RenderWindow& fereastraAplicatie, Nod* N)
+{
+	static unordered_set<const Nod*> noduriVizitate;
+	if (N == nullptr || noduriVizitate.count(N))
+		return;
+	noduriVizitate.insert(N);
+	if (seParcurgeAlgoritmul())
+	{
+		desenareOutline(fereastraAplicatie, nodCurentDeParcurgere()->date, 40);
+	}
+	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->st);
+	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->dr);
 	noduriVizitate.clear();
 }
 
@@ -289,6 +307,7 @@ void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode
 	{
 		if (A.radacina == nullptr)
 			continue;
+		creareOutlineParcurgereRecursiv(fereastraAplicatie, A.radacina);
 		creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, A.radacina);
 	}
 }
@@ -314,7 +333,7 @@ void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 		float x = mijlocXNod2 - mijlocXNod1;
 		float y = mijlocYNod2 - mijlocYNod1;
 		float lng = sqrt(x * x + y * y);
-		float unghi = atan2(y, x) * 180 / (PI);
+		float unghi = static_cast<float>(atan2(y, x) * 180 / (PI));
 
 		line.setSize(Vector2f(lng, grosimeLinie));
 		line.setPosition(mijlocXNod1, mijlocYNod1);
@@ -323,7 +342,7 @@ void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 		fereastraAplicatie.draw(line);
 
 		float dimTriunghi = 30.0f;
-		float inaltimeTriunghi = dimTriunghi * sqrt(3) / 2;
+		float inaltimeTriunghi = dimTriunghi * static_cast<float>(sqrt(3)) / 2;
 		triunghi.setPoint(0, Vector2f(0, -inaltimeTriunghi / 2));
 		triunghi.setPoint(1, Vector2f(dimTriunghi, 0));
 		triunghi.setPoint(2, Vector2f(0, inaltimeTriunghi / 2));
