@@ -6,7 +6,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N)
 {
 	if (N == nullptr)
 		return true;
-	if (N->date.tip == 0) {
+	if (N->date.tip == TipNod::START) {
 		nrStart++;
 		if (nrStart > 1) {//am mai mult de un Nod start
 			const string eroare = "Eroare: Are mai mult de un Nod start!";
@@ -15,7 +15,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N)
 			return false;
 		}
 	}
-	else if (N->date.tip == 1) {
+	else if (N->date.tip == TipNod::STOP) {
 		nrStop++;
 		if (N->st != nullptr || N->dr != nullptr) {//nodul stop nu are voie sa aiba fii
 			const string eroare = "Eroare: Are Nod stop ca fiu!";
@@ -58,7 +58,7 @@ bool verificareAlgoritm()
 	}
 	if (listaArbori[0].radacina == nullptr)
 		return false;
-	if (listaArbori[0].radacina->date.tip != 0)
+	if (listaArbori[0].radacina->date.tip != TipNod::START)
 	{
 		const string eroare = "Eroare: Nu are Nod start la inceput!";
 		cout << eroare << '\n';
@@ -77,31 +77,34 @@ void parcurgereAlgoritm(Nod* N)
 		return;
 	switch (N->date.tip)
 	{
-	case 0:
+	case TipNod::START:
 		parcurgereAlgoritm(N->st);
 		return;
-	case 1:
+	case TipNod::STOP:
 		return;
-	case 2:
+	case TipNod::ATRIBUIRE:
 		logicaAtribuire(N);
 		parcurgereAlgoritm(N->st);
 		return;
-	case 3:
+	case TipNod::CITIRE:
 		logicaCitire(N);
 		parcurgereAlgoritm(N->st);
 		return;
-	case 4:
+	case TipNod::AFISARE:
 		logicaAfisare(N);
 		parcurgereAlgoritm(N->st);
 		return;
-	case 5:
+	case TipNod::DACA:
 		if (logicaDaca(N)) {
 			parcurgereAlgoritm(N->st);
 		}
 		else {
 			parcurgereAlgoritm(N->dr);
 		}
+	case TipNod::NEDEFINIT:
+		cout << "NOD NEDEFINIT!!\n";
 	}
+
 }
 
 bool esteParcurgereaActiva = false;

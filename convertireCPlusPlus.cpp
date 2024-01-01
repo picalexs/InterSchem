@@ -23,10 +23,10 @@ void verificare(Nod* nodCurent, const DateNod& date)
 {
 	if (nodCurent == nullptr)
 		return;
-	if (nodCurent->date.tip == 0)
+	if (nodCurent->date.tip == TipNod::START)
 		nrStart++;
 	else
-		if (nodCurent->date.tip == 1)
+		if (nodCurent->date.tip == TipNod::STOP)
 			nrStop++;
 	verificare(nodCurent->dr, date);
 	verificare(nodCurent->st, date);
@@ -36,13 +36,13 @@ void parcurgere(Nod* nodCurent, const DateNod& date)
 {
 	if (nodCurent == nullptr)
 		return;
-	if (nodCurent->date.tip == 2)
+	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 		cout << nodCurent->date.expresie;
-	if (nodCurent->date.tip == 3)
-		cout<<"cin>>"<<nodCurent->date.expresie;
-	if (nodCurent->date.tip == 3)
+	if (nodCurent->date.tip == TipNod::CITIRE)
+		cout << "cin>>" << nodCurent->date.expresie;
+	if (nodCurent->date.tip == TipNod::AFISARE)
 		cout << "cout<<" << nodCurent->date.expresie;
-	if (nodCurent->date.tip == 3)
+	if (nodCurent->date.tip == TipNod::DACA)
 		cout << "if()" << nodCurent->date.expresie;
 	parcurgere(nodCurent->st, date);
 	parcurgere(nodCurent->dr, date);

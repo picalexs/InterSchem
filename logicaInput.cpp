@@ -10,7 +10,7 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& ci
 		nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
 		if (nodDeGasit != nullptr)
 		{
-			if (nodDeGasit->date.tip == 0 || nodDeGasit->date.tip == 1)
+			if (nodDeGasit->date.tip == TipNod::START || nodDeGasit->date.tip == TipNod::STOP)
 			{
 				nodDeGasit = nullptr;
 				return;

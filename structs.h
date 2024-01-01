@@ -7,8 +7,19 @@
 using namespace std;
 using namespace sf;
 
+enum class TipNod
+{
+	START = 0,
+	STOP = 1,
+	ATRIBUIRE = 2,
+	CITIRE = 3,
+	AFISARE = 4,
+	DACA = 5,
+	NEDEFINIT = 6
+};
+
 struct DateNod {
-	int tip = -1; //0-START, 1-STOP, 2-Atribuire, 3-Citire, 4-Afisare, 5-Daca/While
+	TipNod tip;
 	std::string expresie;
 	float x = 0, y = 0;
 	float lungimeSimbol = 0, inaltimeSimbol = 0;

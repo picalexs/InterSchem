@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <SFML/Graphics.hpp>
 
-DateNod schimbareDate(int tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);
+DateNod schimbareDate(const TipNod tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);
 
 void initializareNod(Nod& N);
 

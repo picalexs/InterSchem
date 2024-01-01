@@ -17,12 +17,12 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode&
 				int tip = key - Keyboard::Num1;
 				const Vector2f dimensiuni = dimensiuniSimbol(desktop, tip);
 				const Vector2f pozitieMouse = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie));
-				DateNod date = schimbareDate(tip, "", pozitieMouse.x, pozitieMouse.y, dimensiuni.x, dimensiuni.y);
-				if (date.tip == 0)
+				DateNod date = schimbareDate(static_cast<TipNod>(tip), "", pozitieMouse.x, pozitieMouse.y, dimensiuni.x, dimensiuni.y);
+				if (date.tip == TipNod::START)
 					date.expresie = "START";
-				else if (date.tip == 1)
+				else if (date.tip == TipNod::STOP)
 					date.expresie = "STOP";
-				cout << "Creat: tip= " << date.tip << ", (" << date.x << ',' << date.y << ")" << endl;
+				cout << "Creat: tip= " << static_cast<int>(date.tip) << ", (" << date.x << ',' << date.y << ")\n";
 
 				Arbore ArboreNou;
 				atribuireArbore(ArboreNou, date);
@@ -73,7 +73,7 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 
 			if (nodDeSters != nullptr)
 			{
-				cout << "Sters: tip= " << nodDeSters->date.tip << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
+				cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
 				stergereLinie(nodDeSters);
 				stergereNod(nodDeSters);
 				return;
@@ -107,7 +107,7 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 		return;
 	}
 	if (creareLegatura(nod1, nod2))
-		cout << "Legatura: tip= " << nod1->date.tip << "->" << nod2->date.tip << ", (" << nod1->date.x << ',' <<
+		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
 		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
 	nod1 = nullptr;
 	nod2 = nullptr;

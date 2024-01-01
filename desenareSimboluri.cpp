@@ -195,15 +195,15 @@ Color scadereCulori(const Color& color1, const Color& color2) {
 	return { static_cast<Uint8>(red), static_cast<Uint8>(green), static_cast<Uint8>(blue) };
 }
 
-void determinareCulori(const int tip, const bool& isOutline, Color& culoareSimbol, Color& culoareDa, Color& culoareNu)
+void determinareCulori(const TipNod tip, const bool& isOutline, Color& culoareSimbol, Color& culoareDa, Color& culoareNu)
 {
 	switch (tip) {
-	case 0: culoareSimbol = Color(120, 189, 219); break;
-	case 1: culoareSimbol = Color(120, 189, 219); break;
-	case 2: culoareSimbol = Color(236, 222, 96); break;
-	case 3: culoareSimbol = Color(102, 210, 102); break;
-	case 4: culoareSimbol = Color(255, 102, 102); break;
-	case 5:
+	case TipNod::START: culoareSimbol = Color(120, 189, 219); break;
+	case TipNod::STOP: culoareSimbol = Color(120, 189, 219); break;
+	case TipNod::ATRIBUIRE: culoareSimbol = Color(236, 222, 96); break;
+	case TipNod::CITIRE: culoareSimbol = Color(102, 210, 102); break;
+	case TipNod::AFISARE: culoareSimbol = Color(255, 102, 102); break;
+	case TipNod::DACA:
 		culoareSimbol = Color(192, 192, 192);
 		culoareDa = Color(30, 222, 30);
 		culoareNu = Color(212, 68, 52);
@@ -222,17 +222,17 @@ void determinareCulori(const int tip, const bool& isOutline, Color& culoareSimbo
 void switchDesen(RenderWindow& fereastraAplicatie, const DateNod& date, const Color& culoareSimbol, const Color& culoareDa, const Color& culoareNu)
 {
 	switch (date.tip) {
-	case 0:
+	case TipNod::START:
 		desenareNodStart(fereastraAplicatie, date, culoareSimbol); break;
-	case 1:
+	case TipNod::STOP:
 		desenareNodStop(fereastraAplicatie, date, culoareSimbol); break;
-	case 2:
+	case TipNod::ATRIBUIRE:
 		desenareNodAtribuire(fereastraAplicatie, date, culoareSimbol); break;
-	case 3:
+	case TipNod::CITIRE:
 		desenareNodCitire(fereastraAplicatie, date, culoareSimbol); break;
-	case 4:
+	case TipNod::AFISARE:
 		desenareNodAfisare(fereastraAplicatie, date, culoareSimbol); break;
-	case 5:
+	case TipNod::DACA:
 		desenareNodDaca(fereastraAplicatie, date, culoareSimbol, culoareDa, culoareNu); break;
 	default:
 		break;
@@ -306,7 +306,7 @@ void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 		float mijlocXNod2 = linie.second.x;
 		float mijlocYNod2 = linie.second.y;
 
-		if (linie.first.tip != 5)
+		if (linie.first.tip != TipNod::DACA)
 			mijlocYNod1 += 50;
 		else
 			mijlocYNod1 += 75;

@@ -57,7 +57,7 @@ void modificareLungimeSimbol(const VideoMode& desktop, DateNod& date) {
 	const Text textExpresie(date.expresie, fontGlobal, marimeFont);
 	const float lungimeText = textExpresie.getLocalBounds().width;
 	float spatiuMargine = 40.0f;
-	if (date.tip == 5)
+	if (date.tip == TipNod::DACA)
 		spatiuMargine = 100.0f;
 	const float raport = (lungimeText + 2 * spatiuMargine) / date.lungimeSimbol;
 

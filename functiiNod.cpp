@@ -1,6 +1,6 @@
 #include "functiiNod.h"
 
-DateNod schimbareDate(const int tip, const string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol) {
+DateNod schimbareDate(const TipNod tip, const string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol) {
 	DateNod date;
 	date.tip = tip;
 	date.expresie = expresie;
@@ -12,7 +12,7 @@ DateNod schimbareDate(const int tip, const string& expresie, const float x, cons
 }
 
 void initializareNod(Nod& N) {
-	schimbareDate(-1, "", 0, 0, 0, 0);
+	schimbareDate(TipNod::NEDEFINIT, "", 0, 0, 0, 0);
 	N.st = nullptr; N.dr = nullptr;
 }
 
@@ -133,8 +133,6 @@ Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie) {
 	}
 	return nodGasit;
 }
-
-
 
 Nod* gasesteNodInListaArbori(const DateNod& date) {
 	for (const auto A : listaArbori)
@@ -295,8 +293,8 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
 	//simbolul are deja nr. maxim de fii posibil
-	if ((nod1->date.tip == 5 && nod1->dr != nullptr)
-		|| (nod1->date.tip != 5 && (nod1->st != nullptr || nod1->dr != nullptr)))
+	if ((nod1->date.tip == TipNod::DACA && nod1->dr != nullptr)
+		|| (nod1->date.tip != TipNod::DACA && (nod1->st != nullptr || nod1->dr != nullptr)))
 		return false;
 
 	const pair<DateNod, DateNod> linie1 = make_pair(nod1->date, nod2->date);
@@ -312,12 +310,12 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 
 	if (pozArbore1 == pozArbore2)
 	{
-		if (nod2->date.tip == 5) {
+		if (nod2->date.tip == TipNod::DACA) {
 			if (!esteNodInArbore(nod1, nod2->st))
 				return false;//nu se poate face legatura intre nod1 si nod2
 		}
-		else if (nod1->date.tip == 5) {
-			if (nod2->date.tip == 0 || nod2->date.tip == 1) {
+		else if (nod1->date.tip == TipNod::DACA) {
+			if (nod2->date.tip == TipNod::START || nod2->date.tip == TipNod::STOP) {
 				return false;//nu se poate face legatura intre while si un nod de start/stop
 			}
 		}
