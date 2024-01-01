@@ -257,11 +257,13 @@ void stergereNod(Nod* N) {
 				break;
 			}
 		}
-		if (nodTata->st == N)
-			nodTata->st = nullptr;
-		else
-			nodTata->dr = nullptr;
-		listaArbori[poz].nrNoduri -= numarNoduri(N);
+		if (nodTata != nullptr) {
+			if (nodTata->st == N)
+				nodTata->st = nullptr;
+			else
+				nodTata->dr = nullptr;
+			listaArbori[poz].nrNoduri -= numarNoduri(N);
+		}
 	}
 	N->st = nullptr;
 	N->dr = nullptr;

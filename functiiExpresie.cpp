@@ -16,20 +16,20 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 		return;
 	stergereOutputCandMare(10);
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	const int spatiuY = 10;
-	const int spatiuMargini = 20;
-	const int spatiuJos = desktop.height / 10;
+	constexpr float spatiuY = 10;
+	constexpr float spatiuMargini = 20;
+	const float spatiuJos = static_cast<float>(desktop.height) / 10;
 
 	//deseneaza primul element din listaConsola (ultimul element adaugat) mai intunecat la culoare
 	Text textOutput(listaConsola[listaConsola.size() - 1], fontGlobal, marimeFont);
 	textOutput.setFillColor(Color::Black);
-	int pozY = desktop.height - spatiuJos - textOutput.getLocalBounds().height;
+	float pozY = desktop.height - spatiuJos - textOutput.getLocalBounds().height;
 	textOutput.setPosition(spatiuMargini, pozY);
 	fereastraAplicatie.draw(textOutput);
 
 	//deseneaza restul elementelor din listaConsola mai gri la culoare
-	for (int i = listaConsola.size() - 2; i >= 0; i--) {
-		Text textOutput(listaConsola[i], fontGlobal, marimeFont);
+	for (size_t i = listaConsola.size() - 1; i > 0; --i) {
+		Text textOutput(listaConsola[i - 1], fontGlobal, marimeFont);
 		textOutput.setFillColor(Color(90, 90, 90));
 		pozY -= textOutput.getGlobalBounds().height + spatiuY;
 		textOutput.setPosition(spatiuMargini, pozY);
@@ -39,9 +39,9 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	int pozY = 0;
-	int spatiuY = 10;
-	int spatiuMargini = 20;
+	float pozY = 0;
+	float spatiuY = 10;
+	float spatiuMargini = 20;
 
 	string textSimboluri = "Nr. de simboluri: " + std::to_string(numarNoduriDinListaArbori());
 	Text text1(textSimboluri, fontGlobal, marimeFont);
