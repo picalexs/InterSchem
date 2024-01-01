@@ -301,17 +301,28 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 
 	const pair<DateNod, DateNod> linie1 = make_pair(nod1->date, nod2->date);
 	const pair<DateNod, DateNod> linie2 = make_pair(nod2->date, nod1->date);
+	if (existaLinie(linie1) || existaLinie(linie2))
+		return false;
+
 	const int pozArbore1 = pozitiaArboreleNodului(nod1);
 	const int pozArbore2 = pozitiaArboreleNodului(nod2);
 
 	if (pozArbore1 == -1 || pozArbore2 == -1)
 		return false;
 
-	if (nod2->date.tip == 5)
+	if (pozArbore1 == pozArbore2)
 	{
-		if (pozArbore1 == pozArbore2) {
+		if (nod2->date.tip == 5) {
 			if (!esteNodInArbore(nod1, nod2->st))
 				return false;//nu se poate face legatura intre nod1 si nod2
+		}
+		else if (nod1->date.tip == 5) {
+			if (nod2->date.tip == 0 || nod2->date.tip == 1) {
+				return false;//nu se poate face legatura intre while si un nod de start/stop
+			}
+		}
+		else {
+			return false; // incerc sa conectez nod1 de nod2(care nu este while, deci nu este bine)
 		}
 	}
 	if (nod1->st == nullptr) {
