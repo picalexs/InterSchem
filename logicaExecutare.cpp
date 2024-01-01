@@ -98,6 +98,12 @@ void logicaCitire(const Nod* N)
 			return;
 		}
 	seCiteste = true;
+	listaConsola.push_back("Introduceti valoarea pentru variabila " + numeVariabila + ": ");
+}
+
+void stopCitirePtParcurgere()
+{
+	seCiteste = false;
 }
 
 bool seCitestePtParcurgere()

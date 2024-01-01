@@ -5,9 +5,13 @@
 
 void logicaAtribuire(Nod* N);
 
-void opresteCitireaPtAlgoritm();
-
 void logicaCitire(const Nod* N);
+
+void stopCitirePtParcurgere();
+
+string getNumeVariabila();
+
+bool seCitestePtParcurgere();
 
 void logicaAfisare(Nod* N);
 

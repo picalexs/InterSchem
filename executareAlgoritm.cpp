@@ -106,6 +106,7 @@ Nod* passParcurgere(Nod* N)
 }
 
 bool seParcurge = false;
+Nod* ultimNodParcurs = nullptr;
 Nod* nodParcurgere = nullptr;
 void executareAlgoritm()
 {
@@ -116,6 +117,7 @@ void executareAlgoritm()
 		seParcurge = true;
 	}
 	cout << "Executare nod cu expresia: " << nodParcurgere->date.expresie << '\n';
+	ultimNodParcurs = nodParcurgere;
 	nodParcurgere = passParcurgere(nodParcurgere);
 	if (nodParcurgere == nullptr)
 	{
@@ -131,7 +133,7 @@ bool seParcurgeAlgoritmul()
 
 Nod* nodCurentDeParcurgere()
 {
-	return nodParcurgere;
+	return ultimNodParcurs;
 }
 
 

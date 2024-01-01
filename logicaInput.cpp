@@ -3,6 +3,7 @@
 #include "functiiExpresie.h"
 #include "dimensiuniSimboluri.h"
 #include "evaluareExpresie.h"
+#include "logicaExecutare.h"
 
 void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
 {
@@ -143,7 +144,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 	static bool seCitesteExpresie = false;
 	static string expresieDeCitit;
 	static Clock timpCeasLMB, timpApasatLMB;
-
+	static bool seCitesteParcurgere = false;
 
 	if (esteApasatLMB) {//verificare dublu click -> citire expresie
 		esteApasatLMB = false;
@@ -189,7 +190,8 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 	}
 	if (esteApasatF12)//executa algoritmul
 	{
-		logicaF12();
+		if (!seCitesteParcurgere)
+			logicaF12();
 		esteApasatF12 = false;
 	}
 	if (esteApasatDelete)//resetaza totul
@@ -204,22 +206,30 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 		if (nodDeGasit != nullptr)
 			nodDeGasit->date.expresie = expresieDeCitit;
 	}
-	static bool seCitesteParcurgere = false;
 	if (seCitestePtParcurgere())
 	{
 		citireExpresie(event, expresieDeCitit);
 		seCitesteParcurgere = true;
 	}
-	else if (seCitesteParcurgere)
-	{
-		const long double rezultat = evaluareExpresie(expresieDeCitit);
-		seteazaVariabila(getNumeVariabila(), rezultat);
-		seCitesteParcurgere = false;
-	}
 
 	if (esteApasatEnter)//stop citire expresie
 	{
-		logicaEnter(seCitesteExpresie, nodDeGasit, expresieDeCitit);
 		esteApasatEnter = false;
+		if (seCitesteParcurgere)
+		{
+			if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r')
+				expresieDeCitit.pop_back();
+			const long double rezultat = evaluareExpresie(expresieDeCitit);
+			seteazaVariabila(getNumeVariabila(), rezultat);
+			string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
+			cout << output << '\n';
+			stopCitirePtParcurgere();
+			seCitesteParcurgere = false;
+			esteApasatF12 = true;
+		}
+		else {
+			logicaEnter(seCitesteExpresie, nodDeGasit, expresieDeCitit);
+		}
+		expresieDeCitit.clear();
 	}
 }
