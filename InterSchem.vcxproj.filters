@@ -60,6 +60,9 @@
     <ClCompile Include="structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="desenareLinie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaExecutare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="desenareLinie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

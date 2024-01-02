@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="convertireCPlusPlus.cpp" />
+    <ClCompile Include="desenareLinie.cpp" />
     <ClCompile Include="dimensiuniSimboluri.cpp" />
     <ClCompile Include="executareAlgoritm.cpp" />
     <ClCompile Include="functiiExpresie.cpp" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="convertireCPlusPlus.h" />
+    <ClInclude Include="desenareLinie.h" />
     <ClInclude Include="dimensiuniSimboluri.h" />
     <ClInclude Include="executareAlgoritm.h" />
     <ClInclude Include="functiiExpresie.h" />

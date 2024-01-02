@@ -1,4 +1,6 @@
 #include "logicaSimboluri.h"
+
+#include "desenareLinie.h"
 #include "dimensiuniSimboluri.h"
 #include "structs.h"
 
@@ -27,7 +29,7 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode&
 				Arbore ArboreNou;
 				atribuireArbore(ArboreNou, date);
 				listaArbori.push_back(ArboreNou);
-
+				actualizareLinii(desktop);
 				esteTastaApasata[static_cast<Keyboard::Key>(key)] = true;
 			}
 		}
@@ -56,7 +58,7 @@ void stergereLinie(const Nod* N)
 
 bool esteApasatStergere = false;
 
-void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
+void logicaStergereSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	if (!Keyboard::isKeyPressed(Keyboard::Escape) && esteApasatStergere)
 	{
@@ -76,6 +78,7 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 				cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
 				stergereLinie(nodDeSters);
 				stergereNod(nodDeSters);
+				actualizareLinii(desktop);
 				return;
 			}
 		}
@@ -85,7 +88,7 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 Nod* nod1 = nullptr;
 Nod* nod2 = nullptr;
 
-void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
+void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	if (Mouse::isButtonPressed(Mouse::Right))
 	{
@@ -106,9 +109,11 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 		nod2 = nullptr;
 		return;
 	}
-	if (creareLegatura(nod1, nod2))
+	if (creareLegatura(nod1, nod2)) {
+		actualizareLinii(desktop);
 		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
-		nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
+			nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
+	}
 	nod1 = nullptr;
 	nod2 = nullptr;
 }
@@ -116,6 +121,6 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie)
 void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	logicaCreareSimbol(fereastraAplicatie, desktop);
-	logicaStergereSimbol(fereastraAplicatie);
-	logicaLegaturaIntreSimboluri(fereastraAplicatie);
+	logicaStergereSimbol(fereastraAplicatie, desktop);
+	logicaLegaturaIntreSimboluri(fereastraAplicatie, desktop);
 }

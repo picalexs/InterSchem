@@ -1,4 +1,6 @@
 #include "logicaInput.h"
+
+#include "desenareLinie.h"
 #include "executareAlgoritm.h"
 #include "functiiExpresie.h"
 #include "dimensiuniSimboluri.h"
@@ -186,6 +188,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 		{
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
+			actualizareLinii(desktop);
 		}
 	}
 	if (esteApasatF12)//executa algoritmul
@@ -221,7 +224,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 				expresieDeCitit.pop_back();
 			const long double rezultat = evaluareExpresie(expresieDeCitit);
 			seteazaVariabila(getNumeVariabila(), rezultat);
-			string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
+			const string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
 			cout << output << '\n';
 			stopCitirePtParcurgere();
 			seCitesteParcurgere = false;
