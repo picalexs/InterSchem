@@ -79,14 +79,14 @@ bool esteNodInArbore(Nod* nodCautat, const Nod* radacina) {
 	return esteNodInArboreRec(nodCautat, radacina, noduriVizitate);
 }
 
-bool verificareSimbolInZona(const Vector2i& pozitieMouse, const DateNod& date) {
+bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date) {
 	return (abs(date.x - pozitieMouse.x) <= date.lungimeSimbol / 2 && abs(date.y - pozitieMouse.y) <= date.inaltimeSimbol / 2);
 }
 
 Nod* gasesteNodRec(Nod* nodCurent, const DateNod& date, unordered_set<const Nod*> noduriVizitate) {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
-	Vector2i pozMouse;
+	Vector2f pozMouse;
 	pozMouse.x = date.x;
 	pozMouse.y = date.y;
 	if (verificareSimbolInZona(pozMouse, nodCurent->date))
@@ -295,14 +295,15 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
 	//simbolul are deja nr. maxim de fii posibil
-	if ((nod1->date.tip == TipNod::DACA && nod1->dr != nullptr)
-		|| (nod1->date.tip != TipNod::DACA && (nod1->st != nullptr || nod1->dr != nullptr)))
+	if (((nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE) && nod1->dr != nullptr)
+		|| (nod1->date.tip != TipNod::DACA && nod1->date.tip != TipNod::WHILE && (nod1->st != nullptr || nod1->dr != nullptr)))
 		return false;
 
 	const pair<DateNod, DateNod> linie1 = make_pair(nod1->date, nod2->date);
 	const pair<DateNod, DateNod> linie2 = make_pair(nod2->date, nod1->date);
-	if (existaLinie(linie1)
-		|| (existaLinie(linie2) && nod1->date.tip != TipNod::DACA && nod2->date.tip != TipNod::DACA))
+	if (existaLinie(linie1) || (existaLinie(linie2)
+		&& nod1->date.tip != TipNod::DACA && nod2->date.tip != TipNod::DACA
+		&& nod1->date.tip != TipNod::WHILE && nod2->date.tip != TipNod::WHILE))
 		return false;
 
 	const int pozArbore1 = pozitiaArboreleNodului(nod1);
@@ -313,11 +314,11 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 
 	if (pozArbore1 == pozArbore2)
 	{
-		if (nod2->date.tip == TipNod::DACA) {
+		if (nod2->date.tip == TipNod::DACA || nod2->date.tip == TipNod::WHILE) {
 			if (!esteNodInArbore(nod1, nod2->st))
 				return false;//nu se poate face legatura intre nod1 si nod2
 		}
-		else if (nod1->date.tip == TipNod::DACA) {
+		else if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE) {
 			if (nod2->date.tip == TipNod::START || nod2->date.tip == TipNod::STOP) {
 				return false;//nu se poate face legatura intre while si un nod de start/stop
 			}
@@ -325,6 +326,10 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 		else {
 			return false; // incerc sa conectez nod1 de nod2(care nu este while, deci nu este bine)
 		}
+		if (nod1->date.tip == TipNod::DACA)
+			nod1->date.tip = TipNod::WHILE;
+		else if (nod2->date.tip == TipNod::DACA)
+			nod2->date.tip = TipNod::WHILE;
 	}
 	if (nod1->st == nullptr) {
 		nod1->st = nod2;

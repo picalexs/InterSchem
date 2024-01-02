@@ -25,7 +25,7 @@ bool esteArboreNull(const Arbore& A);
 
 bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
 
-bool verificareSimbolInZona(const Vector2i& pozitieMouse, const DateNod& date);
+bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date);
 
 Nod* gasesteNod(Nod* nodCurent, const DateNod& date);
 

@@ -1,5 +1,4 @@
 #include "desenareSimboluri.h"
-
 #include "executareAlgoritm.h"
 #include "functiiNod.h"
 #define PI 3.14159265358979323846
@@ -206,7 +205,12 @@ void determinareCulori(const TipNod tip, const bool& isOutline, Color& culoareSi
 	case TipNod::CITIRE: culoareSimbol = Color(102, 210, 102); break;
 	case TipNod::AFISARE: culoareSimbol = Color(255, 102, 102); break;
 	case TipNod::DACA:
-		culoareSimbol = Color(192, 192, 192);
+		culoareSimbol = Color(200, 200, 200);
+		culoareDa = Color(30, 222, 30);
+		culoareNu = Color(212, 68, 52);
+		break;
+	case TipNod::WHILE:
+		culoareSimbol = Color(208, 149, 198);
 		culoareDa = Color(30, 222, 30);
 		culoareNu = Color(212, 68, 52);
 		break;
@@ -235,6 +239,7 @@ void switchDesen(RenderWindow& fereastraAplicatie, const DateNod& date, const Co
 	case TipNod::AFISARE:
 		desenareNodAfisare(fereastraAplicatie, date, culoareSimbol); break;
 	case TipNod::DACA:
+	case TipNod::WHILE:
 		desenareNodDaca(fereastraAplicatie, date, culoareSimbol, culoareDa, culoareNu); break;
 	default:
 		break;
@@ -325,7 +330,7 @@ void desenareLinieIntreSimboluri(RenderWindow& fereastraAplicatie) {
 		float mijlocXNod2 = linie.second.x;
 		float mijlocYNod2 = linie.second.y;
 
-		if (linie.first.tip != TipNod::DACA)
+		if (linie.first.tip != TipNod::DACA && linie.first.tip != TipNod::WHILE)
 			mijlocYNod1 += 50;
 		else
 			mijlocYNod1 += 75;
