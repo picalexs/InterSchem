@@ -188,7 +188,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 		{
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
-			actualizareLinii(desktop);
+			//verificare daca nodul atinge o linie
 		}
 	}
 	if (esteApasatF12)//executa algoritmul

@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+
+#include "desenareLinie.h"
 #include "desenareSimboluri.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"
@@ -22,6 +24,7 @@ void creareFereastra()
 		}
 
 	atribuireConstanteCunoscute();//PI, e, g, phi;
+	initializareMatriceObstacole(desktop);
 
 	while (fereastraAplicatie.isOpen())
 	{
@@ -40,7 +43,7 @@ void creareFereastra()
 		logicaSimboluri(fereastraAplicatie, desktop);//creare, stergere, legare simboluri
 
 		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
-		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
+		desenareLinii(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
 		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging

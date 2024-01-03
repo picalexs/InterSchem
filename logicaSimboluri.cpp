@@ -1,5 +1,4 @@
 #include "logicaSimboluri.h"
-
 #include "desenareLinie.h"
 #include "dimensiuniSimboluri.h"
 #include "structs.h"
@@ -29,29 +28,13 @@ void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode&
 				Arbore ArboreNou;
 				atribuireArbore(ArboreNou, date);
 				listaArbori.push_back(ArboreNou);
-				actualizareLinii(desktop);
+				adaugaSimbolCaObstacole(ArboreNou.radacina);
 				esteTastaApasata[static_cast<Keyboard::Key>(key)] = true;
 			}
 		}
 		else
 		{
 			esteTastaApasata[static_cast<Keyboard::Key>(key)] = false;
-		}
-	}
-}
-
-void stergereLinie(const Nod* N)
-{
-	for (auto it = listaLinii.begin(); it != listaLinii.end();)
-	{
-		if ((it->first.x == N->date.x && it->first.y == N->date.y) ||
-			(it->second.x == N->date.x && it->second.x == N->date.y))
-		{
-			it = listaLinii.erase(it);
-		}
-		else
-		{
-			++it;
 		}
 	}
 }
@@ -76,9 +59,9 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie, const VideoMod
 			if (nodDeSters != nullptr)
 			{
 				cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
-				stergereLinie(nodDeSters);
 				stergereNod(nodDeSters);
-				actualizareLinii(desktop);
+				stergereLinieObstacol(nodDeSters);
+				stergeSimbolObstacol(nodDeSters);
 				return;
 			}
 		}
@@ -110,7 +93,7 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie, const 
 		return;
 	}
 	if (creareLegatura(nod1, nod2)) {
-		actualizareLinii(desktop);
+		adaugaLinieObstacol(nod1, nod2);
 		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
 			nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
 	}
