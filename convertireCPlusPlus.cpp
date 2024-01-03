@@ -37,13 +37,39 @@ void parcurgere(Nod* nodCurent, const DateNod& date)
 	if (nodCurent == nullptr)
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
+	{
 		cout << nodCurent->date.expresie;
+		parcurgere(nodCurent->st, date);
+		parcurgere(nodCurent->dr, date);
+	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
+	{
 		cout << "cin>>" << nodCurent->date.expresie;
+		parcurgere(nodCurent->st, date);
+		parcurgere(nodCurent->dr, date);
+	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
+	{
 		cout << "cout<<" << nodCurent->date.expresie;
+		parcurgere(nodCurent->st, date);
+		parcurgere(nodCurent->dr, date);
+	}
 	if (nodCurent->date.tip == TipNod::DACA)
-		cout << "if()" << nodCurent->date.expresie;
-	parcurgere(nodCurent->st, date);
-	parcurgere(nodCurent->dr, date);
+	{
+		cout << "if(" << nodCurent->date.expresie << ")"<<'\n';
+		cout << "{"<<'\n';
+		parcurgere(nodCurent->st, date);
+		cout << "}";
+		cout << '\n' << "else";
+		parcurgere(nodCurent->dr, date);
+	}
+	if (nodCurent->date.tip == TipNod::DACA)
+	{
+		cout << "if(" << nodCurent->date.expresie << ")" << '\n';
+		cout << "{" << '\n';
+		parcurgere(nodCurent->st, date);
+		cout << "}";
+		cout << '\n' << "else";
+		parcurgere(nodCurent->dr, date);
+	}
 }

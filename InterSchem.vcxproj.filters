@@ -60,6 +60,12 @@
     <ClCompile Include="structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="butoaneMeniu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logicaButoane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -102,6 +108,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaExecutare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="butoaneMeniu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logicaButoane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
