@@ -95,6 +95,7 @@ Nod* passParcurgere(Nod* N)
 		logicaAfisare(N);
 		return N->st;
 	case TipNod::DACA:
+	case TipNod::WHILE:
 		if (logicaDaca(N)) {
 			return N->st;
 		}

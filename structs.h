@@ -15,7 +15,8 @@ enum class TipNod
 	CITIRE = 3,
 	AFISARE = 4,
 	DACA = 5,
-	NEDEFINIT = 6
+	WHILE = 6,
+	NEDEFINIT = 7
 };
 
 struct DateNod {
