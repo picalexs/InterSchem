@@ -37,6 +37,8 @@ Nod* gasesteNodListaCuPozMouse(const RenderWindow& fereastraAplicatie);
 
 Nod* gasesteNodInListaArbori(const DateNod& date);
 
+Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
+
 int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();

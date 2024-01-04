@@ -143,6 +143,8 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static Nod* nodDeGasit = nullptr;
 	static Nod* nodDeMutat = nullptr;
+	static Nod* nodDeMutatTata = nullptr;
+	static int pozDeMutat = -1;
 	static bool seCitesteExpresie = false;
 	static string expresieDeCitit;
 	static Clock timpCeasLMB, timpApasatLMB;
@@ -159,7 +161,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 			nodDeMutat = gasesteNodListaCuPozMouse(fereastraAplicatie);
 			if (nodDeMutat != nullptr)
 			{
-				int pozDeMutat = -1;
+				pozDeMutat = -1;
 				const Nod* nodGasit = nullptr;
 				for (int i = listaArbori.size() - 1; i >= 0; --i) {
 					nodGasit = gasesteNodInArbore(listaArbori[i], nodDeMutat->date);
@@ -170,6 +172,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 				}
 				if (pozDeMutat != -1) {
 					//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
+					nodDeMutatTata = gasesteNodTata(listaArbori[pozDeMutat].radacina, nodDeMutat);
 					const Arbore arboreDeMutat = listaArbori[pozDeMutat];
 					listaArbori.erase(listaArbori.begin() + pozDeMutat);
 					listaArbori.push_back(arboreDeMutat);
@@ -180,15 +183,27 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 	if (esteRidicatLMB)
 	{
 		nodDeMutat = nullptr;
+		pozDeMutat = -1;
 		timpApasatLMB.restart();
 	}
 	else
 	{
 		if (nodDeMutat != nullptr)
 		{
+			const Nod* fiuSt = nodDeMutat->st;
+			const Nod* fiuDr = nodDeMutat->dr;
+			stergereLinieObstacol(nodDeMutat);
+			stergeSimbolObstacol(nodDeMutat);
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
-			//verificare daca nodul atinge o linie
+			if (nodDeMutatTata != nullptr)
+				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
+			if (fiuSt != nullptr)
+				adaugaLinieObstacol(nodDeMutat, fiuSt);
+			if (fiuDr != nullptr)
+				adaugaLinieObstacol(nodDeMutat, fiuDr);
+			adaugaSimbolCaObstacole(nodDeMutat);
+			//de adaugat verificare daca nodul atinge o linie
 		}
 	}
 	if (esteApasatF12)//executa algoritmul
