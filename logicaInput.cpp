@@ -180,10 +180,13 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		}
 	}
 	static unordered_set<int> liniiDeActualizat;
+	static unordered_set<Nod*> noduriDeActualizat;
 	if (esteRidicatLMB)
 	{
 		for (const auto& linie : liniiDeActualizat)
 			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
+		for (const auto& nod : noduriDeActualizat)
+			adaugaSimbolCaObstacole(nod);
 		liniiDeActualizat.clear();
 		nodDeMutat = nullptr;
 		pozDeMutat = -1;
@@ -206,10 +209,25 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 					liniiDeActualizat.insert(valoareSuprapusa);
 				}
 			}
+			else if (valoareSuprapusa < 0)
+			{
+				Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
+				if (noduriDeActualizat.count(nodDeInserat) == 0)
+					noduriDeActualizat.insert(nodDeInserat);
+			}
+			for (const auto& nod : noduriDeActualizat) {
+				if (!esteRadacina(nod)) {
+					creeazaSpatiuSusPtLinieInSimbol(nod);
+				}
+				adaugaSimbolCaObstacole(nod);
+				if (nod->st != nullptr || nod->dr != nullptr) {
+					creeazaSpatiuJosPtLinieInSimbol(nod);
+				}
+			}
 			for (const auto& linie : liniiDeActualizat)
 				actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
-			adaugaSimbolCaObstacole(nodDeMutat);
 
+			adaugaSimbolCaObstacole(nodDeMutat);
 			if (nodDeMutatTata != nullptr)
 				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
 			if (nodSt != nullptr)

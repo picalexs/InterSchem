@@ -12,11 +12,12 @@ struct Linie
 {
 	vector<Punct> coordonate;
 	Color culoareLinie = Color::Black;
+	Nod* nodStart, * nodStop;
 };
 
 vector<Linie> liniiDeDesenat;
 int nrLinii, nrColoane, marimeCasuta;
-constexpr float marimeSpatiu = 40.0f;
+constexpr float marimeSpatiu = 20.0f;
 vector<vector<short int>> matriceObstacole;
 
 
@@ -199,7 +200,6 @@ void plaseazaLinieObstacol(const Punct& start, const Punct& stop, const short in
 	Linie linie;
 	linie.coordonate = drumOptimizat;
 	if (drumOptimizat.empty()) {
-		cout << "Nu s-a putut gasi drum intre punctele date\n";
 		return;
 	}
 	if (idLinie == -1) {
@@ -233,6 +233,8 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 		nod2->date.y - inaltimeSimbol2
 	};
 	plaseazaLinieObstacol(start, stop, -1);
+	liniiDeDesenat.back().nodStart = const_cast<Nod*>(nod1);
+	liniiDeDesenat.back().nodStop = const_cast<Nod*>(nod2);
 }
 
 void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
@@ -334,6 +336,40 @@ short verificareSuprapunere(const Nod* nod)
 			return matriceObstacole[stopY][coloane];
 	}
 	return 0;
+}
+
+
+bool verificareSimbolInZonaMatriceObstacole(const Nod* nod1, const Nod* nod2) {
+	return (abs(nod1->date.x - nod2->date.x) < nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2 + marimeSpatiu &&
+		abs(nod1->date.y - nod2->date.y) < nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + marimeSpatiu);
+}
+
+Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodCautat, unordered_set<const Nod*> noduriVizitate) {
+	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
+		return nullptr;
+	if (verificareSimbolInZonaMatriceObstacole(nodCautat, nodCurent))
+		return nodCurent;
+
+	noduriVizitate.insert(nodCurent);
+	Nod* nodGasit = gasesteNodObstacolRec(nodCurent->st, nodCautat, noduriVizitate);
+	if (nodGasit != nullptr)
+		return nodGasit;
+	return gasesteNodObstacolRec(nodCurent->dr, nodCautat, noduriVizitate);
+}
+
+Nod* gasesteNodObstacol(Nod* nodCurent, Nod*& nodCautat) {
+	const unordered_set<const Nod*> noduriVizitate;
+	return gasesteNodObstacolRec(nodCurent, nodCautat, noduriVizitate);
+}
+
+Nod* gasesteNodObstacolInLista(Nod*& nod) {
+	for (const auto& arbore : listaArbori)
+	{
+		Nod* nodCautat = gasesteNodObstacol(arbore.radacina, nod);
+		if (nodCautat != nullptr)
+			return nodCautat;
+	}
+	return nullptr;
 }
 
 void desenareTriunghi(RenderWindow& fereastraAplicatie, const float x, const float y, const Color culoareLinie, const float lungimeLatura, const float grosimeLinie)

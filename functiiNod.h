@@ -23,6 +23,8 @@ void atribuireArbore(Arbore& A, const DateNod& date);
 
 bool esteArboreNull(const Arbore& A);
 
+bool esteRadacina(const Nod* N);
+
 bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
 
 bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date);
