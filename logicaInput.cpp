@@ -1,5 +1,4 @@
 #include "logicaInput.h"
-
 #include "desenareLinie.h"
 #include "executareAlgoritm.h"
 #include "functiiExpresie.h"
@@ -138,7 +137,7 @@ void citireExpresie(const Event& event, string& expresieDeCitit)
 	}
 }
 
-void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
+void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
 	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static Nod* nodDeGasit = nullptr;
@@ -180,9 +179,13 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 			}
 		}
 	}
+	static vector<pair<short int, Nod*>> liniiDeActualizat;
 	if (esteRidicatLMB)
 	{
 		nodDeMutat = nullptr;
+		for (const auto& linie : liniiDeActualizat)
+			actualizeazaLinieObstacolPrinId(linie.first, linie.second);
+		liniiDeActualizat.clear();
 		pozDeMutat = -1;
 		timpApasatLMB.restart();
 	}
@@ -190,20 +193,39 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 	{
 		if (nodDeMutat != nullptr)
 		{
-			const Nod* fiuSt = nodDeMutat->st;
-			const Nod* fiuDr = nodDeMutat->dr;
-			stergereLinieObstacol(nodDeMutat);
+			const Nod* nodSt = nodDeMutat->st;
+			const Nod* nodDr = nodDeMutat->dr;
+			stergereLiniiObstacoleCuNodulDat(nodDeMutat);
 			stergeSimbolObstacol(nodDeMutat);
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
+
+			const short int valoareSuprapusa = verificareSuprapunere(nodDeMutat);
+			if (valoareSuprapusa > 0) {
+
+				const pair<short int, Nod*> perecheNoua = { valoareSuprapusa, nodDeMutat };
+				bool exista = false;
+				for (const auto& linie : liniiDeActualizat) {
+					if (linie.first == perecheNoua.first && linie.second == perecheNoua.second) {
+						exista = true;
+						break;
+					}
+				}
+				if (!exista)
+				{
+					liniiDeActualizat.push_back(perecheNoua);
+				}
+			}
+			for (const auto& linie : liniiDeActualizat)
+				actualizeazaLinieObstacolPrinId(linie.first, linie.second);
 			adaugaSimbolCaObstacole(nodDeMutat);
+
 			if (nodDeMutatTata != nullptr)
 				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
-			if (fiuSt != nullptr)
-				adaugaLinieObstacol(nodDeMutat, fiuSt);
-			if (fiuDr != nullptr)
-				adaugaLinieObstacol(nodDeMutat, fiuDr);
-			//de adaugat verificare daca nodul atinge o linie
+			if (nodSt != nullptr)
+				adaugaLinieObstacol(nodDeMutat, nodSt);
+			if (nodDr != nullptr)
+				adaugaLinieObstacol(nodDeMutat, nodDr);
 		}
 	}
 	if (esteApasatF12)//executa algoritmul

@@ -9,7 +9,15 @@ void stergeSimbolObstacol(const Nod* nod);
 
 void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2);
 
-void stergereLinieObstacol(const Nod* nod);
+void stergereLiniiObstacoleCuNodulDat(const Nod* nod);
+
+void actualizeazaLiniiObstacolePrinNodDat(const Nod* nod, const float valoareDeSetat);
+
+void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat);
+
+vector<short> returneazaIduriLiniiAleNodului(const Nod* nod);
+
+short verificareSuprapunere(const Nod* nod);
 
 void initializareMatriceObstacole(const VideoMode& desktop);
 

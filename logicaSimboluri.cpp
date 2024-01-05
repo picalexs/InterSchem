@@ -60,7 +60,7 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie, const VideoMod
 			{
 				cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
 				stergereNod(nodDeSters);
-				stergereLinieObstacol(nodDeSters);
+				stergereLiniiObstacoleCuNodulDat(nodDeSters);
 				stergeSimbolObstacol(nodDeSters);
 				return;
 			}
