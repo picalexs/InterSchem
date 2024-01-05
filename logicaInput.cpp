@@ -179,13 +179,13 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			}
 		}
 	}
-	static vector<pair<short int, Nod*>> liniiDeActualizat;
+	static unordered_set<int> liniiDeActualizat;
 	if (esteRidicatLMB)
 	{
-		nodDeMutat = nullptr;
 		for (const auto& linie : liniiDeActualizat)
-			actualizeazaLinieObstacolPrinId(linie.first, linie.second);
+			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
 		liniiDeActualizat.clear();
+		nodDeMutat = nullptr;
 		pozDeMutat = -1;
 		timpApasatLMB.restart();
 	}
@@ -202,22 +202,12 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 
 			const short int valoareSuprapusa = verificareSuprapunere(nodDeMutat);
 			if (valoareSuprapusa > 0) {
-
-				const pair<short int, Nod*> perecheNoua = { valoareSuprapusa, nodDeMutat };
-				bool exista = false;
-				for (const auto& linie : liniiDeActualizat) {
-					if (linie.first == perecheNoua.first && linie.second == perecheNoua.second) {
-						exista = true;
-						break;
-					}
-				}
-				if (!exista)
-				{
-					liniiDeActualizat.push_back(perecheNoua);
+				if (liniiDeActualizat.count(valoareSuprapusa) == 0) {
+					liniiDeActualizat.insert(valoareSuprapusa);
 				}
 			}
 			for (const auto& linie : liniiDeActualizat)
-				actualizeazaLinieObstacolPrinId(linie.first, linie.second);
+				actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
 			adaugaSimbolCaObstacole(nodDeMutat);
 
 			if (nodDeMutatTata != nullptr)
