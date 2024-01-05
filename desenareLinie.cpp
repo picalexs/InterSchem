@@ -54,12 +54,12 @@ float convertesteInCoordEcran(float valoare)
 	return valoare * marimeCasuta;
 }
 
-void afisareMatrice()
+void afisareMatriceObstacole()
 {
 	for (int i = 0; i < nrLinii; i++)
 	{
 		for (int j = 0; j < nrColoane; j++)
-			if (matriceObstacole[i][j])
+			if (matriceObstacole[i][j] != 0)
 				cout << "X ";
 			else
 				cout << ". ";
@@ -132,7 +132,7 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 			const int newX = current.x_matrice + dirX[i];
 			const int newY = current.y_matrice + dirY[i];
 
-			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && !matriceObstacole[newY][newX]) {
+			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] == 0) {
 				vizitat[newY][newX] = true;
 				parinte[newY][newX] = current;
 				coada.push({ newX, newY, convertesteInCoordEcran(newX), convertesteInCoordEcran(newY) });
@@ -190,36 +190,26 @@ void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const short int v
 
 void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 {
-	constexpr float marimeSpatiu = 20.0f;
+	constexpr float marimeSpatiu = 40.0f;
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2 + marimeSpatiu;
 	const float inaltimeSimbol2 = nod2->date.inaltimeSimbol / 2 + marimeSpatiu;
-	Punct start = {
+	const Punct start = {
 	interval(convertesteInCoordMatrice(nod1->date.x), 0, nrColoane - 1),
-	interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1) - 1, 0, nrLinii - 1),
+	interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1) + 1, 0, nrLinii - 1),
 		nod1->date.x,
 		nod1->date.y + inaltimeSimbol1
 	};
-	while (start.y_matrice < nrLinii && matriceObstacole[start.y_matrice][start.x_matrice])
-	{
-		start.y_matrice++;
-	}
-	Punct stop = {
+	const Punct stop = {
 		interval(convertesteInCoordMatrice(nod2->date.x), 0, nrColoane - 1),
-		interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2) + 1, 0, nrLinii - 1),
+		interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2) - 1, 0, nrLinii - 1),
 		nod2->date.x,
 		nod2->date.y - inaltimeSimbol2
 	};
-	while (stop.y_matrice >= 0 && matriceObstacole[stop.y_matrice][stop.x_matrice])
-	{
-		stop.y_matrice--;
-	}
 	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop);
-	plaseazaDrumInMatrice(drumOptimizat, liniiDeDesenat.size());
+	plaseazaDrumInMatrice(drumOptimizat, liniiDeDesenat.size() + 1);
 	Linie linie;
 	linie.coordonate = drumOptimizat;
 	if (!drumOptimizat.empty()) {
-		cout << drumOptimizat.front().x_ecran << ',' << drumOptimizat.front().y_ecran << " | "
-			<< drumOptimizat.back().x_ecran << ',' << drumOptimizat.back().y_ecran << endl;
 		liniiDeDesenat.push_back(linie);
 	}
 }
@@ -228,19 +218,17 @@ void stergereLinieObstacol(const Nod* nod) {
 	if (liniiDeDesenat.empty()) {
 		return;
 	}
-	constexpr float marimeSpatiu = 20.0f;
+	constexpr float marimeSpatiu = 40.0f;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
-	constexpr int offset = 1;
 
 	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();) {
 		if (it->coordonate.size() >= 2) {
 			const Punct& punctStart = it->coordonate.front();
 			const Punct& punctStop = it->coordonate.back();
 
-			if ((abs(punctStart.x_matrice - convertesteInCoordMatrice(nod->date.x)) <= offset &&
-				abs(punctStart.y_matrice - convertesteInCoordMatrice(nod->date.y)) <= inaltimeSimbol) ||
-				(abs(punctStop.x_matrice - convertesteInCoordMatrice(nod->date.x)) <= offset &&
-					abs(punctStop.y_matrice - convertesteInCoordMatrice(nod->date.y)) <= inaltimeSimbol)) {
+			if ((punctStart.x_matrice - convertesteInCoordMatrice(nod->date.x) == 0 && punctStart.y_matrice - (convertesteInCoordMatrice(nod->date.y + inaltimeSimbol) + 1) == 0) ||
+				(punctStop.x_matrice - convertesteInCoordMatrice(nod->date.x) == 0 && punctStop.y_matrice - (convertesteInCoordMatrice(nod->date.y - inaltimeSimbol) - 1) == 0))
+			{
 				plaseazaDrumInMatrice(it->coordonate, 0);
 				it = liniiDeDesenat.erase(it);
 			}
@@ -257,7 +245,7 @@ void stergereLinieObstacol(const Nod* nod) {
 
 void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
 {
-	constexpr float marimeSpatiu = 20.0f;
+	constexpr float marimeSpatiu = 40.0f;
 	const float lungimeSimbol = nod->date.lungimeSimbol / 2 + marimeSpatiu;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
 

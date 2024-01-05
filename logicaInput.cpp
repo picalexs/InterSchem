@@ -193,17 +193,16 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 			const Nod* fiuSt = nodDeMutat->st;
 			const Nod* fiuDr = nodDeMutat->dr;
 			stergereLinieObstacol(nodDeMutat);
-			cout << nodDeMutat->date.x << ' ' << nodDeMutat->date.y << '\n';
 			stergeSimbolObstacol(nodDeMutat);
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
+			adaugaSimbolCaObstacole(nodDeMutat);
 			if (nodDeMutatTata != nullptr)
 				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
 			if (fiuSt != nullptr)
 				adaugaLinieObstacol(nodDeMutat, fiuSt);
 			if (fiuDr != nullptr)
 				adaugaLinieObstacol(nodDeMutat, fiuDr);
-			adaugaSimbolCaObstacole(nodDeMutat);
 			//de adaugat verificare daca nodul atinge o linie
 		}
 	}

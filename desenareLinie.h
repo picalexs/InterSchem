@@ -1,6 +1,8 @@
 #pragma once
 #include "functiiNod.h"
 
+void afisareMatriceObstacole();
+
 void adaugaSimbolCaObstacole(const Nod* nod);
 
 void stergeSimbolObstacol(const Nod* nod);

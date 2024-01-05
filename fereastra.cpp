@@ -36,6 +36,18 @@ void creareFereastra()
 				fereastraAplicatie.close();
 			}
 			logicaInput(event);
+			static bool apasatF11 = false;
+			//////////////////////////DEBUGGING//////////////////////////tmp
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::F11 && !apasatF11) {
+					apasatF11 = true;
+					afisareMatriceObstacole();
+				}
+			}
+			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
+				apasatF11 = false;
+			}
+			////////////////////////////////////////////////////////////
 		}
 		logicaExecutareInput(fereastraAplicatie, desktop, event);
 		fereastraAplicatie.clear(Color::White);
