@@ -193,6 +193,7 @@ void logicaExecutareInput(RenderWindow& fereastraAplicatie, const VideoMode& des
 			const Nod* fiuSt = nodDeMutat->st;
 			const Nod* fiuDr = nodDeMutat->dr;
 			stergereLinieObstacol(nodDeMutat);
+			cout << nodDeMutat->date.x << ' ' << nodDeMutat->date.y << '\n';
 			stergeSimbolObstacol(nodDeMutat);
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;

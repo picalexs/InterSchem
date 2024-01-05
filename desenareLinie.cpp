@@ -16,7 +16,7 @@ struct Linie
 
 vector<Linie> liniiDeDesenat;
 int nrLinii, nrColoane, marimeCasuta;
-vector<vector<bool>> matriceObstacole;
+vector<vector<short int>> matriceObstacole;
 
 
 int interval(int valoare, int min, int max)
@@ -62,12 +62,12 @@ void afisareMatrice()
 			if (matriceObstacole[i][j])
 				cout << "X ";
 			else
-				cout << ".";
+				cout << ". ";
 		cout << endl;
 	}
 }
 
-vector<Punct> optimizareDrumBFS(vector<Punct>& drum)
+vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
 {
 	vector<Punct> drumOptimizat;
 	if (!drum.empty()) {
@@ -81,12 +81,6 @@ vector<Punct> optimizareDrumBFS(vector<Punct>& drum)
 			if ((diffX == dirX && diffY == dirY) || (diffX == 0 && diffY == 0)) {
 				continue;
 			}
-			if (diffX == dirX || diffX == 0) {
-				drum[i].x_ecran = drum[i - 1].x_ecran;
-			}
-			if (diffY == dirY || diffY == 0) {
-				drum[i].y_ecran = drum[i - 1].y_ecran;
-			}
 			if (!(drumOptimizat.back().x_matrice == drum[i - 1].x_matrice && drumOptimizat.back().y_matrice == drum[i - 1].y_matrice)) {
 				drumOptimizat.push_back(drum[i - 1]);
 			}
@@ -95,10 +89,22 @@ vector<Punct> optimizareDrumBFS(vector<Punct>& drum)
 			dirY = diffY;
 		}
 		drumOptimizat.push_back(drum.back());
-		if (drumOptimizat.size() > 1) {
-			drumOptimizat[1].y_ecran = drumOptimizat[0].y_ecran;
-			drumOptimizat[size(drumOptimizat) - 2].x_ecran = drumOptimizat.back().x_ecran;
+
+		for (size_t i = 1; i < drumOptimizat.size(); ++i)
+		{
+			const int diffX = drumOptimizat[i].x_matrice - drumOptimizat[i - 1].x_matrice;
+			const int diffY = drumOptimizat[i].y_matrice - drumOptimizat[i - 1].y_matrice;
+
+			if (diffX == 0) {
+				drumOptimizat[i].x_ecran = drumOptimizat[i - 1].x_ecran;
+			}
+			if (diffY == 0) {
+				drumOptimizat[i].y_ecran = drumOptimizat[i - 1].y_ecran;
+			}
 		}
+
+		if (drumOptimizat.size() > 1 && drumOptimizat.back().x_matrice == drumOptimizat[drumOptimizat.size() - 2].x_matrice)
+			drumOptimizat.back().x_ecran = drumOptimizat[drumOptimizat.size() - 2].x_ecran;
 	}
 	return drumOptimizat;
 }
@@ -147,7 +153,7 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 	return optimizareDrumBFS(drum);
 }
 
-void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const bool valoareDeSetat) {
+void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const short int valoareDeSetat) {
 	//algoritmul Bresenham pentru a desena linii intre puncte
 	if (drumOptimizat.size() < 2)
 	{
@@ -208,36 +214,48 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 		stop.y_matrice--;
 	}
 	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop);
-	plaseazaDrumInMatrice(drumOptimizat, true);
+	plaseazaDrumInMatrice(drumOptimizat, liniiDeDesenat.size());
 	Linie linie;
 	linie.coordonate = drumOptimizat;
-	liniiDeDesenat.push_back(linie);
+	if (!drumOptimizat.empty()) {
+		cout << drumOptimizat.front().x_ecran << ',' << drumOptimizat.front().y_ecran << " | "
+			<< drumOptimizat.back().x_ecran << ',' << drumOptimizat.back().y_ecran << endl;
+		liniiDeDesenat.push_back(linie);
+	}
 }
 
-void stergereLinieObstacol(const Nod* nod)
-{
-	if (liniiDeDesenat.empty())
+void stergereLinieObstacol(const Nod* nod) {
+	if (liniiDeDesenat.empty()) {
 		return;
+	}
 	constexpr float marimeSpatiu = 20.0f;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
-	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();)
-	{
-		if (!it->coordonate.empty() && ((it->coordonate[0].x_ecran == nod->date.x && it->coordonate[0].y_ecran == nod->date.y - inaltimeSimbol) ||
-			(it->coordonate[0].x_ecran == nod->date.x && it->coordonate[0].y_ecran == nod->date.y + inaltimeSimbol) ||
-			(it->coordonate.back().x_ecran == nod->date.x && it->coordonate.back().y_ecran == nod->date.y - inaltimeSimbol) ||
-			(it->coordonate.back().x_ecran == nod->date.x && it->coordonate.back().y_ecran == nod->date.y + inaltimeSimbol)))
-		{
-			plaseazaDrumInMatrice(it->coordonate, false);
-			it = liniiDeDesenat.erase(it);
+	constexpr int offset = 1;
+
+	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();) {
+		if (it->coordonate.size() >= 2) {
+			const Punct& punctStart = it->coordonate.front();
+			const Punct& punctStop = it->coordonate.back();
+
+			if ((abs(punctStart.x_matrice - convertesteInCoordMatrice(nod->date.x)) <= offset &&
+				abs(punctStart.y_matrice - convertesteInCoordMatrice(nod->date.y)) <= inaltimeSimbol) ||
+				(abs(punctStop.x_matrice - convertesteInCoordMatrice(nod->date.x)) <= offset &&
+					abs(punctStop.y_matrice - convertesteInCoordMatrice(nod->date.y)) <= inaltimeSimbol)) {
+				plaseazaDrumInMatrice(it->coordonate, 0);
+				it = liniiDeDesenat.erase(it);
+			}
+			else {
+				++it;
+			}
 		}
-		else
-		{
+		else {
 			++it;
 		}
 	}
 }
 
-void modificareSimbolObstacol(const Nod* nod, bool valoareDeSetat)
+
+void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
 {
 	constexpr float marimeSpatiu = 20.0f;
 	const float lungimeSimbol = nod->date.lungimeSimbol / 2 + marimeSpatiu;
@@ -257,12 +275,12 @@ void modificareSimbolObstacol(const Nod* nod, bool valoareDeSetat)
 
 void adaugaSimbolCaObstacole(const Nod* nod)
 {
-	modificareSimbolObstacol(nod, true);
+	modificareSimbolObstacol(nod, -1);
 }
 
 void stergeSimbolObstacol(const Nod* nod)
 {
-	modificareSimbolObstacol(nod, false);
+	modificareSimbolObstacol(nod, 0);
 }
 
 
@@ -271,7 +289,7 @@ void initializareMatriceObstacole(const VideoMode& desktop)
 	marimeCasuta = 20;
 	nrLinii = static_cast<int>(desktop.height) / marimeCasuta + 1;
 	nrColoane = static_cast<int>(desktop.width) / marimeCasuta + 1;
-	matriceObstacole = vector<vector<bool>>(nrLinii, vector<bool>(nrColoane, false));
+	matriceObstacole = vector<vector<short int>>(nrLinii, vector<short int>(nrColoane, false));
 }
 
 void desenareSegmentLinie(RenderWindow& fereastraAplicatie, float x1, float y1, float x2, float y2, Color culoareLinie)

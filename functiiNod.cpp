@@ -83,13 +83,50 @@ bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date) {
 	return (abs(date.x - pozitieMouse.x) <= date.lungimeSimbol / 2 && abs(date.y - pozitieMouse.y) <= date.inaltimeSimbol / 2);
 }
 
+bool verificareSuprapunere(const Nod* nod1, const Nod* nod2)
+{
+	if (nod1 == nullptr || nod2 == nullptr)
+		return false;
+	return (abs(nod1->date.x - nod2->date.x) <= nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2
+		&& abs(nod1->date.y - nod2->date.y) <= nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2);
+
+}
+
+const Nod* cautaNodCeSeSuprapuneRec(const Nod* nodCurent, const Nod* nodDeVerificat, unordered_set<const Nod*>& noduriVizitate)
+{
+	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
+		return nullptr;
+	if (nodCurent != nodDeVerificat && verificareSuprapunere(nodCurent, nodDeVerificat))
+		return nodCurent;
+
+	noduriVizitate.insert(nodCurent);
+	const Nod* nodGasit = cautaNodCeSeSuprapuneRec(nodCurent->st, nodDeVerificat, noduriVizitate);
+	if (nodGasit != nullptr)
+		return nodGasit;
+	return cautaNodCeSeSuprapuneRec(nodCurent->dr, nodDeVerificat, noduriVizitate);
+}
+
+const Nod* cautaNodCeSeSuprapune(const Nod* nodCurent, const Nod* nodDeVerificat)
+{
+	unordered_set<const Nod*> noduriVizitate;
+	return cautaNodCeSeSuprapuneRec(nodCurent, nodDeVerificat, noduriVizitate);
+}
+
+const Nod* cautaNodCeSeSuprapuneDinLista(const Nod* nodDeVerificat)
+{
+	for (const auto& A : listaArbori)
+	{
+		const Nod* nodGasit = cautaNodCeSeSuprapune(A.radacina, nodDeVerificat);
+		if (nodGasit != nullptr)
+			return nodGasit;
+	}
+	return nullptr;
+}
+
 Nod* gasesteNodRec(Nod* nodCurent, const DateNod& date, unordered_set<const Nod*> noduriVizitate) {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
-	Vector2f pozMouse;
-	pozMouse.x = date.x;
-	pozMouse.y = date.y;
-	if (verificareSimbolInZona(pozMouse, nodCurent->date))
+	if (verificareSimbolInZona({ date.x , date.y }, nodCurent->date))
 		return nodCurent;
 
 	noduriVizitate.insert(nodCurent);

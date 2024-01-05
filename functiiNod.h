@@ -27,6 +27,10 @@ bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
 
 bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date);
 
+bool verificareSuprapunere(const Nod* nod1, const Nod* nod2);
+
+const Nod* cautaNodCeSeSuprapuneDinLista(const Nod* nodDeVerificat);
+
 Nod* gasesteNod(Nod* nodCurent, const DateNod& date);
 
 Nod* gasesteNodInArbore(const Arbore& A, const DateNod& date);
