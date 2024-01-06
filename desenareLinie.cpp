@@ -133,8 +133,8 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 	coada.push(start);
 	vizitat[start.y_matrice][start.x_matrice] = true;
 
-	constexpr int dirX[] = { -1, 1,0, 0 };
-	constexpr int dirY[] = { 0, 0,1, -1 };
+	constexpr int dirX[] = { -1, 1, 0, 0 };
+	constexpr int dirY[] = { 0, 0, 1, -1 };
 
 	while (!coada.empty()) {
 		const Punct current = coada.front();
@@ -148,7 +148,7 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 			const int newX = current.x_matrice + dirX[i];
 			const int newY = current.y_matrice + dirY[i];
 
-			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] == 0) {
+			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] >= 0) {
 				vizitat[newY][newX] = true;
 				parinte[newY][newX] = current;
 				coada.push({ newX, newY, convertesteInCoordEcran(newX), convertesteInCoordEcran(newY) });
