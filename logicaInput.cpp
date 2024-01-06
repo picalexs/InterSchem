@@ -183,8 +183,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static unordered_set<Nod*> noduriDeActualizat;
 	if (esteRidicatLMB)
 	{
-		for (const auto& linie : liniiDeActualizat)
-			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
+		/*for (const auto& linie : liniiDeActualizat)
+			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);*/
 		for (const auto& nod : noduriDeActualizat)
 			adaugaSimbolCaObstacole(nod);
 		liniiDeActualizat.clear();
@@ -203,30 +203,27 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
 
-			const short int valoareSuprapusa = verificareSuprapunere(nodDeMutat);
-			if (valoareSuprapusa > 0) {
-				if (liniiDeActualizat.count(valoareSuprapusa) == 0) {
-					liniiDeActualizat.insert(valoareSuprapusa);
-				}
-			}
-			else if (valoareSuprapusa < 0)
+			const set<short> valoareSuprapusa = verificareSuprapunere(nodDeMutat);
+			for (auto& valoare : valoareSuprapusa)
 			{
-				Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
-				if (noduriDeActualizat.count(nodDeInserat) == 0)
-					noduriDeActualizat.insert(nodDeInserat);
+				if (valoare > 0) {
+					if (liniiDeActualizat.count(valoare) == 0) {
+						liniiDeActualizat.insert(valoare);
+					}
+				}
+				else if (valoare < 0)
+				{
+					Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
+					if (noduriDeActualizat.count(nodDeInserat) == 0)
+						noduriDeActualizat.insert(nodDeInserat);
+				}
 			}
 			for (const auto& nod : noduriDeActualizat) {
-				if (!esteRadacina(nod)) {
-					creeazaSpatiuSusPtLinieInSimbol(nod);
-				}
 				adaugaSimbolCaObstacole(nod);
-				if (nod->st != nullptr || nod->dr != nullptr) {
-					creeazaSpatiuJosPtLinieInSimbol(nod);
-				}
 			}
-			for (const auto& linie : liniiDeActualizat)
+			for (const auto& linie : liniiDeActualizat) {
 				actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
-
+			}
 			adaugaSimbolCaObstacole(nodDeMutat);
 			if (nodDeMutatTata != nullptr)
 				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
