@@ -110,7 +110,6 @@ vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
 		{
 			const int diffX = drumOptimizat[i].x_matrice - drumOptimizat[i - 1].x_matrice;
 			const int diffY = drumOptimizat[i].y_matrice - drumOptimizat[i - 1].y_matrice;
-
 			if (diffX == 0) {
 				drumOptimizat[i].x_ecran = drumOptimizat[i - 1].x_ecran;
 			}
@@ -128,11 +127,9 @@ vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
 vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 	vector<vector<bool>> vizitat(nrLinii, vector<bool>(nrColoane, false));
 	vector<vector<Punct>> parinte(nrLinii, vector<Punct>(nrColoane, { -1, -1 }));
-
 	queue<Punct> coada;
 	coada.push(start);
 	vizitat[start.y_matrice][start.x_matrice] = true;
-
 	constexpr int dirX[] = { -1, 1, 0, 0 };
 	constexpr int dirY[] = { 0, 0, 1, -1 };
 
@@ -147,15 +144,13 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 		for (int i = 0; i < 4; ++i) {
 			const int newX = current.x_matrice + dirX[i];
 			const int newY = current.y_matrice + dirY[i];
-
-			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] >= 0) {
+			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] == 0) {
 				vizitat[newY][newX] = true;
 				parinte[newY][newX] = current;
 				coada.push({ newX, newY, convertesteInCoordEcran(newX), convertesteInCoordEcran(newY) });
 			}
 		}
 	}
-
 	vector<Punct> drum;
 	if (!vizitat[stop.y_matrice][stop.x_matrice]) {
 		return drum;
@@ -211,23 +206,38 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 	const int iStart1 = interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrColoane - 1);
 	const int iStart2 = interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2), 0, nrColoane - 1);
 
-	for (int i = iStart1; i <= interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1 + marimeSpatiu), 0, nrColoane - 1); i++)
-		matriceObstacole[i][convertesteInCoordMatrice(nod1->date.x)] = 0;
-	for (int i = iStart2; i >= interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2 - marimeSpatiu), 0, nrColoane - 1); i--)
-		matriceObstacole[i][convertesteInCoordMatrice(nod2->date.x)] = 0;
-
-	const Punct start = {
+	Punct start = {
 	interval(convertesteInCoordMatrice(nod1->date.x), 0, nrColoane - 1),
 	interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrLinii - 1),
 		nod1->date.x,
 		nod1->date.y + inaltimeSimbol1
 	};
+	if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE)
+	{
+		constexpr int spatiuCasute = -2;
+		if (nod1->st == nod2)
+		{
+			start.x_matrice = interval(start.x_matrice - (convertesteInCoordMatrice(nod1->date.lungimeSimbol / 2) + spatiuCasute), 0, nrColoane - 1);
+			start.x_ecran -= (nod1->date.lungimeSimbol / 2 + convertesteInCoordEcran(spatiuCasute));
+		}
+		else if (nod1->dr == nod2)
+		{
+			start.x_matrice = interval(start.x_matrice + convertesteInCoordMatrice(nod1->date.lungimeSimbol / 2) + spatiuCasute, 0, nrColoane - 1);
+			start.x_ecran += nod1->date.lungimeSimbol / 2 + convertesteInCoordEcran(spatiuCasute);
+		}
+		cout << start.x_matrice << '\n';
+	}
 	const Punct stop = {
 		interval(convertesteInCoordMatrice(nod2->date.x), 0, nrColoane - 1),
 		interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2), 0, nrLinii - 1),
 		nod2->date.x,
 		nod2->date.y - inaltimeSimbol2
 	};
+
+	for (int i = iStart1; i <= interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1 + marimeSpatiu), 0, nrLinii - 1); i++)
+		matriceObstacole[i][start.x_matrice] = 0;
+	for (int i = iStart2; i >= interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2 - marimeSpatiu), 0, nrLinii - 1); i--)
+		matriceObstacole[i][stop.x_matrice] = 0;
 
 	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop);
 	Linie linie;
@@ -287,6 +297,18 @@ void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
 	for (int linie = startY; linie <= stopY; linie++)
 		for (int coloana = startX; coloana <= stopX; coloana++)
 			matriceObstacole[linie][coloana] = valoareDeSetat;
+
+	if (nod->date.tip == TipNod::DACA || nod->date.tip == TipNod::WHILE)
+	{
+		constexpr int distanta = 3;
+		const int start = convertesteInCoordMatrice(nod->date.x);
+		const int yObstacol1 = interval(stopY + 1, 0, nrLinii - 1);
+		const int yObstacol2 = interval(stopY + 2, 0, nrLinii - 1);
+		for (int coloana = interval(start - distanta, 0, nrColoane - 1); coloana <= start + distanta && coloana < nrColoane; coloana++) {
+			matriceObstacole[yObstacol1][coloana] = valoareDeSetat;
+			matriceObstacole[yObstacol2][coloana] = valoareDeSetat;
+		}
+	}
 }
 
 void adaugaSimbolCaObstacole(const Nod* nod)
@@ -330,31 +352,34 @@ set<short> verificareSuprapunere(const Nod* nod)
 		if (matriceObstacole[stopY][coloana] != 0)
 			obiecteSuprapuse.insert(matriceObstacole[stopY][coloana]);
 	}
+	for (const auto& linie : liniiDeDesenat)
+		if (linie.second.nodStart == nod || linie.second.nodStop == nod)
+			obiecteSuprapuse.erase(linie.second.id);
 	return obiecteSuprapuse;
 }
 
 
 bool verificareSimbolInZonaMatriceObstacole(const Nod* nod1, const Nod* nod2) {
-	return (abs(nod1->date.x - nod2->date.x) < nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2 + marimeSpatiu &&
-		abs(nod1->date.y - nod2->date.y) < nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + marimeSpatiu);
+	return (abs(nod1->date.x - nod2->date.x) <= nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2 + marimeSpatiu &&
+		abs(nod1->date.y - nod2->date.y) <= nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + marimeSpatiu);
 }
 
-Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodCautat, unordered_set<const Nod*> noduriVizitate) {
+Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodVerificare, unordered_set<const Nod*> noduriVizitate) {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
-	if (verificareSimbolInZonaMatriceObstacole(nodCautat, nodCurent))
+	if (verificareSimbolInZonaMatriceObstacole(nodVerificare, nodCurent) && nodCurent != nodVerificare)
 		return nodCurent;
 
 	noduriVizitate.insert(nodCurent);
-	Nod* nodGasit = gasesteNodObstacolRec(nodCurent->st, nodCautat, noduriVizitate);
+	Nod* nodGasit = gasesteNodObstacolRec(nodCurent->st, nodVerificare, noduriVizitate);
 	if (nodGasit != nullptr)
 		return nodGasit;
-	return gasesteNodObstacolRec(nodCurent->dr, nodCautat, noduriVizitate);
+	return gasesteNodObstacolRec(nodCurent->dr, nodVerificare, noduriVizitate);
 }
 
-Nod* gasesteNodObstacol(Nod* nodCurent, Nod*& nodCautat) {
+Nod* gasesteNodObstacol(Nod* nodCurent, Nod*& nodVerificare) {
 	const unordered_set<const Nod*> noduriVizitate;
-	return gasesteNodObstacolRec(nodCurent, nodCautat, noduriVizitate);
+	return gasesteNodObstacolRec(nodCurent, nodVerificare, noduriVizitate);
 }
 
 Nod* gasesteNodObstacolInLista(Nod*& nod) {

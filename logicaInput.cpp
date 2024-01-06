@@ -183,11 +183,14 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static unordered_set<Nod*> noduriDeActualizat;
 	if (esteRidicatLMB)
 	{
-		/*for (const auto& linie : liniiDeActualizat)
-			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);*/
-		for (const auto& nod : noduriDeActualizat)
+		for (const auto& nod : noduriDeActualizat) {
 			adaugaSimbolCaObstacole(nod);
+		}
+		for (const auto& linie : liniiDeActualizat) {
+			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
+		}
 		liniiDeActualizat.clear();
+		noduriDeActualizat.clear();
 		nodDeMutat = nullptr;
 		pozDeMutat = -1;
 		timpApasatLMB.restart();
@@ -214,10 +217,13 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 				else if (valoare < 0)
 				{
 					Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
+					if (nodDeInserat == nullptr)
+						return;
 					if (noduriDeActualizat.count(nodDeInserat) == 0)
 						noduriDeActualizat.insert(nodDeInserat);
 				}
 			}
+
 			for (const auto& nod : noduriDeActualizat) {
 				adaugaSimbolCaObstacole(nod);
 			}
