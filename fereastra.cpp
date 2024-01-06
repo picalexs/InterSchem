@@ -6,6 +6,7 @@
 #include "logicaSimboluri.h"
 #include "butoaneMeniu.h"
 #include "logicaButoane.h"
+#include "convertireCPlusPlus.h"
 using namespace sf;
 
 void creareFereastra()
@@ -45,20 +46,17 @@ void creareFereastra()
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
+		
+
 		butonSalvare(fereastraAplicatie, desktop);
 		butonIncarcare(fereastraAplicatie, desktop);
-		butonStart(fereastraAplicatie, desktop);
-		butonStop(fereastraAplicatie, desktop);
-		butonCitire(fereastraAplicatie, desktop);
-		butonAfisare(fereastraAplicatie, desktop);
-		butonAtribuire(fereastraAplicatie, desktop);
-		butonDaca(fereastraAplicatie, desktop);
-		butonCatTimp(fereastraAplicatie, desktop);
+
+		butonDropDown(fereastraAplicatie, desktop);
 		butonRulare(fereastraAplicatie, desktop);
 		butonConvertire(fereastraAplicatie, desktop);
 		butonAjutor(fereastraAplicatie, desktop);
 
-		verificareApasare(fereastraAplicatie, desktop, event);
+		logicaButon(fereastraAplicatie, desktop, event);
 		///functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
