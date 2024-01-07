@@ -1,9 +1,15 @@
 #include "logicaButoane.h"
 #include "butoaneMeniu.h"
+#include "convertireCPlusPlus.h"
 using namespace sf;
 
-bool verificareButon(const Vector2i& pozitieMouse, float x, float y, const VideoMode& desktop) {
-	return (abs(x - pozitieMouse.x) <= desktop.width/15 && abs(y - pozitieMouse.y) <= desktop.height/15);
+/*bool verificareButon(const Vector2i& pozitieMouse, float x, float y, const VideoMode& desktop) {
+	return (abs(x - pozitieMouse.x) <= desktop.width/10-desktop.width/5 && abs(y - pozitieMouse.y) <= desktop.height/15-desktop.height/5);
+}*/
+
+bool verificareButon(const sf::Vector2i& pozitieMouse, float x, float y, float lungime, float inaltime) {
+	return (pozitieMouse.x >= x && pozitieMouse.x <= x + lungime &&
+		pozitieMouse.y >= y && pozitieMouse.y <= y + inaltime);
 }
 
 void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
@@ -49,14 +55,35 @@ void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 		butonAfisare(fereastraAplicatie, desktop);
 		butonAtribuire(fereastraAplicatie, desktop);
 		butonDaca(fereastraAplicatie, desktop);
-		butonCatTimp(fereastraAplicatie, desktop);
+		///butonCatTimp(fereastraAplicatie, desktop);
 	}
+}
+void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
+{
+	int lungime, inaltime;
+	lungime = 60*desktop.width / 100;
+	inaltime = 40*desktop.height / 100;
+	sf::RectangleShape rectangle(sf::Vector2f(lungime, inaltime));
+
+	rectangle.setPosition(70 * desktop.width / 100, 30 * desktop.height / 100);
+	rectangle.setOutlineThickness(desktop.width / 350);
+	rectangle.setOutlineColor(sf::Color(0, 0, 0));
+	rectangle.setFillColor(sf::Color(255,255, 255));
+	fereastraAplicatie.draw(rectangle);
+	///convertire(fereastraAplicatie, desktop);
+}
+
+void desenareDropDownRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
+{
+	butonRulareTotal(fereastraAplicatie, desktop);
+	butonRularePas(fereastraAplicatie, desktop);
 }
 
 void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
 	static bool esteApasatMouse = false;
 	static bool esteActivatDrop = false;
+	static bool esteActivatDropRulare = false, esteActivatConvertire=false;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && esteApasatMouse==false)
 	{
 		   esteApasatMouse = true;
@@ -66,13 +93,23 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 		sf::Vector2i pozitieMouse = sf::Mouse::getPosition(fereastraAplicatie);
 		esteApasatMouse = false;
 
-		if (verificareButon(pozitieMouse, 500, 0, desktop))
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, desktop.height / 100, desktop.width/10, desktop.height/15))
 		{
 			esteActivatDrop = !esteActivatDrop;
 		}
-		if (verificareButon(pozitieMouse, 1240, 630, desktop))
+		if (verificareButon(pozitieMouse, 89 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 15))
+			esteActivatDropRulare = !esteActivatDropRulare;
+
+		if (verificareButon(pozitieMouse, 91 * desktop.width / 100, 83 * desktop.height / 100, desktop.width / 15, desktop.height / 15))
 		    desenareAjutor(fereastraAplicatie, desktop, event);
+
+		if (verificareButon(pozitieMouse, 78 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 15))
+			esteActivatConvertire = !esteActivatConvertire;
 	}
 	if (esteActivatDrop)
 		desenareDropDown(fereastraAplicatie, desktop, event);
+	if (esteActivatDropRulare)
+		desenareDropDownRulare(fereastraAplicatie, desktop, event);
+	if (esteActivatConvertire)
+		desenareConvertire(fereastraAplicatie, desktop, event);
 }

@@ -274,7 +274,7 @@ void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod, c
 }
 
 void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
-	static unordered_set<const Nod*> noduriVizitate;
+	static set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 
@@ -294,7 +294,7 @@ void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoM
 
 void creareOutlineParcurgereRecursiv(RenderWindow& fereastraAplicatie, Nod* N)
 {
-	static unordered_set<const Nod*> noduriVizitate;
+	static set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 	noduriVizitate.insert(N);

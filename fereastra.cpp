@@ -46,7 +46,8 @@ void creareFereastra()
 		desenareLinieIntreSimboluri(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
-		
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F4)
+			convertire(fereastraAplicatie, desktop);
 
 		butonSalvare(fereastraAplicatie, desktop);
 		butonIncarcare(fereastraAplicatie, desktop);

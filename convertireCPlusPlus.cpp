@@ -1,9 +1,11 @@
 #include "functiiNod.h"
 #include "convertireCPlusPlus.h"
-#include <fstream>
+#include "executareAlgoritm.h"
+#include <set>
+///#include <fstream>
 
 using namespace std;
-ofstream fout("output.txt");
+///ofstream cout("output.txt");
 int nrStart = 0, nrStop = 0;
 /*void nrStartStop(Arbore A, const DateNod& date)
 {
@@ -22,7 +24,7 @@ int nrStart = 0, nrStop = 0;
 
 	}
 }*/
-bool nrStartStop(int& nrStart, int& nrStop, const Nod* nodCurent)
+bool nrStartStop(int& nrStart, int& nrStop, const Nod * nodCurent)
 {
 	if (listaArbori.size() > 1)
 	{
@@ -79,65 +81,76 @@ bool verificare(const Nod* radacina)
 	return true;
 }
 
-void parcurgere(Nod* nodCurent, unordered_set<const Nod*>& noduriVizitate)
+
+void parcurgere(Nod* nodCurent)
 {
+	static set<const Nod*> noduriVizitate;
 	if (nodCurent == nullptr)
+		return;
+	if (noduriVizitate.count(nodCurent) != 0)
 		return;
 	if (nodCurent->date.tip == TipNod::START)
 	{
 		noduriVizitate.insert(nodCurent);
-		parcurgere(nodCurent->st, noduriVizitate);
+		parcurgere(nodCurent->st);
 	}
 	if (nodCurent->date.tip == TipNod::STOP)
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
+		///cout<<"int "<< nodCurent->date.expresie << ';' << '\n';
 		noduriVizitate.insert(nodCurent);
-		fout << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st, noduriVizitate);
+		cout << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
 	{
 		noduriVizitate.insert(nodCurent);
-		fout << "int " << nodCurent->date.expresie<<';' << '\n';
-		fout << "cin>>" << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st, noduriVizitate);
+		cout << "int " << nodCurent->date.expresie<<';' << '\n';
+		cout << "cin>>" << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st);
 	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
 		noduriVizitate.insert(nodCurent);
-		fout << "cout<<" << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st, noduriVizitate);
+		cout << "cout<<" << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st);
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
 	{
 		noduriVizitate.insert(nodCurent);
-		fout << "if(" << nodCurent->date.expresie << ")"<<'\n';
-		fout << "{"<<'\n';
-		parcurgere( nodCurent->st, noduriVizitate);
-		fout << "}";
-		fout << '\n' << "else"<<'\n';
-		fout << "{" << '\n';
-		parcurgere(nodCurent->dr, noduriVizitate);
-		fout << "}";
+		cout << "if(" << nodCurent->date.expresie << ")"<<'\n';
+		cout << "{"<<'\n';
+		parcurgere( nodCurent->st);
+		cout << "}";
+		cout << '\n' << "else"<<'\n';
+		cout << "{" << '\n';
+		parcurgere(nodCurent->dr);
+		cout << "}"<<'\n';
 	}
 	if (nodCurent->date.tip == TipNod::WHILE)
 	{
 		noduriVizitate.insert(nodCurent);
-		cout << "if(" << nodCurent->date.expresie << ")" << '\n';
+		cout << "while(" << nodCurent->date.expresie << ")" << '\n';
 		cout << "{" << '\n';
-		unordered_set<const Nod*>::iterator I = noduriVizitate.find(nodCurent->st);
-		if (I == noduriVizitate.end())
-		   parcurgere(nodCurent->st, noduriVizitate);
-		else
-		{
-			cout << "}";
-			parcurgere(nodCurent->dr, noduriVizitate);
-		}
+		parcurgere(nodCurent->st);
+		cout << "}"<<'\n';
+		parcurgere(nodCurent->dr);
 	}
+	noduriVizitate.clear();
 }
 
-/*void convertire()
+void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
+	if (!esteAlgoritmCorect())
+		return;
+	cout << "#include <iostream>" << '\n';
+	cout << "include <cmath>"<<'\n';
+	cout << "using namespace std;" << '\n';
+	cout << "int main(){" << '\n';
 
-}*/
+	parcurgere(listaArbori[0].radacina);
+	cout << "return 0" << '\n';
+	cout << "}";
+
+}

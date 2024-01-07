@@ -1,6 +1,6 @@
 #pragma once
 #include "structs.h"
-#include <unordered_set>
+#include <set>
 #include <SFML/Graphics.hpp>
 
 DateNod schimbareDate(const TipNod tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);

@@ -27,3 +27,7 @@ void butonRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 void butonAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void butonDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
+void butonRulareTotal(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
+void butonRularePas(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
