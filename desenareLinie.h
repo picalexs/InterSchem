@@ -11,7 +11,7 @@ void adaugaSimbolCaObstacole(const Nod* nod);
 
 void stergeSimbolObstacol(const Nod* nod);
 
-void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2);
+void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile);
 
 void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat);
 

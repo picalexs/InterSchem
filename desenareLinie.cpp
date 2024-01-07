@@ -210,7 +210,7 @@ void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int short v
 	}
 }
 
-void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
+void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile)
 {
 	bool drumDus = true;
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2;
@@ -247,17 +247,7 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 		nod2->date.x,
 		nod2->date.y - inaltimeSimbol2
 	};
-	bool esteNodWhile = false;
-	if (nod2->date.tip == TipNod::WHILE && nod1->st == nod2)
-	{
-		for (const auto& linie : liniiDeDesenat)
-			if (nod2 == linie.second.nodStart || nod2 == linie.second.nodStop)
-			{
-				esteNodWhile = true;
-				break;
-			}
-	}
-	if (esteNodWhile)
+	if (linieSpreWhile)
 	{
 		drumDus = false;
 		stop.x_matrice = interval(convertesteInCoordMatrice(nod2->date.x - nod2->date.lungimeSimbol / 2), 0, nrColoane - 1);
@@ -279,9 +269,8 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 	for (int i = iStart1; i <= interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1 + marimeSpatiu), 0, nrLinii - 1); i++)
 		matriceObstacole[i][start.x_matrice] = 0;
 
-
-	if (start.y_matrice > stop.y_matrice)
-		drumDus = false;
+	/*if (start.y_matrice > stop.y_matrice)
+		drumDus = false;*/
 
 	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop, drumDus);
 	Linie linie;
@@ -324,7 +313,7 @@ void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat)
 	const Nod* nodStop = liniiDeDesenat[idLinie].nodStop;
 	liniiDeDesenat.erase(idLinie);
 	adaugaSimbolCaObstacole(nodDeMutat);
-	adaugaLinieObstacol(nodStart, nodStop);//actualizeaza linia Suprapusa de nodDeMutat
+	adaugaLinieObstacol(nodStart, nodStop, false);//actualizeaza linia Suprapusa de nodDeMutat
 }
 
 void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)

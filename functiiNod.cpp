@@ -141,6 +141,30 @@ Nod* gasesteNodInListaArbori(const DateNod& date) {
 	return nullptr;
 }
 
+Nod* gasesteNodLegatDeWhileRec(Nod* nodCurent, Nod* nodWhile, unordered_set<const Nod*>& noduriVizitate)
+{
+	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
+		return nullptr;
+	if (nodCurent->st == nodWhile || nodCurent->dr == nodWhile)
+		return nodCurent;
+	noduriVizitate.insert(nodCurent);
+	Nod* nodGasit = gasesteNodLegatDeWhileRec(nodCurent->st, nodWhile, noduriVizitate);
+	if (nodGasit != nullptr)
+		return nodGasit;
+	return gasesteNodLegatDeWhileRec(nodCurent->dr, nodWhile, noduriVizitate);
+}
+
+Nod* gasesteNodLegatDeWhile(Nod* nodWhile)
+{
+	if (nodWhile == nullptr)
+		return nullptr;
+	unordered_set<const Nod*> noduriVizitate;
+	Nod* rezultat = gasesteNodLegatDeWhileRec(nodWhile->st, nodWhile, noduriVizitate);
+	if (rezultat == nullptr)
+		rezultat = gasesteNodLegatDeWhileRec(nodWhile->dr, nodWhile, noduriVizitate);
+	return  rezultat;
+}
+
 int numarNoduriRecursiv(const Nod* N, unordered_set<const Nod*>& noduriVizitate)
 {
 	if (N == nullptr || noduriVizitate.count(N))

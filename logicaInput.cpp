@@ -143,6 +143,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static Nod* nodDeGasit = nullptr;
 	static Nod* nodDeMutat = nullptr;
 	static Nod* nodDeMutatTata = nullptr;
+	static Nod* nodLegatDeWhile = nullptr;
 	static int pozDeMutat = -1;
 	static bool seCitesteExpresie = false;
 	static string expresieDeCitit;
@@ -172,6 +173,10 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 				if (pozDeMutat != -1) {
 					//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
 					nodDeMutatTata = gasesteNodTata(listaArbori[pozDeMutat].radacina, nodDeMutat);
+					if (nodDeMutat->date.tip == TipNod::WHILE)
+					{
+						nodLegatDeWhile = gasesteNodLegatDeWhile(nodDeMutat);
+					}
 					const Arbore arboreDeMutat = listaArbori[pozDeMutat];
 					listaArbori.erase(listaArbori.begin() + pozDeMutat);
 					listaArbori.push_back(arboreDeMutat);
@@ -191,6 +196,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		}
 		iduriLiniiDeActualizat.clear();
 		noduriDeActualizat.clear();
+		nodLegatDeWhile = nullptr;
 		nodDeMutat = nullptr;
 		pozDeMutat = -1;
 		timpApasatLMB.restart();
@@ -223,7 +229,6 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 						noduriDeActualizat.insert(nodDeInserat);
 				}
 			}
-
 			for (const auto& nod : noduriDeActualizat) {
 				adaugaSimbolCaObstacole(nod);
 			}
@@ -232,11 +237,29 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			}
 			adaugaSimbolCaObstacole(nodDeMutat);
 			if (nodDeMutatTata != nullptr)
-				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat);
-			if (nodSt != nullptr)
-				adaugaLinieObstacol(nodDeMutat, nodSt);
-			if (nodDr != nullptr)
-				adaugaLinieObstacol(nodDeMutat, nodDr);
+				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat, false);
+			if (nodSt != nullptr) {
+				bool linieSpreWhile = false;
+				if (nodSt->date.tip == TipNod::WHILE)
+				{
+					if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodSt)) != nullptr &&
+						gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
+						linieSpreWhile = true;
+				}
+				adaugaLinieObstacol(nodDeMutat, nodSt, linieSpreWhile);
+			}
+			if (nodDr != nullptr) {
+				bool linieSpreWhile = false;
+				if (nodSt->date.tip == TipNod::WHILE)
+				{
+					if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodDr)) != nullptr &&
+						gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
+						linieSpreWhile = true;
+				}
+				adaugaLinieObstacol(nodDeMutat, nodDr, linieSpreWhile);
+			}
+			if (nodLegatDeWhile != nullptr)
+				adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true);
 		}
 	}
 	if (esteApasatF12)//executa algoritmul

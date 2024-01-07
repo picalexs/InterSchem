@@ -41,6 +41,8 @@ Nod* gasesteNodInListaArbori(const DateNod& date);
 
 Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
 
+Nod* gasesteNodLegatDeWhile(Nod* nodWhile);
+
 int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();

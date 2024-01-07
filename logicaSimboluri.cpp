@@ -93,7 +93,12 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie, const 
 		return;
 	}
 	if (creareLegatura(nod1, nod2)) {
-		adaugaLinieObstacol(nod1, nod2);
+		if (nod2->date.tip == TipNod::WHILE) {
+			adaugaLinieObstacol(nod1, nod2, true);
+		}
+		else {
+			adaugaLinieObstacol(nod1, nod2, false);
+		}
 		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
 			nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
 	}
