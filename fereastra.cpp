@@ -6,6 +6,7 @@
 #include "functiiNod.h"
 #include "logicaInput.h"
 #include "logicaSimboluri.h"
+#include "salvareDate.h"
 using namespace sf;
 
 void creareFereastra()
@@ -36,8 +37,8 @@ void creareFereastra()
 				fereastraAplicatie.close();
 			}
 			logicaInput(event);
+			//////////////////////////DEBUGGING//////////////////////////
 			static bool apasatF11 = false;
-			//////////////////////////DEBUGGING//////////////////////////tmp
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F11 && !apasatF11) {
 					apasatF11 = true;
@@ -46,6 +47,17 @@ void creareFereastra()
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
 				apasatF11 = false;
+			}
+
+			static bool apasatF10 = false;
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::F10 && !apasatF10) {
+					apasatF10 = true;
+					salvareDate();
+				}
+			}
+			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F10) {
+				apasatF10 = false;
 			}
 			////////////////////////////////////////////////////////////
 		}

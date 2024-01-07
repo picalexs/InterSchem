@@ -148,6 +148,8 @@
     <ClCompile Include="logicaSimboluri.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="desenareSimboluri.cpp" />
+    <ClCompile Include="salvareDate.cpp" />
+    <ClCompile Include="salvareDate.h" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>

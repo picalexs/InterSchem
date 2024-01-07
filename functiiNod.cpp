@@ -300,18 +300,6 @@ void stergereNod(Nod* N) {
 	stergereTotSubNod(N);
 }
 
-bool existaLinie(const pair<DateNod, DateNod>& linie) {
-	for (const auto& L : listaLinii)
-	{
-		if (linie.first.x == L.first.x
-			&& linie.first.y == L.first.y
-			&& linie.second.x == L.second.x
-			&& linie.second.y == L.second.y)
-			return true;
-	}
-	return false;
-}
-
 bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
@@ -320,12 +308,10 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 		|| (nod1->date.tip != TipNod::DACA && nod1->date.tip != TipNod::WHILE && (nod1->st != nullptr || nod1->dr != nullptr)))
 		return false;
 
-	const pair<DateNod, DateNod> linie1 = make_pair(nod1->date, nod2->date);
-	const pair<DateNod, DateNod> linie2 = make_pair(nod2->date, nod1->date);
-	if (existaLinie(linie1) || (existaLinie(linie2)
+	/*if (existaLinie(linie1) || (existaLinie(linie2)
 		&& nod1->date.tip != TipNod::DACA && nod2->date.tip != TipNod::DACA
 		&& nod1->date.tip != TipNod::WHILE && nod2->date.tip != TipNod::WHILE))
-		return false;
+		return false;*/
 
 	const int pozArbore1 = pozitiaArboreleNodului(nod1);
 	const int pozArbore2 = pozitiaArboreleNodului(nod2);
@@ -358,8 +344,6 @@ bool creareLegatura(Nod*& nod1, Nod*& nod2) {
 	else {
 		nod1->dr = nod2;
 	}
-
-	listaLinii.push_back(linie1);
 	if (pozArbore1 != pozArbore2)
 	{
 		listaArbori[pozArbore1].nrNoduri = numarNoduriDinArbore(listaArbori[pozArbore1]);

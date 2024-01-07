@@ -37,7 +37,6 @@ struct Arbore {
 };
 
 extern vector<Arbore> listaArbori;
-extern vector<pair<DateNod, DateNod>> listaLinii;
 extern unordered_map<string, long double> variabile;
 extern vector<string> listaConsola;
 extern Font fontGlobal;

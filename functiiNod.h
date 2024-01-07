@@ -43,13 +43,13 @@ Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
 
 Nod* gasesteNodLegatDeWhile(Nod* nodWhile);
 
+int numarNoduri(const Nod* N);
+
 int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();
 
 void stergereNod(Nod* N);
-
-bool existaLinie(const std::pair<DateNod, DateNod>& linie);
 
 bool creareLegatura(Nod*& nod1, Nod*& nod2);
 

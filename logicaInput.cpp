@@ -68,7 +68,6 @@ void logicaF12()
 void logicaDelete()
 {
 	listaArbori.clear();
-	listaLinii.clear();
 	listaConsola.clear();
 	variabile.clear();
 	atribuireConstanteCunoscute();//PI, e, g, phi;
