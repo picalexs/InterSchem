@@ -124,14 +124,17 @@ vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
 	return drumOptimizat;
 }
 
-vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
+vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop, const bool drumDus) {
 	vector<vector<bool>> vizitat(nrLinii, vector<bool>(nrColoane, false));
 	vector<vector<Punct>> parinte(nrLinii, vector<Punct>(nrColoane, { -1, -1 }));
 	queue<Punct> coada;
 	coada.push(start);
 	vizitat[start.y_matrice][start.x_matrice] = true;
-	constexpr int dirX[] = { -1, 1, 0, 0 };
-	constexpr int dirY[] = { 0, 0, 1, -1 };
+
+	constexpr int dirXDus[] = { -1, 1, 0, 0 };
+	constexpr int dirYDus[] = { 0, 0, 1, -1 };
+	constexpr int dirXIntors[] = { 0, 0, -1, 1 };
+	constexpr int dirYIntors[] = { -1, 1, 0, 0 };
 
 	while (!coada.empty()) {
 		const Punct current = coada.front();
@@ -142,8 +145,16 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop) {
 		}
 
 		for (int i = 0; i < 4; ++i) {
-			const int newX = current.x_matrice + dirX[i];
-			const int newY = current.y_matrice + dirY[i];
+			int newX, newY;
+			if (drumDus) {
+				newX = current.x_matrice + dirXDus[i];
+				newY = current.y_matrice + dirYDus[i];
+			}
+			else
+			{
+				newX = current.x_matrice + dirXIntors[i];
+				newY = current.y_matrice + dirYIntors[i];
+			}
 			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX] && matriceObstacole[newY][newX] == 0) {
 				vizitat[newY][newX] = true;
 				parinte[newY][newX] = current;
@@ -201,6 +212,7 @@ void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int short v
 
 void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 {
+	bool drumDus = true;
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2;
 	const float inaltimeSimbol2 = nod2->date.inaltimeSimbol / 2;
 	const int iStart1 = interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrColoane - 1);
@@ -212,34 +224,66 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2)
 		nod1->date.x,
 		nod1->date.y + inaltimeSimbol1
 	};
+
 	if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE)
 	{
 		constexpr int spatiuCasute = -2;
 		if (nod1->st == nod2)
 		{
+			//muta pozitia startului liniei in partea stanga a nodului de conditie
 			start.x_matrice = interval(start.x_matrice - (convertesteInCoordMatrice(nod1->date.lungimeSimbol / 2) + spatiuCasute), 0, nrColoane - 1);
 			start.x_ecran -= (nod1->date.lungimeSimbol / 2 + convertesteInCoordEcran(spatiuCasute));
 		}
 		else if (nod1->dr == nod2)
 		{
+			//muta pozitia startului liniei in partea dreapta a nodului de conditie
 			start.x_matrice = interval(start.x_matrice + convertesteInCoordMatrice(nod1->date.lungimeSimbol / 2) + spatiuCasute, 0, nrColoane - 1);
 			start.x_ecran += nod1->date.lungimeSimbol / 2 + convertesteInCoordEcran(spatiuCasute);
 		}
-		cout << start.x_matrice << '\n';
 	}
-	const Punct stop = {
+	Punct stop = {
 		interval(convertesteInCoordMatrice(nod2->date.x), 0, nrColoane - 1),
 		interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2), 0, nrLinii - 1),
 		nod2->date.x,
 		nod2->date.y - inaltimeSimbol2
 	};
+	bool esteNodWhile = false;
+	if (nod2->date.tip == TipNod::WHILE && nod1->st == nod2)
+	{
+		for (const auto& linie : liniiDeDesenat)
+			if (nod2 == linie.second.nodStart || nod2 == linie.second.nodStop)
+			{
+				esteNodWhile = true;
+				break;
+			}
+	}
+	if (esteNodWhile)
+	{
+		drumDus = false;
+		stop.x_matrice = interval(convertesteInCoordMatrice(nod2->date.x - nod2->date.lungimeSimbol / 2), 0, nrColoane - 1);
+		stop.y_matrice = interval(convertesteInCoordMatrice(nod2->date.y), 0, nrLinii - 1);
+		stop.x_ecran = interval(nod2->date.x - nod2->date.lungimeSimbol / 2, 0, convertesteInCoordEcran(stop.x_matrice));
+		stop.y_ecran = interval(nod2->date.y, 0, convertesteInCoordEcran(stop.y_matrice));
 
+		//face un spatiu in partea stanga a nodului de conditie pentru linia ce vine de la nodul de start
+		for (int i = stop.x_matrice; i >= stop.x_matrice - convertesteInCoordMatrice(marimeSpatiu); i--)
+			matriceObstacole[stop.y_matrice][i] = 0;
+	}
+	else
+	{
+		//face un spatiu in partea de sus a nodului stop pentru linie
+		for (int i = iStart2; i >= interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2 - marimeSpatiu), 0, nrLinii - 1); i--)
+			matriceObstacole[i][stop.x_matrice] = 0;
+	}
+	//face un spatiu in partea de jos a nodului start pentru linie
 	for (int i = iStart1; i <= interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1 + marimeSpatiu), 0, nrLinii - 1); i++)
 		matriceObstacole[i][start.x_matrice] = 0;
-	for (int i = iStart2; i >= interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2 - marimeSpatiu), 0, nrLinii - 1); i--)
-		matriceObstacole[i][stop.x_matrice] = 0;
 
-	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop);
+
+	if (start.y_matrice > stop.y_matrice)
+		drumDus = false;
+
+	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop, drumDus);
 	Linie linie;
 	linie.coordonate = drumOptimizat;
 	linie.nodStart = nod1;
@@ -268,7 +312,7 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
 
 void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat)
 {
-	if (idLinie < 1 || idLinie > liniiDeDesenat.size())
+	if (idLinie < 1 || liniiDeDesenat.count(idLinie) == 0)
 		return;
 	if (!liniiDeDesenat[idLinie].coordonate.empty())
 	{
@@ -300,7 +344,7 @@ void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
 
 	if (nod->date.tip == TipNod::DACA || nod->date.tip == TipNod::WHILE)
 	{
-		constexpr int distanta = 3;
+		constexpr int distanta = 4;
 		const int start = convertesteInCoordMatrice(nod->date.x);
 		const int yObstacol1 = interval(stopY + 1, 0, nrLinii - 1);
 		const int yObstacol2 = interval(stopY + 2, 0, nrLinii - 1);
@@ -360,8 +404,8 @@ set<short> verificareSuprapunere(const Nod* nod)
 
 
 bool verificareSimbolInZonaMatriceObstacole(const Nod* nod1, const Nod* nod2) {
-	return (abs(nod1->date.x - nod2->date.x) <= nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2 + marimeSpatiu &&
-		abs(nod1->date.y - nod2->date.y) <= nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + marimeSpatiu);
+	return (abs(nod1->date.x - nod2->date.x) <= nod1->date.lungimeSimbol / 2 + nod2->date.lungimeSimbol / 2 + 2 * marimeSpatiu &&
+		abs(nod1->date.y - nod2->date.y) <= nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + 2 * marimeSpatiu);
 }
 
 Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodVerificare, unordered_set<const Nod*> noduriVizitate) {

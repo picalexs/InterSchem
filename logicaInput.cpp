@@ -179,17 +179,17 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			}
 		}
 	}
-	static unordered_set<int> liniiDeActualizat;
+	static unordered_set<short> iduriLiniiDeActualizat;
 	static unordered_set<Nod*> noduriDeActualizat;
 	if (esteRidicatLMB)
 	{
 		for (const auto& nod : noduriDeActualizat) {
 			adaugaSimbolCaObstacole(nod);
 		}
-		for (const auto& linie : liniiDeActualizat) {
+		for (const auto& linie : iduriLiniiDeActualizat) {
 			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
 		}
-		liniiDeActualizat.clear();
+		iduriLiniiDeActualizat.clear();
 		noduriDeActualizat.clear();
 		nodDeMutat = nullptr;
 		pozDeMutat = -1;
@@ -210,8 +210,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			for (auto& valoare : valoareSuprapusa)
 			{
 				if (valoare > 0) {
-					if (liniiDeActualizat.count(valoare) == 0) {
-						liniiDeActualizat.insert(valoare);
+					if (iduriLiniiDeActualizat.count(valoare) == 0) {
+						iduriLiniiDeActualizat.insert(valoare);
 					}
 				}
 				else if (valoare < 0)
@@ -227,8 +227,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 			for (const auto& nod : noduriDeActualizat) {
 				adaugaSimbolCaObstacole(nod);
 			}
-			for (const auto& linie : liniiDeActualizat) {
-				actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
+			for (const auto& idLinie : iduriLiniiDeActualizat) {
+				actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat);
 			}
 			adaugaSimbolCaObstacole(nodDeMutat);
 			if (nodDeMutatTata != nullptr)
