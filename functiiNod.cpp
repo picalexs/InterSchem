@@ -207,18 +207,24 @@ int numarNoduriDinListaArbori() {
 	return nrNoduri;
 }
 
-void stergereTotSubNod(Nod*& N) {
-	static set<const Nod*> noduriVizitate;
+void stergereTotSubNodRec(Nod*& N, set<const Nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 
 	noduriVizitate.insert(N);
-	stergereTotSubNod(N->st);
-	stergereTotSubNod(N->dr);
+	stergereTotSubNodRec(N->st, noduriVizitate);
+	stergereTotSubNodRec(N->dr, noduriVizitate);
 
 	N = nullptr;
 	delete N;
-	noduriVizitate.clear();
+}
+
+void stergereTotSubNod(Nod*& N)
+{
+	if (N == nullptr)
+		return;
+	set<const Nod*> noduriVizitate;
+	stergereTotSubNodRec(N, noduriVizitate);
 }
 
 void stergereDinListaArbori(const Nod* N) {
@@ -242,22 +248,26 @@ bool esteRadacina(const Nod* N)
 }
 
 //gaseste nodul tata al nodului cautat daca exista legatura intre ei
-Nod* gasesteNodTata(Nod* N, Nod*& nodCautat) {
-	static set<const Nod*> noduriVizitate;
+Nod* gasesteNodTataRec(Nod* N, Nod*& nodCautat, set<const Nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N))
 		return nullptr;
 	if (N->st == nodCautat || N->dr == nodCautat)
 		return N;
 
 	noduriVizitate.insert(N);
-	Nod* nodTata = gasesteNodTata(N->st, nodCautat);
+	Nod* nodTata = gasesteNodTataRec(N->st, nodCautat, noduriVizitate);
 	if (nodTata == nullptr)
-		nodTata = gasesteNodTata(N->dr, nodCautat);
+		nodTata = gasesteNodTataRec(N->dr, nodCautat, noduriVizitate);
 
 	N = nullptr;
 	delete N;
-	noduriVizitate.clear();
 	return nodTata;
+}
+
+Nod* gasesteNodTata(Nod* N, Nod*& nodCautat)
+{
+	set<const Nod*> noduriVizitate;
+	return gasesteNodTataRec(N, nodCautat, noduriVizitate);
 }
 
 int pozitiaArboreleNodului(Nod* N)
@@ -312,58 +322,6 @@ void stergereNod(Nod* N) {
 		listaArbori.push_back(Arbore{ subarbore2, numarNoduri(subarbore2) });
 	}
 	stergereTotSubNod(N);
-}
-
-bool esteLegaturaValida(Nod*& nod1, Nod*& nod2) {
-	if (nod1 == nullptr || nod2 == nullptr)
-		return false;
-	//simbolul are deja nr. maxim de fii posibil
-	if (((nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE) && nod1->dr != nullptr)
-		|| (nod1->date.tip != TipNod::DACA && nod1->date.tip != TipNod::WHILE && (nod1->st != nullptr || nod1->dr != nullptr)))
-		return false;
-
-	/*if (existaLinie(linie1) || (existaLinie(linie2)
-		&& nod1->date.tip != TipNod::DACA && nod2->date.tip != TipNod::DACA
-		&& nod1->date.tip != TipNod::WHILE && nod2->date.tip != TipNod::WHILE))
-		return false;*/
-
-	const int pozArbore1 = pozitiaArboreleNodului(nod1);
-	const int pozArbore2 = pozitiaArboreleNodului(nod2);
-
-	if (pozArbore1 == -1 || pozArbore2 == -1)
-		return false;
-
-	if (pozArbore1 == pozArbore2)
-	{
-		if (nod2->date.tip == TipNod::DACA || nod2->date.tip == TipNod::WHILE) {
-			if (!esteNodInArbore(nod1, nod2->st))
-				return false;//nu se poate face legatura intre nod1 si nod2
-		}
-		else if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE) {
-			if (nod2->date.tip == TipNod::START || nod2->date.tip == TipNod::STOP) {
-				return false;//nu se poate face legatura intre while si un nod de start/stop
-			}
-		}
-		else {
-			return false; // incerc sa conectez nod1 de nod2(care nu este while, deci nu este bine)
-		}
-		if (nod1->date.tip == TipNod::DACA)
-			nod1->date.tip = TipNod::WHILE;
-		else if (nod2->date.tip == TipNod::DACA)
-			nod2->date.tip = TipNod::WHILE;
-	}
-	if (nod1->st == nullptr) {
-		nod1->st = nod2;
-	}
-	else {
-		nod1->dr = nod2;
-	}
-	if (pozArbore1 != pozArbore2)
-	{
-		listaArbori[pozArbore1].nrNoduri = numarNoduriDinArbore(listaArbori[pozArbore1]);
-		stergereDinListaArbori(nod2);
-	}
-	return true;
 }
 
 void seteazaVariabila(const string& nume, const long double valoare) {

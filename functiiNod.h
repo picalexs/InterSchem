@@ -43,6 +43,8 @@ Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
 
 Nod* gasesteNodLegatDeWhile(Nod* nodWhile);
 
+int pozitiaArboreleNodului(Nod* N);
+
 int numarNoduriMap(const Nod* N, const map<const Nod*, unsigned int>& noduriParcurse);
 
 int numarNoduri(const Nod* N);
@@ -51,9 +53,11 @@ int numarNoduriDinArbore(Arbore A);
 
 int numarNoduriDinListaArbori();
 
+void stergereDinListaArbori(const Nod* N);
+
 void stergereNod(Nod* N);
 
-bool esteLegaturaValida(Nod*& nod1, Nod*& nod2);
+bool esteLegaturaValida(Nod*& nodStart, Nod*& nodStop);
 
 void seteazaVariabila(const std::string& nume, long double valoare);
 

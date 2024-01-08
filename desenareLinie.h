@@ -5,6 +5,8 @@
 
 unsigned short getIdLinie();
 
+bool existaLinie(Nod*& nodStart, Nod*& nodStop);
+
 void afisareMatriceObstacole();
 
 void adaugaSimbolCaObstacole(const Nod* nod);

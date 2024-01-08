@@ -273,8 +273,7 @@ void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod, c
 	creareSimbol(fereastraAplicatie, dateTmp, true);
 }
 
-void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N) {
-	static set<const Nod*> noduriVizitate;
+void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoMode& desktop, Nod* N, set<const Nod*>& noduriVizitate) {
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 
@@ -287,14 +286,12 @@ void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoM
 
 	creareSimbol(fereastraAplicatie, N->date, false);
 	afisareTextNod(fereastraAplicatie, desktop, N->date);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st);
-	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr);
-	noduriVizitate.clear();
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->st, noduriVizitate);
+	creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, N->dr, noduriVizitate);
 }
 
-void creareOutlineParcurgereRecursiv(RenderWindow& fereastraAplicatie, Nod* N)
+void creareOutlineParcurgereRecursiv(RenderWindow& fereastraAplicatie, Nod* N, set<const Nod*>& noduriVizitate)
 {
-	static set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 	noduriVizitate.insert(N);
@@ -302,9 +299,8 @@ void creareOutlineParcurgereRecursiv(RenderWindow& fereastraAplicatie, Nod* N)
 	{
 		desenareOutline(fereastraAplicatie, nodCurentDeParcurgere()->date, 40);
 	}
-	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->st);
-	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->dr);
-	noduriVizitate.clear();
+	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->st, noduriVizitate);
+	creareOutlineParcurgereRecursiv(fereastraAplicatie, N->dr, noduriVizitate);
 }
 
 void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop) {
@@ -312,8 +308,10 @@ void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode
 	{
 		if (A.radacina == nullptr)
 			continue;
-		creareOutlineParcurgereRecursiv(fereastraAplicatie, A.radacina);
-		creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, A.radacina);
+		set<const Nod*> noduriVizitate;
+		creareOutlineParcurgereRecursiv(fereastraAplicatie, A.radacina, noduriVizitate);
+		noduriVizitate.clear();
+		creareSimbolPtArboreRecursiv(fereastraAplicatie, desktop, A.radacina, noduriVizitate);
 	}
 }
 

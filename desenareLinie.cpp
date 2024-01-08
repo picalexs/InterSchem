@@ -32,6 +32,17 @@ unsigned short getIdLinie()
 	}
 }
 
+bool existaLinie(Nod*& nodStart, Nod*& nodStop)
+{
+	for (const auto& linie : liniiDeDesenat)
+	{
+		if ((linie.second.nodStart == nodStart && linie.second.nodStop == nodStop) ||
+			(linie.second.nodStop == nodStart && linie.second.nodStart == nodStop))
+			return true;
+	}
+	return false;
+}
+
 int interval(int valoare, int min, int max)
 {
 	if (valoare < min)
