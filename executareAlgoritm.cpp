@@ -110,7 +110,7 @@ Nod* passParcurgere(Nod* N)
 bool seParcurge = false;
 Nod* ultimNodParcurs = nullptr;
 Nod* nodParcurgere = nullptr;
-void executareAlgoritm()
+void executareAlgoritmPasCuPas()
 {
 	if (seParcurge == false) {
 		if (!esteAlgoritmCorect())

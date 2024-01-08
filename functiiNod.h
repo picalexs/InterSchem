@@ -2,6 +2,8 @@
 #include "structs.h"
 #include <set>
 #include <SFML/Graphics.hpp>
+using namespace std;
+using namespace sf;
 
 DateNod schimbareDate(const TipNod tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);
 

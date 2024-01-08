@@ -11,10 +11,10 @@ void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 	fprintf(fisier, "%d,", index);
 	fprintf(fisier, "%d,", nodCurent->date.tip);
 	if (nodCurent->date.expresie.empty()) {
-		fprintf(fisier, "#,");
+		fprintf(fisier, "#@,");
 	}
 	else {
-		fprintf(fisier, "%s,", nodCurent->date.expresie.c_str());
+		fprintf(fisier, "%s@,", nodCurent->date.expresie.c_str());
 	}
 	fprintf(fisier, "%f,", nodCurent->date.x);
 	fprintf(fisier, "%f,", nodCurent->date.y);
@@ -49,17 +49,17 @@ void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 	}
 }
 
-FILE* creeazaFisier(const string& numeDefault) {
+FILE* creeazaFisier(const string& numeDefault, const string& numeExtensie) {
 	string numeFisier;
 	int nr = 0;
 	FILE* fisier;
 
 	do {
 		if (nr == 0) {
-			numeFisier = numeDefault + ".its";
+			numeFisier = numeDefault + "." + numeExtensie;
 		}
 		else {
-			numeFisier = numeDefault + to_string(nr) + ".its";
+			numeFisier = numeDefault + to_string(nr) + "." + numeExtensie;
 		}
 		fisier = fopen(numeFisier.c_str(), "r");
 		nr++;
@@ -77,7 +77,7 @@ FILE* creeazaFisier(const string& numeDefault) {
 
 void salvareDate()
 {
-	FILE* fisier = creeazaFisier("date");
+	FILE* fisier = creeazaFisier("date", "its");
 
 	fprintf(fisier, "%d\n", listaArbori.size());
 	for (int i = 0; i < listaArbori.size(); i++)
@@ -91,5 +91,13 @@ void salvareDate()
 			fprintf(fisier, "\n");
 		}
 	}
+	fclose(fisier);
+}
+
+void salvareCodConvertit()
+{
+	FILE* fisier = creeazaFisier("codConvertit", "cpp");
+	const string codConvertit = getCodConvertit();
+	fprintf(fisier, "%s", codConvertit.c_str());
 	fclose(fisier);
 }

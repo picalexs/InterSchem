@@ -7,7 +7,7 @@ void creareNod(FILE* fisier, char buffer[256], vector<Nod*>& noduri, vector<pair
 	fgets(buffer, 256, fisier);
 	const int index = atoi(strtok(buffer, ","));
 	const int tip = atoi(strtok(nullptr, ","));
-	string expresie = strtok(nullptr, ",");
+	string expresie = strtok(nullptr, "@");
 	if (expresie == "#")
 	{
 		expresie.clear();

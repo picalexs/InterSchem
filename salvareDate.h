@@ -3,5 +3,7 @@
 #include "functiiNod.h"
 #include <cstdio>
 #include <set>
-
+#include "convertireCPlusPlus.h"
 void salvareDate();
+
+void salvareCodConvertit();

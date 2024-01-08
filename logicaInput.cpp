@@ -352,7 +352,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	if (esteApasatF12)//executa algoritmul
 	{
 		if (!seCitesteParcurgere)
-			executareAlgoritm();
+			executareAlgoritmPasCuPas();
 		esteApasatF12 = false;
 	}
 	if (esteApasatDelete)//resetaza totul

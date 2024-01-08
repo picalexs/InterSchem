@@ -3,7 +3,7 @@
 
 bool esteAlgoritmCorect();
 
-void executareAlgoritm();
+void executareAlgoritmPasCuPas();
 
 bool seParcurgeAlgoritmul();
 
