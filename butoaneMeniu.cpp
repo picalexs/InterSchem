@@ -223,6 +223,28 @@ void butonConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
     fereastraAplicatie.draw(mainText);
 }
 
+void butonSalvareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+{
+    int lungimeButon, inaltimeButon;
+    lungimeButon = desktop.width / 16;
+    inaltimeButon = desktop.height / 18;
+    sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+
+    rectangle.setPosition(71 * desktop.width / 100, 12 * desktop.height / 100);
+    rectangle.setFillColor(sf::Color(0, 205, 205));
+    rectangle.setOutlineThickness(desktop.width / 350);
+    rectangle.setOutlineColor(sf::Color(0, 0, 204));
+    fereastraAplicatie.draw(rectangle);
+
+    const int marimeFont = static_cast<int>(desktop.width) / 70;
+    Text mainText("Salvare", fontGlobal, marimeFont);
+    mainText.setFillColor(Color::Black);
+    const FloatRect marginiText = mainText.getLocalBounds();
+    mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
+    mainText.setPosition(74 * desktop.width / 100, 14*desktop.height / 100);
+    fereastraAplicatie.draw(mainText);
+}
+
 void butonRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
     int lungimeButon, inaltimeButon;

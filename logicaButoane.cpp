@@ -1,6 +1,7 @@
 #include "logicaButoane.h"
 #include "butoaneMeniu.h"
 #include "convertireCPlusPlus.h"
+#include "desenareSimboluri.h"
 using namespace sf;
 
 /*bool verificareButon(const Vector2i& pozitieMouse, float x, float y, const VideoMode& desktop) {
@@ -62,15 +63,17 @@ void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 {
 	int lungime, inaltime;
 	lungime = 60*desktop.width / 100;
-	inaltime = 40*desktop.height / 100;
+	inaltime = 72*desktop.height / 100;
 	sf::RectangleShape rectangle(sf::Vector2f(lungime, inaltime));
 
-	rectangle.setPosition(70 * desktop.width / 100, 30 * desktop.height / 100);
+	rectangle.setPosition(70 * desktop.width / 100, 10 * desktop.height / 100);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(sf::Color(0, 0, 0));
 	rectangle.setFillColor(sf::Color(255,255, 255));
 	fereastraAplicatie.draw(rectangle);
-	///convertire(fereastraAplicatie, desktop);
+
+	butonSalvareConvertire(fereastraAplicatie, desktop);
+	convertire(fereastraAplicatie, desktop);
 }
 
 void desenareDropDownRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
@@ -105,11 +108,47 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 
 		if (verificareButon(pozitieMouse, 78 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 15))
 			esteActivatConvertire = !esteActivatConvertire;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 24 * desktop.height / 100, desktop.width / 10, desktop.height / 25))
+			creareSimbolPtListaArbori(fereastraAplicatie, desktop);
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 8 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton start
+			cout << 1;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 12 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton stop
+			cout << 2;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 16 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton citire
+			cout << 3;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 20 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton afisare
+			cout << 4;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 24 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton atribuire
+			cout << 5;
+
+		if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 28 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton decizie
+			cout << 6;
+
+		if (verificareButon(pozitieMouse, desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton salvare
+			cout << "salvare";
+
+		if (verificareButon(pozitieMouse, 12 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25))///buton incarcare
+			cout << "incarcare";
+
+		if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 8 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///rulare total
+			cout << "rulare total";
+
+		if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 12 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///rulare pas cu pas
+			cout << "rulare pas cu pas";
+
+		if (verificareButon(pozitieMouse, 71 * desktop.width / 100, 12 * desktop.height / 100, desktop.width / 10, desktop.height / 25))///salvare convertire
+			cout << "salvare convertire";
 	}
 	if (esteActivatDrop)
 		desenareDropDown(fereastraAplicatie, desktop, event);
-	if (esteActivatDropRulare)
-		desenareDropDownRulare(fereastraAplicatie, desktop, event);
 	if (esteActivatConvertire)
 		desenareConvertire(fereastraAplicatie, desktop, event);
+	if (esteActivatDropRulare)
+		desenareDropDownRulare(fereastraAplicatie, desktop, event);
 }

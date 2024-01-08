@@ -2,10 +2,10 @@
 #include "convertireCPlusPlus.h"
 #include "executareAlgoritm.h"
 #include <set>
-///#include <fstream>
+#include <fstream>
 
 using namespace std;
-///ofstream cout("output.txt");
+ofstream fout("output.txt");
 int nrStart = 0, nrStop = 0;
 /*void nrStartStop(Arbore A, const DateNod& date)
 {
@@ -17,8 +17,8 @@ int nrStart = 0, nrStop = 0;
 		ok = 0;
 	if (ok == 1)
 	{
-		cout << "#include <iostream>" << '\n';
-		cout << "using namespace std;" << '\n';
+		fout << "#include <iostream>" << '\n';
+		fout << "using namespace std;" << '\n';
 
 		parcurgere(A.radacina, date);
 
@@ -29,7 +29,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod * nodCurent)
 	if (listaArbori.size() > 1)
 	{
 		const string eroare = "Exista mai mult de o schema logica!";
-		cout << eroare << '\n';
+		fout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -41,7 +41,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod * nodCurent)
 		if (nrStart > 1)
 		{
 			const string eroare = "Exista mai mult de un Nod start!";
-			cout << eroare << '\n';
+			fout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
@@ -52,7 +52,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod * nodCurent)
 		if (nodCurent->st != nullptr || nodCurent->dr != nullptr)
 		{
 			const string eroare = "Nodul STOP nu poate avea fii!";
-			cout << eroare << '\n';
+			fout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
 		}
@@ -60,7 +60,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod * nodCurent)
 	if (nodCurent->st == nullptr || nodCurent->dr == nullptr)
 	{
 		const string eroare = "Nu exista niciun nod STOP!";
-		cout << eroare << '\n';
+		fout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
@@ -74,17 +74,18 @@ bool verificare(const Nod* radacina)
 	if (nrStart == 0 || nrStop == 0)
 	{
 		const string eroare = "Nu exista niciun nod STOP sau START!";
-		cout << eroare << '\n';
+		fout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
 	}
 	return true;
 }
 
-
-void parcurgere(Nod* nodCurent)
+int k = 0;
+void parcurgere(Nod* nodCurent, RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	static set<const Nod*> noduriVizitate;
+	k++;
 	if (nodCurent == nullptr)
 		return;
 	if (noduriVizitate.count(nodCurent) != 0)
@@ -92,50 +93,59 @@ void parcurgere(Nod* nodCurent)
 	if (nodCurent->date.tip == TipNod::START)
 	{
 		noduriVizitate.insert(nodCurent);
-		parcurgere(nodCurent->st);
+		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::STOP)
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
-		///cout<<"int "<< nodCurent->date.expresie << ';' << '\n';
+		///fout<<"int "<< nodCurent->date.expresie << ';' << '\n';
 		noduriVizitate.insert(nodCurent);
-		cout << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st);
+
+		const int marimeFont = static_cast<int>(desktop.width) / 90;
+		Text mainText(nodCurent->date.expresie, fontGlobal, marimeFont);
+		mainText.setFillColor(Color::Black);
+		const FloatRect marginiText = mainText.getLocalBounds();
+		mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
+		mainText.setPosition(73 * desktop.width / 100, (k*5+23) * desktop.height / 100);
+		fereastraAplicatie.draw(mainText);
+
+		fout << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
 	{
 		noduriVizitate.insert(nodCurent);
-		cout << "int " << nodCurent->date.expresie<<';' << '\n';
-		cout << "cin>>" << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st);
+		fout << "int " << nodCurent->date.expresie<<';' << '\n';
+		fout << "cin>>" << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
 		noduriVizitate.insert(nodCurent);
-		cout << "cout<<" << nodCurent->date.expresie<<';'<<'\n';
-		parcurgere(nodCurent->st);
+		fout << "fout<<" << nodCurent->date.expresie<<';'<<'\n';
+		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
 	{
 		noduriVizitate.insert(nodCurent);
-		cout << "if(" << nodCurent->date.expresie << ")"<<'\n';
-		cout << "{"<<'\n';
-		parcurgere( nodCurent->st);
-		cout << "}";
-		cout << '\n' << "else"<<'\n';
-		cout << "{" << '\n';
-		parcurgere(nodCurent->dr);
-		cout << "}"<<'\n';
+		fout << "if(" << nodCurent->date.expresie << ")"<<'\n';
+		fout << "{"<<'\n';
+		parcurgere( nodCurent->st, fereastraAplicatie, desktop);
+		fout << "}";
+		fout << '\n' << "else"<<'\n';
+		fout << "{" << '\n';
+		parcurgere(nodCurent->dr, fereastraAplicatie, desktop);
+		fout << "}"<<'\n';
 	}
 	if (nodCurent->date.tip == TipNod::WHILE)
 	{
 		noduriVizitate.insert(nodCurent);
-		cout << "while(" << nodCurent->date.expresie << ")" << '\n';
-		cout << "{" << '\n';
-		parcurgere(nodCurent->st);
-		cout << "}"<<'\n';
-		parcurgere(nodCurent->dr);
+		fout << "while(" << nodCurent->date.expresie << ")" << '\n';
+		fout << "{" << '\n';
+		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
+		fout << "}"<<'\n';
+		parcurgere(nodCurent->dr, fereastraAplicatie, desktop);
 	}
 	noduriVizitate.clear();
 }
@@ -144,13 +154,21 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	if (!esteAlgoritmCorect())
 		return;
-	cout << "#include <iostream>" << '\n';
-	cout << "include <cmath>"<<'\n';
-	cout << "using namespace std;" << '\n';
-	cout << "int main(){" << '\n';
+	fout << "#include <iostream>" << '\n';
+	fout << "include <cmath>"<<'\n';
+	fout << "using namespace std;" << '\n';
+	fout << "int main(){" << '\n';
 
-	parcurgere(listaArbori[0].radacina);
-	cout << "return 0" << '\n';
-	cout << "}";
+	const int marimeFont = static_cast<int>(desktop.width) / 90;
+	Text mainText("#include <iostream> \n #include <cmath> \n using namespace std; \n int main(){", fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
+	mainText.setPosition(77 * desktop.width / 100, 23 * desktop.height / 100);
+	fereastraAplicatie.draw(mainText);
+
+	parcurgere(listaArbori[0].radacina, fereastraAplicatie, desktop);
+	fout << "return 0" << '\n';
+	fout << "}";
 
 }

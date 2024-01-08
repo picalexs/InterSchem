@@ -31,3 +31,5 @@ void butonDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 void butonRulareTotal(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void butonRularePas(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
+void butonSalvareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
