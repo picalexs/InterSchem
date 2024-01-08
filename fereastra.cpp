@@ -7,6 +7,9 @@
 #include "logicaInput.h"
 #include "logicaSimboluri.h"
 #include "salvareDate.h"
+#include "butoaneMeniu.h"
+#include "logicaButoane.h"
+#include "convertireCPlusPlus.h"
 using namespace sf;
 
 void creareFereastra()
@@ -68,7 +71,19 @@ void creareFereastra()
 		desenareLinii(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
-		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F4)
+			convertire(fereastraAplicatie, desktop);
+
+		butonSalvare(fereastraAplicatie, desktop);
+		butonIncarcare(fereastraAplicatie, desktop);
+
+		butonDropDown(fereastraAplicatie, desktop);
+		butonRulare(fereastraAplicatie, desktop);
+		butonConvertire(fereastraAplicatie, desktop);
+		butonAjutor(fereastraAplicatie, desktop);
+
+		logicaButon(fereastraAplicatie, desktop, event);
+		///functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
 }

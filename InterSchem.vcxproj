@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="butoaneMeniu.cpp" />
     <ClCompile Include="convertireCPlusPlus.cpp" />
     <ClCompile Include="desenareLinie.cpp" />
     <ClCompile Include="dimensiuniSimboluri.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
+    <ClCompile Include="logicaButoane.cpp" />
     <ClCompile Include="incarcareDate.cpp" />
     <ClCompile Include="logicaExecutare.cpp" />
     <ClCompile Include="logicaInput.cpp" />
@@ -155,6 +157,7 @@
     <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="butoaneMeniu.h" />
     <ClInclude Include="convertireCPlusPlus.h" />
     <ClInclude Include="desenareLinie.h" />
     <ClInclude Include="dimensiuniSimboluri.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
     <ClInclude Include="incarcareDate.h" />
+    <ClInclude Include="logicaButoane.h" />
     <ClInclude Include="logicaExecutare.h" />
     <ClInclude Include="logicaInput.h" />
     <ClInclude Include="logicaSimboluri.h" />

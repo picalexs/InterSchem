@@ -3,8 +3,10 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-void nrStartStop(Arbore A, const DateNod& date);
+bool nrStartStop(int& nrStart, int& nrStop, const Nod* NodCurent);
 
-void verificare(Nod* nodCurent, const DateNod& date);
+bool verificare(Nod* nodCurent, const DateNod& date);
 
-void parcurgere(Nod* nodCurent, const DateNod& date);
+void parcurgere(Nod* nodCurent, RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
+void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
