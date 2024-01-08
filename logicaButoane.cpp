@@ -19,22 +19,24 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop, 
 	float buttonY = 0.83f * desktop.height / 100;
 		sf::Vector2i pozitieMouse = sf::Mouse::getPosition(fereastraAplicatie);
 		///sf::Vector2f worldMousePos = fereastraAplicatie.mapPixelToCoords(mousePosition);
-			RenderWindow newWindow(sf::VideoMode(400, 300), "New Window");
+			///RenderWindow newWindow(sf::VideoMode(400, 300), "New Window");
+			///newWindow.setFramerateLimit(60);
+
+			RenderWindow newWindow(sf::VideoMode(static_cast<float>(50 * desktop.width / 100), static_cast<float>(50 * desktop.height / 100)), "Ajutor"); //de schimbat cu Fullscreen dupa
+			///const View view(FloatRect(0, 0, static_cast<float>(30*desktop.width/100), static_cast<float>(30*desktop.height/100)));
 			newWindow.setFramerateLimit(60);
 
 			const int marimeFont = static_cast<int>(desktop.width) / 70;
-			Text mainText("Bla Bla", fontGlobal, marimeFont);
+			Text mainText("Proiect InterSchem\n \n Blocurile se vor muta dupa mouse, daca este apasat butonul din stanga;\n \n Pentru a crea legaturi, se vor trasa cu butonul din dreapta mouse-ului; \n \n Pentru a crea blocuri, se vor apasa tastele CTRL+1(START), CTRL+2(STOP)\n CTRL+3(ATRIBUIRE), CTRL+4(CITIRE), CTRL+5(AFISARE), \n CTRL+6(DECIZIE) sau se vor folosi butoanele din meniu;\n \n Pentru a sterge un bloc si legatura sa, se va apasa ESCAPE\n \n Pentru executarea algoritmului se va folosi F12 \n \n Butonul de salvare va salva schema logica, iar cu cel de incarcare se vor \n incarca scheme logice deja facute", fontGlobal, marimeFont);
 			mainText.setFillColor(Color::White);
-			const FloatRect marginiText = mainText.getLocalBounds();
-			mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-			mainText.setPosition(100, 100);
+			mainText.setPosition(desktop.width/100, desktop.height/100);
 
 			while (newWindow.isOpen())
 			{
 				Event event;
 				while (newWindow.pollEvent(event))
 				{
-					if (event.type == Event::Closed)
+					if (event.type == Event::Closed) 
 					{
 						newWindow.close();
 					}
