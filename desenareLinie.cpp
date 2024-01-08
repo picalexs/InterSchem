@@ -1,25 +1,16 @@
 #include "desenareLinie.h"
 #include <queue>
 #define PI 3.14159265358979323846
-struct Punct {
-	int x_matrice;
-	int y_matrice;
-	float x_ecran;
-	float y_ecran;
-};
 
-struct Linie
-{
-	vector<Punct> coordonate;
-	Color culoareLinie = Color::Black;
-	const Nod* nodStart, * nodStop;
-	unsigned short id;
-};
-
-map<unsigned short, Linie> liniiDeDesenat;
 int nrLinii, nrColoane, marimeCasuta;
 constexpr float marimeSpatiu = 20.0f;
 vector<vector<short int>> matriceObstacole;
+
+void resetMatrice()
+{
+	matriceObstacole.clear();
+	matriceObstacole = vector<vector<short int>>(nrLinii, vector<short int>(nrColoane, false));
+}
 
 unsigned short getIdLinie()
 {

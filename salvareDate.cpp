@@ -1,6 +1,4 @@
 #include "salvareDate.h"
-#include <cstdio>
-#include <set>
 
 map<const Nod*, unsigned int> noduriParcurse;
 unsigned int index = 1;

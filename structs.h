@@ -36,6 +36,22 @@ struct Arbore {
 	int nrNoduri = 0;
 };
 
+struct Punct {
+	int x_matrice;
+	int y_matrice;
+	float x_ecran;
+	float y_ecran;
+};
+
+struct Linie
+{
+	vector<Punct> coordonate;
+	Color culoareLinie = Color::Black;
+	const Nod* nodStart, * nodStop;
+	unsigned short id;
+};
+
+extern map<unsigned short, Linie> liniiDeDesenat;;
 extern vector<Arbore> listaArbori;
 extern map<string, long double> variabile;
 extern vector<string> listaConsola;

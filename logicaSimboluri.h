@@ -9,6 +9,6 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie);
 
 void logicaGasireNoduriDeLegat(const RenderWindow& fereastraAplicatie);
 
-void logicaLegaturaIntreSimboluri();
+void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcat);
 
 void adaugaLinie(Nod*& nodStart, Nod*& nodStop);

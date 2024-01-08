@@ -60,63 +60,50 @@ void logicaGasireNoduriDeLegat(const RenderWindow& fereastraAplicatie)
 	}
 }
 
-bool esteLegaturaValida(Nod*& nodStart, Nod*& nodStop) {
+pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodStop) {
 	if (nodStart == nullptr || nodStop == nullptr)
-		return false;
+		return { -1,-1 };
 	//de la nodul stop nu se poate face legatura
 	if (nodStart->date.tip == TipNod::STOP)
-		return false;
+		return { -1,-1 };
 
 	//simbolul are deja nr. maxim de fii posibil
 	if (((nodStart->date.tip == TipNod::DACA || nodStart->date.tip == TipNod::WHILE) && nodStart->st != nullptr && nodStart->dr != nullptr)
 		|| (nodStart->date.tip != TipNod::DACA && nodStart->date.tip != TipNod::WHILE && (nodStart->st != nullptr || nodStart->dr != nullptr)))
-		return false;
+		return { -1,-1 };
 
 	//exista deja o legatura intre nodStart si nodStop
 	if (existaLinie(nodStart, nodStop)
 		&& nodStart->date.tip != TipNod::DACA && nodStop->date.tip != TipNod::DACA
 		&& nodStart->date.tip != TipNod::WHILE && nodStop->date.tip != TipNod::WHILE)
-		return false;
+		return { -1,-1 };
 
 	const int pozArbore1 = pozitiaArboreleNodului(nodStart);
 	const int pozArbore2 = pozitiaArboreleNodului(nodStop);
 
 	if (pozArbore1 == -1 || pozArbore2 == -1)
-		return false;
+		return { -1,-1 };
 
 	if (pozArbore1 == pozArbore2)
 	{
 		if (nodStop->date.tip == TipNod::WHILE)
-			return false;
+			return { -1,-1 };
 		if (nodStop->date.tip == TipNod::DACA) {
 			if (!esteNodInArbore(nodStart, nodStop->st) && !esteNodInArbore(nodStart, nodStop->dr))
-				return false;//nu se poate face legatura intre nodStart si nodStop
+				return { -1,-1 };//nu se poate face legatura intre nodStart si nodStop
 		}
 		else {
-			return false; // incerc sa conectez nodStart de nodStop(care nu este while, deci nu este bine)
+			return { -1,-1 }; // incerc sa conectez nodStart de nodStop(care nu este while, deci nu este bine)
 		}
 		if (nodStart->date.tip == TipNod::DACA)
 			nodStart->date.tip = TipNod::WHILE;
 		else if (nodStop->date.tip == TipNod::DACA)
 			nodStop->date.tip = TipNod::WHILE;
 	}
-
-	//realizeaza legatura intre nodStart si nodStop
-	if (nodStart->st == nullptr) {
-		nodStart->st = nodStop;
-	}
-	else {
-		nodStart->dr = nodStop;
-	}
-	if (pozArbore1 != pozArbore2)
-	{
-		listaArbori[pozArbore1].nrNoduri = numarNoduriDinArbore(listaArbori[pozArbore1]);
-		stergereDinListaArbori(nodStop);
-	}
-	return true;
+	return { pozArbore1, pozArbore2 };
 }
 
-void logicaLegaturaIntreSimboluri()
+void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata)
 {
 	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
 	{
@@ -124,7 +111,29 @@ void logicaLegaturaIntreSimboluri()
 		nod2 = nullptr;
 		return;
 	}
-	if (esteLegaturaValida(nod1, nod2)) {
+	pair<unsigned int, unsigned int> pozitiiArbori;
+	if (esteLegaturaIncarcata)
+	{
+		pozitiiArbori = { pozitiaArboreleNodului(nod1),pozitiaArboreleNodului(nod2) };
+	}
+	else {
+		pozitiiArbori = esteLegaturaValida(nod1, nod2);
+	}
+
+	if (esteLegaturaIncarcata || pozitiiArbori != make_pair(-1, -1)) {
+		//realizeaza legatura intre nodStart si nodStop
+		if (nod1->st == nullptr) {
+			nod1->st = nod2;
+		}
+		else {
+			nod1->dr = nod2;
+		}
+		if (pozitiiArbori.first != pozitiiArbori.second)
+		{
+			listaArbori[pozitiiArbori.first].nrNoduri = numarNoduriDinArbore(listaArbori[pozitiiArbori.first]);
+			stergereDinListaArbori(nod2);
+		}
+
 		if (nod2->date.tip == TipNod::WHILE && esteNodInArbore(nod1, nod2)) {
 			adaugaLinieObstacol(nod1, nod2, true);
 		}
@@ -142,5 +151,5 @@ void adaugaLinie(Nod*& nodStart, Nod*& nodStop)
 {
 	nod1 = nodStart;
 	nod2 = nodStop;
-	logicaLegaturaIntreSimboluri();
+	logicaLegaturaIntreSimboluri(true);
 }

@@ -25,7 +25,7 @@ bool esteArboreNull(const Arbore& A);
 
 bool esteRadacina(const Nod* N);
 
-bool esteNodInArbore(Nod* nodCautat, const Nod* radacina);
+bool esteNodInArbore(const Nod* nodCautat, const Nod* radacina);
 
 bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date);
 
@@ -43,7 +43,7 @@ Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
 
 Nod* gasesteNodLegatDeWhile(Nod* nodWhile);
 
-int pozitiaArboreleNodului(Nod* N);
+int pozitiaArboreleNodului(const Nod* N);
 
 int numarNoduriMap(const Nod* N, const map<const Nod*, unsigned int>& noduriParcurse);
 
@@ -56,8 +56,6 @@ int numarNoduriDinListaArbori();
 void stergereDinListaArbori(const Nod* N);
 
 void stergereNod(Nod* N);
-
-bool esteLegaturaValida(Nod*& nodStart, Nod*& nodStop);
 
 void seteazaVariabila(const std::string& nume, long double valoare);
 

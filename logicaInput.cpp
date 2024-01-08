@@ -201,6 +201,8 @@ void stopMutareSimbol(set<short>& iduriLiniiDeActualizat, set<Nod*> noduriDeActu
 
 void logicaDelete()
 {
+	liniiDeDesenat.clear();
+	resetMatrice();
 	listaArbori.clear();
 	listaConsola.clear();
 	variabile.clear();
@@ -343,7 +345,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	}
 	if (esteRidicatLegare)
 	{
-		logicaLegaturaIntreSimboluri();
+		logicaLegaturaIntreSimboluri(false);
 		esteApasatLegare = false;
 		esteRidicatLegare = false;
 	}

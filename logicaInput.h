@@ -3,6 +3,8 @@
 #include <string>
 using namespace sf;
 
+void logicaDelete();
+
 void logicaInput(const Event& event);
 
 void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event);

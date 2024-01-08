@@ -64,18 +64,18 @@ bool esteArboreNull(const Arbore& A) {
 	return (A.radacina == nullptr);
 }
 
-bool esteNodInArboreRec(Nod* nodCautat, const Nod* radacina, set<const Nod*> noduriVizitate)
+bool esteNodInArboreRec(const Nod* nodCautat, const Nod* radacina, set<const Nod*>& noduriVizitate)
 {
 	if (radacina == nullptr || noduriVizitate.count(radacina))
 		return false;
+	noduriVizitate.insert(radacina);
 	if (radacina == nodCautat)
 		return true;
-	noduriVizitate.insert(radacina);
 	return (esteNodInArboreRec(nodCautat, radacina->st, noduriVizitate) || esteNodInArboreRec(nodCautat, radacina->dr, noduriVizitate));
 }
 
-bool esteNodInArbore(Nod* nodCautat, const Nod* radacina) {
-	const set<const Nod*> noduriVizitate;
+bool esteNodInArbore(const Nod* nodCautat, const Nod* radacina) {
+	set<const Nod*> noduriVizitate;
 	return esteNodInArboreRec(nodCautat, radacina, noduriVizitate);
 }
 
@@ -270,7 +270,7 @@ Nod* gasesteNodTata(Nod* N, Nod*& nodCautat)
 	return gasesteNodTataRec(N, nodCautat, noduriVizitate);
 }
 
-int pozitiaArboreleNodului(Nod* N)
+int pozitiaArboreleNodului(const Nod* N)
 {
 	for (int i = 0; i < listaArbori.size(); i++)
 	{
