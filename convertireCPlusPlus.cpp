@@ -100,12 +100,9 @@ void parcurgere(Nod* nodCurent, RenderWindow& fereastraAplicatie, const VideoMod
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
-		///cout<<"float "<< nodCurent->date.expresie << ';' << '\n';
 
 		noduriVizitate.insert(nodCurent);
 		codConvertit+="float "+ nodCurent->date.expresie + ";\n";
-
-		///codConvertit += nodCurent->date.expresie + ";\n";
 
 		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
@@ -113,14 +110,13 @@ void parcurgere(Nod* nodCurent, RenderWindow& fereastraAplicatie, const VideoMod
 	{
 		noduriVizitate.insert(nodCurent);
 		codConvertit +="cin>> "+ nodCurent->date.expresie + ";\n";
-		///cout << "cin>>" << nodCurent->date.expresie<<';'<<'\n';
 		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
 		noduriVizitate.insert(nodCurent);
 		codConvertit +="cout<< " +nodCurent->date.expresie + ";\n";
-		///cout << "cout<<" << nodCurent->date.expresie<<';'<<'\n';
+		
 		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
@@ -128,29 +124,25 @@ void parcurgere(Nod* nodCurent, RenderWindow& fereastraAplicatie, const VideoMod
 		noduriVizitate.insert(nodCurent);
 		codConvertit += "if("+nodCurent->date.expresie +")" + "\n";
 		codConvertit += "{\n";
-		///cout << "if(" << nodCurent->date.expresie << ")"<<'\n';
-		///cout << "{"<<'\n';
+		
 		parcurgere( nodCurent->st, fereastraAplicatie, desktop);
 		codConvertit += "}\n";
-		///cout << "}";
 		codConvertit += "else\n";
-		///cout << '\n' << "else"<<'\n';
 		codConvertit += "{\n";
-		///cout << "{" << '\n';
+		
 		parcurgere(nodCurent->dr, fereastraAplicatie, desktop);
 		codConvertit += "}\n";
-		///cout << "}"<<'\n';
 	}
 	if (nodCurent->date.tip == TipNod::WHILE)
 	{
 		noduriVizitate.insert(nodCurent);
 		codConvertit += "while(" + nodCurent->date.expresie + ")" + "\n";
 		codConvertit += "{\n";
-		///cout << "while(" << nodCurent->date.expresie << ")" << '\n';
-		///cout << "{" << '\n';
+		
 		parcurgere(nodCurent->st, fereastraAplicatie, desktop);
+
 		codConvertit += "}\n";
-		///cout << "}"<<'\n';
+		
 		parcurgere(nodCurent->dr, fereastraAplicatie, desktop);
 	}
 	noduriVizitate.clear();
@@ -166,15 +158,10 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	codConvertit += "using namespace std;\n";
 	codConvertit += "#int main()\n";
 	codConvertit += "{\n";
-	///cout << "#include <iostream>" << '\n';
-	///cout << "include <cmath>"<<'\n';
-	///cout << "using namespace std;" << '\n';
-	///cout << "int main(){" << '\n';
 
 
-	parcurgere(listaArbori[0].radacina, fereastraAplicatie, desktop);
-	///cout << "return 0" << '\n';
-	///cout << "}";
+	parcurgere(listaArbori[0].radacina, fereastraAplicatie, desktop); 
+
 	codConvertit += "return 0;\n";
 	codConvertit += "}\n";
 	cout << '\n' << codConvertit;
@@ -182,8 +169,6 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	const int marimeFont = static_cast<int>(desktop.width) / 90;
 	Text mainText(codConvertit, fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
-	///const FloatRect marginiText = mainText.getLocalBounds();
-	///mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
 	mainText.setPosition(71 * desktop.width / 100, 20 * desktop.height / 100);
 	fereastraAplicatie.draw(mainText);
 }

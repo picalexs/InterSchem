@@ -18,12 +18,8 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop, 
 	float buttonX = 0.91f * desktop.width / 100;
 	float buttonY = 0.83f * desktop.height / 100;
 		sf::Vector2i pozitieMouse = sf::Mouse::getPosition(fereastraAplicatie);
-		///sf::Vector2f worldMousePos = fereastraAplicatie.mapPixelToCoords(mousePosition);
-			///RenderWindow newWindow(sf::VideoMode(400, 300), "New Window");
-			///newWindow.setFramerateLimit(60);
 
-			RenderWindow newWindow(sf::VideoMode(static_cast<float>(50 * desktop.width / 100), static_cast<float>(50 * desktop.height / 100)), "Ajutor"); //de schimbat cu Fullscreen dupa
-			///const View view(FloatRect(0, 0, static_cast<float>(30*desktop.width/100), static_cast<float>(30*desktop.height/100)));
+			RenderWindow newWindow(sf::VideoMode(static_cast<float>(50 * desktop.width / 100), static_cast<float>(50 * desktop.height / 100)), "Ajutor");
 			newWindow.setFramerateLimit(60);
 
 			const int marimeFont = static_cast<int>(desktop.width) / 70;
@@ -50,7 +46,6 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop, 
 void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
 	sf::Vector2i pozitieMouse = sf::Mouse::getPosition(fereastraAplicatie);
-	///sf::Vector2f worldMousePos = fereastraAplicatie.mapPixelToCoords(mousePosition);
 	{
 		butonStart(fereastraAplicatie, desktop);
 		butonStop(fereastraAplicatie, desktop);
