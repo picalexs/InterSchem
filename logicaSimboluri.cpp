@@ -3,96 +3,66 @@
 #include "dimensiuniSimboluri.h"
 #include "structs.h"
 
-map<Keyboard::Key, bool> esteTastaApasata;
-
-void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int tip)
 {
-	if (!Keyboard::isKeyPressed(Keyboard::LControl))
-		return;
-	for (int key = Keyboard::Num1; key <= Keyboard::Num6; key++)
-	{
-		if (Keyboard::isKeyPressed(static_cast<Keyboard::Key>(key)))
-		{
-			if (!esteTastaApasata[static_cast<Keyboard::Key>(key)])
-			{
-				int tip = key - Keyboard::Num1;
-				const Vector2f dimensiuni = dimensiuniSimbol(desktop, tip);
-				const Vector2f pozitieMouse = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie));
-				DateNod date = schimbareDate(static_cast<TipNod>(tip), "", pozitieMouse.x, pozitieMouse.y, dimensiuni.x, dimensiuni.y);
-				if (date.tip == TipNod::START)
-					date.expresie = "START";
-				else if (date.tip == TipNod::STOP)
-					date.expresie = "STOP";
-				cout << "Creat: tip= " << static_cast<int>(date.tip) << ", (" << date.x << ',' << date.y << ")\n";
+	//creaza un nod nou si il adauga in lista de arbori
+	const Vector2f dimensiune = dimensiuneSimbol(desktop, tip);
+	const Vector2f pozitieMouse = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie));
+	DateNod date = schimbareDate(static_cast<TipNod>(tip), "", pozitieMouse.x, pozitieMouse.y, dimensiune.x, dimensiune.y);
+	if (date.tip == TipNod::START)
+		date.expresie = "START";
+	else if (date.tip == TipNod::STOP)
+		date.expresie = "STOP";
 
-				Arbore ArboreNou;
-				atribuireArbore(ArboreNou, date);
-				listaArbori.push_back(ArboreNou);
-				adaugaSimbolCaObstacole(ArboreNou.radacina);
-				esteTastaApasata[static_cast<Keyboard::Key>(key)] = true;
-			}
-		}
-		else
-		{
-			esteTastaApasata[static_cast<Keyboard::Key>(key)] = false;
-		}
-	}
+	cout << "Creat: tip= " << static_cast<int>(date.tip) << ", (" << date.x << ',' << date.y << ")\n";
+	Arbore ArboreNou;
+	atribuireArbore(ArboreNou, date);
+	listaArbori.push_back(ArboreNou);
+	adaugaSimbolCaObstacole(ArboreNou.radacina);
 }
 
-bool esteApasatStergere = false;
-
-void logicaStergereSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 {
-	if (!Keyboard::isKeyPressed(Keyboard::Escape) && esteApasatStergere)
+	// Parcurgerea listei de arbori si a fiecarui Arbore pentru a gasi nodul si a-l sterge daca este gasit
+	for (auto& A : listaArbori)
 	{
-		esteApasatStergere = false;
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Escape) && !esteApasatStergere)
-	{
-		esteApasatStergere = true;
-		// Parcurgerea listei de arbori si a fiecarui Arbore pentru a gasi nodul si a-l sterge daca este gasit
-		for (auto& A : listaArbori)
-		{
-			Nod* nodDeSters = gasesteNodCuPozMouse(fereastraAplicatie, A);
+		Nod* nodDeSters = gasesteNodCuPozMouse(fereastraAplicatie, A);
 
-			if (nodDeSters != nullptr)
-			{
-				cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
-				stergereNod(nodDeSters);
-				stergereLiniiObstacoleCuNodulDat(nodDeSters);
-				stergeSimbolObstacol(nodDeSters);
-				return;
-			}
+		if (nodDeSters != nullptr)
+		{
+			cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
+			stergereNod(nodDeSters);
+			stergereLiniiObstacoleCuNodulDat(nodDeSters);
+			stergeSimbolObstacol(nodDeSters);
+			return;
 		}
 	}
 }
 
 Nod* nod1 = nullptr;
 Nod* nod2 = nullptr;
-
-void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+void logicaGasireNoduriDeLegat(const RenderWindow& fereastraAplicatie)
 {
-	if (Mouse::isButtonPressed(Mouse::Right))
+	if (nod1 == nullptr)
 	{
-		if (nod1 == nullptr)
-		{
-			nod1 = gasesteNodListaCuPozMouse(fereastraAplicatie);
-		}
-		Nod* nod2Nou = gasesteNodListaCuPozMouse(fereastraAplicatie);
-		if (nod2 == nullptr || nod2 == nod1 || nod2Nou != nod2)
-		{
-			nod2 = nod2Nou;
-		}
-		return;
+		nod1 = gasesteNodListaCuPozMouse(fereastraAplicatie);
 	}
+	Nod* nod2Nou = gasesteNodListaCuPozMouse(fereastraAplicatie);
+	if (nod2 == nullptr || nod2 == nod1 || nod2Nou != nod2)
+	{
+		nod2 = nod2Nou;
+	}
+}
+
+void logicaLegaturaIntreSimboluri()
+{
 	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
 	{
 		nod1 = nullptr;
 		nod2 = nullptr;
 		return;
 	}
-	if (creareLegatura(nod1, nod2)) {
+	if (esteLegaturaValida(nod1, nod2)) {
 		if (nod2->date.tip == TipNod::WHILE) {
 			adaugaLinieObstacol(nod1, nod2, true);
 		}
@@ -104,11 +74,4 @@ void logicaLegaturaIntreSimboluri(const RenderWindow& fereastraAplicatie, const 
 	}
 	nod1 = nullptr;
 	nod2 = nullptr;
-}
-
-void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
-{
-	logicaCreareSimbol(fereastraAplicatie, desktop);
-	logicaStergereSimbol(fereastraAplicatie, desktop);
-	logicaLegaturaIntreSimboluri(fereastraAplicatie, desktop);
 }

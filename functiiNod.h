@@ -1,6 +1,6 @@
 #pragma once
 #include "structs.h"
-#include <unordered_set>
+#include <set>
 #include <SFML/Graphics.hpp>
 
 DateNod schimbareDate(const TipNod tip, const std::string& expresie, const float x, const float y, const float lungimeSimbol, const float inaltimeSimbol);
@@ -43,6 +43,8 @@ Nod* gasesteNodTata(Nod* N, Nod*& nodCautat);
 
 Nod* gasesteNodLegatDeWhile(Nod* nodWhile);
 
+int numarNoduriMap(const Nod* N, const map<const Nod*, unsigned int>& noduriParcurse);
+
 int numarNoduri(const Nod* N);
 
 int numarNoduriDinArbore(Arbore A);
@@ -51,7 +53,7 @@ int numarNoduriDinListaArbori();
 
 void stergereNod(Nod* N);
 
-bool creareLegatura(Nod*& nod1, Nod*& nod2);
+bool esteLegaturaValida(Nod*& nod1, Nod*& nod2);
 
 void seteazaVariabila(const std::string& nume, long double valoare);
 

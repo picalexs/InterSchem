@@ -143,6 +143,7 @@
     <ClCompile Include="fereastra.cpp" />
     <ClCompile Include="functiiMatematice.cpp" />
     <ClCompile Include="functiiNod.cpp" />
+    <ClCompile Include="incarcareDate.cpp" />
     <ClCompile Include="logicaExecutare.cpp" />
     <ClCompile Include="logicaInput.cpp" />
     <ClCompile Include="logicaSimboluri.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="functiiMatematice.h" />
     <ClInclude Include="functiiNod.h" />
     <ClInclude Include="desenareSimboluri.h" />
+    <ClInclude Include="incarcareDate.h" />
     <ClInclude Include="logicaExecutare.h" />
     <ClInclude Include="logicaInput.h" />
     <ClInclude Include="logicaSimboluri.h" />

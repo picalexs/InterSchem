@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
-
 #include "desenareLinie.h"
 #include "desenareSimboluri.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"
+#include "incarcareDate.h"
 #include "logicaInput.h"
 #include "logicaSimboluri.h"
 #include "salvareDate.h"
@@ -53,18 +53,27 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F10 && !apasatF10) {
 					apasatF10 = true;
-					salvareDate();
+					//salvareDate();
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F10) {
 				apasatF10 = false;
 			}
+
+			static bool apasatF9 = false;
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::F9 && !apasatF9) {
+					apasatF9 = true;
+					incarcareDate();
+				}
+			}
+			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F9) {
+				apasatF9 = false;
+			}
 			////////////////////////////////////////////////////////////
 		}
 		logicaExecutareInput(fereastraAplicatie, desktop, event);
 		fereastraAplicatie.clear(Color::White);
-
-		logicaSimboluri(fereastraAplicatie, desktop);//creare, stergere, legare simboluri
 
 		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinii(fereastraAplicatie);//deseneaza liniile dintre simboluri

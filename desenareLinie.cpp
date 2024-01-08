@@ -397,7 +397,7 @@ bool verificareSimbolInZonaMatriceObstacole(const Nod* nod1, const Nod* nod2) {
 		abs(nod1->date.y - nod2->date.y) <= nod1->date.inaltimeSimbol / 2 + nod2->date.inaltimeSimbol / 2 + 2 * marimeSpatiu);
 }
 
-Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodVerificare, unordered_set<const Nod*> noduriVizitate) {
+Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodVerificare, set<const Nod*> noduriVizitate) {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
 	if (verificareSimbolInZonaMatriceObstacole(nodVerificare, nodCurent) && nodCurent != nodVerificare)
@@ -411,7 +411,7 @@ Nod* gasesteNodObstacolRec(Nod* nodCurent, Nod*& nodVerificare, unordered_set<co
 }
 
 Nod* gasesteNodObstacol(Nod* nodCurent, Nod*& nodVerificare) {
-	const unordered_set<const Nod*> noduriVizitate;
+	const set<const Nod*> noduriVizitate;
 	return gasesteNodObstacolRec(nodCurent, nodVerificare, noduriVizitate);
 }
 

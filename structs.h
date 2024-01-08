@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;
@@ -37,6 +37,6 @@ struct Arbore {
 };
 
 extern vector<Arbore> listaArbori;
-extern unordered_map<string, long double> variabile;
+extern map<string, long double> variabile;
 extern vector<string> listaConsola;
 extern Font fontGlobal;

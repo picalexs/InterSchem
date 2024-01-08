@@ -64,7 +64,7 @@ bool esteArboreNull(const Arbore& A) {
 	return (A.radacina == nullptr);
 }
 
-bool esteNodInArboreRec(Nod* nodCautat, const Nod* radacina, unordered_set<const Nod*> noduriVizitate)
+bool esteNodInArboreRec(Nod* nodCautat, const Nod* radacina, set<const Nod*> noduriVizitate)
 {
 	if (radacina == nullptr || noduriVizitate.count(radacina))
 		return false;
@@ -75,7 +75,7 @@ bool esteNodInArboreRec(Nod* nodCautat, const Nod* radacina, unordered_set<const
 }
 
 bool esteNodInArbore(Nod* nodCautat, const Nod* radacina) {
-	const unordered_set<const Nod*> noduriVizitate;
+	const set<const Nod*> noduriVizitate;
 	return esteNodInArboreRec(nodCautat, radacina, noduriVizitate);
 }
 
@@ -83,7 +83,7 @@ bool verificareSimbolInZona(const Vector2f& pozitieMouse, const DateNod& date) {
 	return (abs(date.x - pozitieMouse.x) <= date.lungimeSimbol / 2 && abs(date.y - pozitieMouse.y) <= date.inaltimeSimbol / 2);
 }
 
-Nod* gasesteNodRec(Nod* nodCurent, const DateNod& date, unordered_set<const Nod*> noduriVizitate) {
+Nod* gasesteNodRec(Nod* nodCurent, const DateNod& date, set<const Nod*> noduriVizitate) {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
 	if (verificareSimbolInZona({ date.x , date.y }, nodCurent->date))
@@ -97,7 +97,7 @@ Nod* gasesteNodRec(Nod* nodCurent, const DateNod& date, unordered_set<const Nod*
 }
 
 Nod* gasesteNod(Nod* nodCurent, const DateNod& date) {
-	const unordered_set<const Nod*> noduriVizitate;
+	const set<const Nod*> noduriVizitate;
 	return gasesteNodRec(nodCurent, date, noduriVizitate);
 }
 
@@ -141,7 +141,7 @@ Nod* gasesteNodInListaArbori(const DateNod& date) {
 	return nullptr;
 }
 
-Nod* gasesteNodLegatDeWhileRec(Nod* nodCurent, Nod* nodWhile, unordered_set<const Nod*>& noduriVizitate)
+Nod* gasesteNodLegatDeWhileRec(Nod* nodCurent, Nod* nodWhile, set<const Nod*>& noduriVizitate)
 {
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent))
 		return nullptr;
@@ -158,14 +158,28 @@ Nod* gasesteNodLegatDeWhile(Nod* nodWhile)
 {
 	if (nodWhile == nullptr)
 		return nullptr;
-	unordered_set<const Nod*> noduriVizitate;
+	set<const Nod*> noduriVizitate;
 	Nod* rezultat = gasesteNodLegatDeWhileRec(nodWhile->st, nodWhile, noduriVizitate);
 	if (rezultat == nullptr)
 		rezultat = gasesteNodLegatDeWhileRec(nodWhile->dr, nodWhile, noduriVizitate);
 	return  rezultat;
 }
 
-int numarNoduriRecursiv(const Nod* N, unordered_set<const Nod*>& noduriVizitate)
+int numarNoduriMapRecursiv(const Nod* N, set<const Nod*>& noduriVizitate, const map<const Nod*, unsigned int>& noduriParcurse) {
+	if (N == nullptr || noduriParcurse.find(N) != noduriParcurse.end() || noduriVizitate.count(N))
+		return 0;
+	noduriVizitate.insert(N);
+	return 1 + numarNoduriMapRecursiv(N->st, noduriVizitate, noduriParcurse) + numarNoduriMapRecursiv(N->dr, noduriVizitate, noduriParcurse);
+}
+
+int numarNoduriMap(const Nod* N, const map<const Nod*, unsigned int>& noduriParcurse) {
+	if (N == nullptr)
+		return 0;
+	set<const Nod*> noduriVizitate;
+	return numarNoduriMapRecursiv(N, noduriVizitate, noduriParcurse);
+}
+
+int numarNoduriRecursiv(const Nod* N, set<const Nod*>& noduriVizitate)
 {
 	if (N == nullptr || noduriVizitate.count(N))
 		return 0;
@@ -176,7 +190,7 @@ int numarNoduriRecursiv(const Nod* N, unordered_set<const Nod*>& noduriVizitate)
 int numarNoduri(const Nod* N) {
 	if (N == nullptr)
 		return 0;
-	unordered_set<const Nod*> noduriVizitate;
+	set<const Nod*> noduriVizitate;
 	return numarNoduriRecursiv(N, noduriVizitate);
 }
 
@@ -194,7 +208,7 @@ int numarNoduriDinListaArbori() {
 }
 
 void stergereTotSubNod(Nod*& N) {
-	static unordered_set<const Nod*> noduriVizitate;
+	static set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return;
 
@@ -229,7 +243,7 @@ bool esteRadacina(const Nod* N)
 
 //gaseste nodul tata al nodului cautat daca exista legatura intre ei
 Nod* gasesteNodTata(Nod* N, Nod*& nodCautat) {
-	static unordered_set<const Nod*> noduriVizitate;
+	static set<const Nod*> noduriVizitate;
 	if (N == nullptr || noduriVizitate.count(N))
 		return nullptr;
 	if (N->st == nodCautat || N->dr == nodCautat)
@@ -300,7 +314,7 @@ void stergereNod(Nod* N) {
 	stergereTotSubNod(N);
 }
 
-bool creareLegatura(Nod*& nod1, Nod*& nod2) {
+bool esteLegaturaValida(Nod*& nod1, Nod*& nod2) {
 	if (nod1 == nullptr || nod2 == nullptr)
 		return false;
 	//simbolul are deja nr. maxim de fii posibil

@@ -63,6 +63,15 @@
     <ClCompile Include="desenareLinie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="salvareDate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="salvareDate.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="incarcareDate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structs.h">
@@ -108,6 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="desenareLinie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="incarcareDate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

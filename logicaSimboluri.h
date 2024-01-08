@@ -3,12 +3,10 @@
 #include "functiiNod.h"
 using namespace sf;
 
-void logicaSimboluri(const RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+void logicaCreareSimbol(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int tip);
 
-void logicaAtribuire(Nod* N);
+void logicaStergereSimbol(const RenderWindow& fereastraAplicatie);
 
-void logicaCitire(const Nod* N);
+void logicaGasireNoduriDeLegat(const RenderWindow& fereastraAplicatie);
 
-void logicaAfisare(Nod* N);
-
-bool logicaDaca(Nod* N);
+void logicaLegaturaIntreSimboluri();

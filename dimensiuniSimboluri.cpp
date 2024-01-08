@@ -30,7 +30,7 @@ Vector2f dimensiuniNodDaca(const VideoMode& desktop)
 	return { static_cast<float>(desktop.width / 15 + desktop.height / 25), static_cast<float>(desktop.height / 25) };
 }
 
-Vector2f dimensiuniSimbol(const VideoMode& desktop, const int& tip)
+Vector2f dimensiuneSimbol(const VideoMode& desktop, const int& tip)
 {
 	switch (tip)
 	{

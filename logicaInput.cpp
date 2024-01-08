@@ -5,42 +5,21 @@
 #include "dimensiuniSimboluri.h"
 #include "evaluareExpresie.h"
 #include "logicaExecutare.h"
+#include "logicaSimboluri.h"
 
-void logicaLMB(const RenderWindow& fereastraAplicatie, Clock& timpCeas, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
+void logicaEnterParcurgere(string& expresieDeCitit, bool& seCitesteParcurgere, bool& esteApasatF12)
 {
-	if (timpCeas.getElapsedTime().asSeconds() < 1.0f && !citireExpresie)
-	{
-		nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
-		if (nodDeGasit != nullptr)
-		{
-			if (nodDeGasit->date.tip == TipNod::START || nodDeGasit->date.tip == TipNod::STOP)
-			{
-				nodDeGasit = nullptr;
-				return;
-			}
-
-			citireExpresie = true;
-			reseteazaModificareDimensiune();
-			expresieDeCitit = nodDeGasit->date.expresie;
-			cout << "Citire expresie!" << endl;
-		}
-	}
-	else
-	{
-		if (citireExpresie)
-		{
-			citireExpresie = false;
-			if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
-				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
-			}
-			cout << "Expresie citita: " << expresieDeCitit << '\n';
-			if (nodDeGasit != nullptr)
-				nodDeGasit->date.expresie = expresieDeCitit;
-			expresieDeCitit.clear();
-		}
-		timpCeas.restart();
-	}
+	if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r')
+		expresieDeCitit.pop_back();
+	const long double rezultat = evaluareExpresie(expresieDeCitit);
+	seteazaVariabila(getNumeVariabila(), rezultat);
+	const string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
+	cout << output << '\n';
+	stopCitirePtParcurgere();
+	seCitesteParcurgere = false;
+	esteApasatF12 = true;
 }
+
 void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit) {
 	if (nodDeGasit == nullptr)
 		return;
@@ -59,10 +38,165 @@ void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit)
 	}
 }
 
-
-void logicaF12()
+bool esteDubluClick(const Clock& timpCeas, const bool& citireExpresie)
 {
-	executareAlgoritm();
+	return timpCeas.getElapsedTime().asSeconds() < 1.0f && citireExpresie == false;
+}
+
+void logicaDubluClick(const RenderWindow& fereastraAplicatie, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
+{
+	nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
+	if (nodDeGasit != nullptr)
+	{
+		if (nodDeGasit->date.tip == TipNod::START || nodDeGasit->date.tip == TipNod::STOP)
+		{
+			nodDeGasit = nullptr;
+			return;
+		}
+
+		citireExpresie = true;
+		reseteazaModificareDimensiune();
+		expresieDeCitit = nodDeGasit->date.expresie;
+		cout << "Citire expresie!" << endl;
+	}
+}
+
+void logicaLMB(const RenderWindow& fereastraAplicatie, bool& seCitesteExpresie, bool& esteApasatLMB, bool& esteRidicatLMB, Nod*& nodDeGasit, string& expresieDeCitit, Clock& timpCeasLMB, Clock& timpApasatLMB)
+{
+	if (esteDubluClick(timpCeasLMB, seCitesteExpresie)) {
+		cout << "dublu";
+		logicaDubluClick(fereastraAplicatie, seCitesteExpresie, nodDeGasit, expresieDeCitit);
+	}
+	else
+	{
+		if (seCitesteExpresie)
+		{
+			if (!expresieDeCitit.empty() && expresieDeCitit[expresieDeCitit.size() - 1] == '\r') {
+				expresieDeCitit = expresieDeCitit.substr(0, expresieDeCitit.size() - 1);//sterge '\r' de la final
+			}
+			cout << "Expresie citita: " << expresieDeCitit << '\n';
+			if (nodDeGasit != nullptr)
+				nodDeGasit->date.expresie = expresieDeCitit;
+			seCitesteExpresie = false;
+			expresieDeCitit.clear();
+		}
+		timpCeasLMB.restart();
+	}
+	esteApasatLMB = false;
+	esteRidicatLMB = false;
+	timpApasatLMB.restart();
+}
+
+void actualizareSimbolDeMutat(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodDeMutatTata, Nod*& nodLegatDeWhile, const Clock& timpApasatLMB)
+{
+	if (timpApasatLMB.getElapsedTime().asSeconds() < 0.20f)
+		return;
+	if (nodDeMutat != nullptr)
+		return;
+	nodDeMutat = gasesteNodListaCuPozMouse(fereastraAplicatie);
+	if (nodDeMutat == nullptr)
+		return;
+
+	int pozDeMutat = -1;
+	const Nod* nodGasit = nullptr;
+	for (int i = listaArbori.size() - 1; i >= 0; --i) {
+		nodGasit = gasesteNodInArbore(listaArbori[i], nodDeMutat->date);
+		if (nodGasit != nullptr) {
+			pozDeMutat = i;
+			break;
+		}
+	}
+	if (pozDeMutat != -1) {
+		//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
+		nodDeMutatTata = gasesteNodTata(listaArbori[pozDeMutat].radacina, nodDeMutat);
+		if (nodDeMutat->date.tip == TipNod::WHILE)
+		{
+			nodLegatDeWhile = gasesteNodLegatDeWhile(nodDeMutat);
+		}
+		const Arbore arboreDeMutat = listaArbori[pozDeMutat];
+		listaArbori.erase(listaArbori.begin() + pozDeMutat);
+		listaArbori.push_back(arboreDeMutat);
+	}
+}
+
+void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodDeMutatTata, Nod*& nodLegatDeWhile, set<short>& iduriLiniiDeActualizat, set<Nod*>& noduriDeActualizat)
+{
+	if (nodDeMutat == nullptr)
+		return;
+	const Nod* nodSt = nodDeMutat->st;
+	const Nod* nodDr = nodDeMutat->dr;
+	stergereLiniiObstacoleCuNodulDat(nodDeMutat);
+	stergeSimbolObstacol(nodDeMutat);
+
+	nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
+	nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
+	const set<short> valoareSuprapusa = verificareSuprapunere(nodDeMutat);
+	for (auto& valoare : valoareSuprapusa)
+	{
+		if (valoare > 0) {
+			if (iduriLiniiDeActualizat.count(valoare) == 0) {
+				iduriLiniiDeActualizat.insert(valoare);
+			}
+		}
+		else if (valoare < 0)
+		{
+			Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
+			if (nodDeInserat == nullptr)
+				return;
+			if (noduriDeActualizat.count(nodDeInserat) == 0)
+				noduriDeActualizat.insert(nodDeInserat);
+		}
+	}
+
+	for (const auto& nod : noduriDeActualizat) {
+		adaugaSimbolCaObstacole(nod);
+	}
+	for (const auto& idLinie : iduriLiniiDeActualizat) {
+		actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat);
+	}
+
+	adaugaSimbolCaObstacole(nodDeMutat);
+	if (nodDeMutatTata != nullptr) {
+		adaugaLinieObstacol(nodDeMutatTata, nodDeMutat, false);
+	}
+	if (nodSt != nullptr) {
+		bool linieSpreWhile = false;
+		if (nodSt->date.tip == TipNod::WHILE)
+		{
+			if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodSt)) != nullptr &&
+				gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
+				linieSpreWhile = true;
+		}
+		adaugaLinieObstacol(nodDeMutat, nodSt, linieSpreWhile);
+	}
+	if (nodDr != nullptr) {
+		bool linieSpreWhile = false;
+		if (nodSt->date.tip == TipNod::WHILE)
+		{
+			if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodDr)) != nullptr &&
+				gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
+				linieSpreWhile = true;
+		}
+		adaugaLinieObstacol(nodDeMutat, nodDr, linieSpreWhile);
+	}
+	if (nodLegatDeWhile != nullptr) {
+		adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true);
+	}
+}
+
+void stopMutareSimbol(set<short>& iduriLiniiDeActualizat, set<Nod*> noduriDeActualizat, Nod*& nodDeMutat, Nod*& nodLegatDeWhile, Clock& timpApasatLMB)
+{
+	for (const auto& nod : noduriDeActualizat) {
+		adaugaSimbolCaObstacole(nod);
+	}
+	for (const auto& linie : iduriLiniiDeActualizat) {
+		actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
+	}
+	iduriLiniiDeActualizat.clear();
+	noduriDeActualizat.clear();
+	nodLegatDeWhile = nullptr;
+	nodDeMutat = nullptr;
+	timpApasatLMB.restart();
 }
 
 void logicaDelete()
@@ -79,16 +213,36 @@ bool esteApasatEnter = false;
 bool esteApasatF12 = false;
 bool esteApasatDelete = false;
 
+int esteApasatCreare = 0;
+bool esteApasatStergere = false;
+bool esteApasatLegare = false;
+bool esteRidicatLegare = false;
+
+bool seCitesteExpresie = false;
+bool seCitesteParcurgere = false;
+
 void logicaInput(const Event& event)
 {
-	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+	if (event.type == Event::MouseButtonPressed)
 	{
-		esteApasatLMB = true;
+		if (event.mouseButton.button == Mouse::Left) {
+			esteApasatLMB = true;
+		}
+		if (event.mouseButton.button == Mouse::Right) {
+			esteApasatLegare = true;
+		}
 	}
-	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+	if (event.type == Event::MouseButtonReleased)
 	{
-		esteRidicatLMB = true;
+		if (event.mouseButton.button == Mouse::Left) {
+			esteRidicatLMB = true;
+		}
+		if (event.mouseButton.button == Mouse::Right)
+		{
+			esteRidicatLegare = true;
+		}
 	}
+
 	if (event.type == Event::KeyPressed) {
 		if (event.key.code == Keyboard::Enter) {
 			esteApasatEnter = true;
@@ -99,6 +253,19 @@ void logicaInput(const Event& event)
 		if (event.key.code == Keyboard::Delete)
 		{
 			esteApasatDelete = true;
+		}
+		if (!seCitesteExpresie && !seCitesteParcurgere) {//input creare simbol
+			for (int i = Keyboard::Num0; i <= Keyboard::Num6; ++i) {
+				if (event.key.code == i) {
+					esteApasatCreare = i - Keyboard::Num0;
+					break;
+				}
+			}
+		}
+		if (!seCitesteExpresie && !seCitesteParcurgere &&
+			(event.key.code == Keyboard::BackSpace || event.key.code == Keyboard::Escape))//input stergere simbol
+		{
+			esteApasatStergere = true;
 		}
 	}
 }
@@ -115,8 +282,9 @@ void citireExpresie(const Event& event, string& expresieDeCitit)
 			ch = static_cast<char>(event.text.unicode);
 		}
 	}
-	else
+	else {
 		ultimaTastaApasata = '\0';
+	}
 
 	//daca tasta e apasata prelungit, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
 	if (ultimaTastaApasata == ch[0] && timpCeasTastatura.getElapsedTime().asSeconds() < 0.35f)
@@ -138,133 +306,51 @@ void citireExpresie(const Event& event, string& expresieDeCitit)
 
 void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
 {
-	//static initializeaza variabilele doar la prima apelare, ele pastrandu-si valoarea intre apeluri.
 	static Nod* nodDeGasit = nullptr;
 	static Nod* nodDeMutat = nullptr;
 	static Nod* nodDeMutatTata = nullptr;
 	static Nod* nodLegatDeWhile = nullptr;
-	static int pozDeMutat = -1;
-	static bool seCitesteExpresie = false;
 	static string expresieDeCitit;
 	static Clock timpCeasLMB, timpApasatLMB;
-	static bool seCitesteParcurgere = false;
+	static set<short> iduriLiniiDeActualizat;
+	static set<Nod*> noduriDeActualizat;
 
-	if (esteApasatLMB) {//verificare dublu click -> citire expresie
-		esteApasatLMB = false;
-		esteRidicatLMB = false;
-		logicaLMB(fereastraAplicatie, timpCeasLMB, seCitesteExpresie, nodDeGasit, expresieDeCitit);
-		timpApasatLMB.restart();
+	if (esteApasatLMB) {
+		logicaLMB(fereastraAplicatie, seCitesteExpresie, esteApasatLMB, esteRidicatLMB, nodDeGasit, expresieDeCitit, timpCeasLMB, timpApasatLMB);
 	}
-	if (timpApasatLMB.getElapsedTime().asSeconds() >= 0.20f) {
-		if (nodDeMutat == nullptr) {
-			nodDeMutat = gasesteNodListaCuPozMouse(fereastraAplicatie);
-			if (nodDeMutat != nullptr)
-			{
-				pozDeMutat = -1;
-				const Nod* nodGasit = nullptr;
-				for (int i = listaArbori.size() - 1; i >= 0; --i) {
-					nodGasit = gasesteNodInArbore(listaArbori[i], nodDeMutat->date);
-					if (nodGasit != nullptr) {
-						pozDeMutat = i;
-						break;
-					}
-				}
-				if (pozDeMutat != -1) {
-					//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
-					nodDeMutatTata = gasesteNodTata(listaArbori[pozDeMutat].radacina, nodDeMutat);
-					if (nodDeMutat->date.tip == TipNod::WHILE)
-					{
-						nodLegatDeWhile = gasesteNodLegatDeWhile(nodDeMutat);
-					}
-					const Arbore arboreDeMutat = listaArbori[pozDeMutat];
-					listaArbori.erase(listaArbori.begin() + pozDeMutat);
-					listaArbori.push_back(arboreDeMutat);
-				}
-			}
-		}
-	}
-	static unordered_set<short> iduriLiniiDeActualizat;
-	static unordered_set<Nod*> noduriDeActualizat;
+	actualizareSimbolDeMutat(fereastraAplicatie, nodDeMutat, nodDeMutatTata, nodLegatDeWhile, timpApasatLMB);
 	if (esteRidicatLMB)
 	{
-		for (const auto& nod : noduriDeActualizat) {
-			adaugaSimbolCaObstacole(nod);
-		}
-		for (const auto& linie : iduriLiniiDeActualizat) {
-			actualizeazaLinieObstacolPrinId(linie, nodDeMutat);
-		}
-		iduriLiniiDeActualizat.clear();
-		noduriDeActualizat.clear();
-		nodLegatDeWhile = nullptr;
-		nodDeMutat = nullptr;
-		pozDeMutat = -1;
-		timpApasatLMB.restart();
+		stopMutareSimbol(iduriLiniiDeActualizat, noduriDeActualizat, nodDeMutat, nodLegatDeWhile, timpApasatLMB);
 	}
 	else
 	{
-		if (nodDeMutat != nullptr)
-		{
-			const Nod* nodSt = nodDeMutat->st;
-			const Nod* nodDr = nodDeMutat->dr;
-			stergereLiniiObstacoleCuNodulDat(nodDeMutat);
-			stergeSimbolObstacol(nodDeMutat);
-			nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
-			nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
-
-			const set<short> valoareSuprapusa = verificareSuprapunere(nodDeMutat);
-			for (auto& valoare : valoareSuprapusa)
-			{
-				if (valoare > 0) {
-					if (iduriLiniiDeActualizat.count(valoare) == 0) {
-						iduriLiniiDeActualizat.insert(valoare);
-					}
-				}
-				else if (valoare < 0)
-				{
-					Nod* nodDeInserat = gasesteNodObstacolInLista(nodDeMutat);
-					if (nodDeInserat == nullptr)
-						return;
-					if (noduriDeActualizat.count(nodDeInserat) == 0)
-						noduriDeActualizat.insert(nodDeInserat);
-				}
-			}
-			for (const auto& nod : noduriDeActualizat) {
-				adaugaSimbolCaObstacole(nod);
-			}
-			for (const auto& idLinie : iduriLiniiDeActualizat) {
-				actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat);
-			}
-			adaugaSimbolCaObstacole(nodDeMutat);
-			if (nodDeMutatTata != nullptr)
-				adaugaLinieObstacol(nodDeMutatTata, nodDeMutat, false);
-			if (nodSt != nullptr) {
-				bool linieSpreWhile = false;
-				if (nodSt->date.tip == TipNod::WHILE)
-				{
-					if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodSt)) != nullptr &&
-						gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
-						linieSpreWhile = true;
-				}
-				adaugaLinieObstacol(nodDeMutat, nodSt, linieSpreWhile);
-			}
-			if (nodDr != nullptr) {
-				bool linieSpreWhile = false;
-				if (nodSt->date.tip == TipNod::WHILE)
-				{
-					if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodDr)) != nullptr &&
-						gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
-						linieSpreWhile = true;
-				}
-				adaugaLinieObstacol(nodDeMutat, nodDr, linieSpreWhile);
-			}
-			if (nodLegatDeWhile != nullptr)
-				adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true);
-		}
+		logicaMutareSimbol(fereastraAplicatie, nodDeMutat, nodDeMutatTata, nodLegatDeWhile, iduriLiniiDeActualizat, noduriDeActualizat);
+	}
+	if (esteApasatCreare != 0)
+	{
+		logicaCreareSimbol(fereastraAplicatie, desktop, esteApasatCreare - 1);
+		esteApasatCreare = 0;
+	}
+	if (esteApasatStergere)
+	{
+		logicaStergereSimbol(fereastraAplicatie);
+		esteApasatStergere = false;
+	}
+	if (esteApasatLegare)
+	{
+		logicaGasireNoduriDeLegat(fereastraAplicatie);
+	}
+	if (esteRidicatLegare)
+	{
+		logicaLegaturaIntreSimboluri();
+		esteApasatLegare = false;
+		esteRidicatLegare = false;
 	}
 	if (esteApasatF12)//executa algoritmul
 	{
 		if (!seCitesteParcurgere)
-			logicaF12();
+			executareAlgoritm();
 		esteApasatF12 = false;
 	}
 	if (esteApasatDelete)//resetaza totul
@@ -284,21 +370,12 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		citireExpresie(event, expresieDeCitit);
 		seCitesteParcurgere = true;
 	}
-
 	if (esteApasatEnter)//stop citire expresie
 	{
 		esteApasatEnter = false;
 		if (seCitesteParcurgere)
 		{
-			if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r')
-				expresieDeCitit.pop_back();
-			const long double rezultat = evaluareExpresie(expresieDeCitit);
-			seteazaVariabila(getNumeVariabila(), rezultat);
-			const string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
-			cout << output << '\n';
-			stopCitirePtParcurgere();
-			seCitesteParcurgere = false;
-			esteApasatF12 = true;
+			logicaEnterParcurgere(expresieDeCitit, seCitesteParcurgere, esteApasatF12);
 		}
 		else {
 			logicaEnter(seCitesteExpresie, nodDeGasit, expresieDeCitit);

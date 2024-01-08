@@ -2,9 +2,10 @@
 
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
+#include "logicaExecutare.h"
 #include "logicaSimboluri.h"
 
-bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, unordered_set<const Nod*>& noduriVizitate)
+bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, set<const Nod*>& noduriVizitate)
 {
 	if (N == nullptr || noduriVizitate.count(N))
 		return true;
@@ -39,7 +40,7 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, unordered_set<const No
 
 bool verificareStartStop(const Nod* radacina)
 {
-	unordered_set<const Nod*> noduriVizitate;
+	set<const Nod*> noduriVizitate;
 	int nrStart = 0, nrStop = 0;
 	if (!nrStartStop(nrStart, nrStop, radacina, noduriVizitate))
 		return false;
