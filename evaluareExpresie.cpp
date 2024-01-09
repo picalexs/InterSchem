@@ -293,28 +293,28 @@ struct operatori
 };
 
 map<string, operatori> reguliOperatori = {
-	{"==", {0, false}},
-	{"!=", {0, false}},
-	{"<", {0, false}},
-	{">", {0, false}},
-	{"<=", {0, false}},
-	{">=", {0, false}},
 	{"&&", {0, false}},
 	{"||", {0, false}},
-	{"(", {1, false}},
-	{"+", {2, false}},
-	{"-", {2, false}},
-	{"*", {3, false}},
-	{"/", {3, false}},
-	{"%", {3, false}},
-	{"^", {4, true}},
-	{"sin", {5, false}},
-	{"cos", {5, false}},
-	{"tg", {5, false}},
-	{"ctg", {5, false}},
-	{"ln", {5, false}},
-	{"abs", {5, false}},
-	{"sqrt", {5, false}}
+	{"==", {1, false}},
+	{"!=", {1, false}},
+	{"<", {1, false}},
+	{">", {1, false}},
+	{"<=", {1, false}},
+	{">=", {1, false}},
+	{"(", {2, false}},
+	{"+", {3, false}},
+	{"-", {3, false}},
+	{"*", {4, false}},
+	{"/", {4, false}},
+	{"%", {4, false}},
+	{"^", {5, true}},
+	{"sin", {6, false}},
+	{"cos", {6, false}},
+	{"tg", {6, false}},
+	{"ctg", {6, false}},
+	{"ln", {6, false}},
+	{"abs", {6, false}},
+	{"sqrt", {6, false}}
 };
 
 vector<atom> conversieInPostfixat(const vector<atom>& atomi)

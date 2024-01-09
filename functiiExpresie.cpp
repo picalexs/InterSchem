@@ -36,6 +36,27 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 		fereastraAplicatie.draw(textOutput);
 	}
 }
+
+void afisareVariabile(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+{
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
+	float spatiuMargini = 20;
+
+	string textVariabile = "Variabile:";
+	for (const auto& variabila : variabile) {
+		textVariabile += "\n" + variabila.first + "= ";
+
+		stringstream stream;
+		stream << defaultfloat << setprecision(6) << variabila.second;
+		textVariabile += stream.str();
+	}
+
+	Text textVariabileAfisate(textVariabile, fontGlobal, marimeFont);
+	textVariabileAfisate.setFillColor(Color::Black);
+	textVariabileAfisate.setPosition(spatiuMargini, desktop.height / 10);
+	fereastraAplicatie.draw(textVariabileAfisate);
+}
+
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
@@ -59,12 +80,6 @@ void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	fereastraAplicatie.draw(text2);
 	pozY += text2.getGlobalBounds().height + spatiuY;
 
-	/*string textLegaturi = ("Nr. de legaturi: " + to_string(listaLinii.size()));
-	Text text3(textLegaturi, fontGlobal, marimeFont);
-	text3.setFillColor(Color::Black);
-	text3.setPosition(spatiuMargini, pozY);
-	fereastraAplicatie.draw(text3);
-	pozY += text3.getGlobalBounds().height + spatiuY;*/
 
 	pozY = 0;
 	Text text4("Resetaza lista cu 'Del'", fontGlobal, marimeFont);
@@ -87,21 +102,6 @@ void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	text5.setPosition(desktop.width - spatiuMargini - text5.getLocalBounds().width, pozY);
 	fereastraAplicatie.draw(text5);
 	pozY += text5.getGlobalBounds().height + spatiuY;
-
-	// Text Variabile
-	string textVariabile = "Variabile:";
-	for (const auto& variabila : variabile) {
-		textVariabile += "\n" + variabila.first + "= ";
-
-		stringstream stream;
-		stream << defaultfloat << setprecision(6) << variabila.second;
-		textVariabile += stream.str();
-	}
-
-	Text textVariabileAfisate(textVariabile, fontGlobal, marimeFont);
-	textVariabileAfisate.setFillColor(Color::Black);
-	textVariabileAfisate.setPosition(spatiuMargini, pozY);
-	fereastraAplicatie.draw(textVariabileAfisate);
 }
 
 void stergereSpatii(string& expresie)

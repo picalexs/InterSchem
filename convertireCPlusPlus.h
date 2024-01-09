@@ -1,8 +1,8 @@
 #pragma once
 #include "functiiNod.h"
-#include <SFML/Graphics.hpp>
 #include "executareAlgoritm.h"
 #include <set>
+#include <SFML/Graphics.hpp>
 
 string getCodConvertit();
 

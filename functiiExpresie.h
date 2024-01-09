@@ -7,6 +7,8 @@ using namespace sf;
 
 void afisareTextLista(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
+void afisareVariabile(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& desktop);

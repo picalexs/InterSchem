@@ -427,7 +427,7 @@ Nod* gasesteNodObstacolInLista(Nod*& nod) {
 	return nullptr;
 }
 
-void desenareTriunghi(RenderWindow& fereastraAplicatie, const float x, const float y, const Color culoareLinie, const float lungimeLatura, const float grosimeLinie)
+void desenareTriunghi(RenderWindow& fereastraAplicatie, const float x, const float y, const Color culoareLinie, const float lungimeLatura, const float grosimeLinie, const float unghi)
 {
 	ConvexShape triunghi;
 	triunghi.setPointCount(3);
@@ -437,8 +437,9 @@ void desenareTriunghi(RenderWindow& fereastraAplicatie, const float x, const flo
 	triunghi.setPoint(1, Vector2f(lungimeLatura / 2, inaltime));
 	triunghi.setPoint(2, Vector2f(lungimeLatura, 0));
 
-	triunghi.setOrigin(0, 0);
-	triunghi.setPosition(x - lungimeLatura / 2 - grosimeLinie, y - inaltime + grosimeLinie);
+	triunghi.setOrigin(lungimeLatura / 2, grosimeLinie);
+	triunghi.setPosition(x, y);
+	triunghi.setRotation(unghi + 30);
 	triunghi.setFillColor(culoareLinie);
 	fereastraAplicatie.draw(triunghi);
 }
@@ -458,12 +459,12 @@ void desenareSegmentLinie(RenderWindow& fereastraAplicatie, const float x1, cons
 	fereastraAplicatie.draw(linie);
 }
 
-void desenareLinie(RenderWindow& fereastraAplicatie, const Linie& linie) {
+void desenareLinie(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Linie& linie) {
 	if (linie.coordonate.size() < 2) {
 		return;
 	}
 
-	constexpr float grosimeLinie = 6;
+	const float grosimeLinie = desktop.height / 275;
 	for (size_t i = 0; i < linie.coordonate.size() - 1; ++i) {
 		const auto coordonateCurente = linie.coordonate[i];
 		const auto coordonateUrmatoare = linie.coordonate[i + 1];
@@ -474,12 +475,14 @@ void desenareLinie(RenderWindow& fereastraAplicatie, const Linie& linie) {
 	if (!linie.coordonate.empty()) {
 		constexpr float lungimeLaturaTriunghi = 40;
 		const auto ultimaCoordonata = linie.coordonate.back();
-		desenareTriunghi(fereastraAplicatie, ultimaCoordonata.x_ecran, ultimaCoordonata.y_ecran, linie.culoareLinie, lungimeLaturaTriunghi, grosimeLinie);
+		const auto penultimaCoordonata = linie.coordonate[linie.coordonate.size() - 2];
+		const float unghi = static_cast<float>(atan2(ultimaCoordonata.y_ecran - penultimaCoordonata.y_ecran, ultimaCoordonata.x_ecran - penultimaCoordonata.x_ecran) * 180 / PI);
+		desenareTriunghi(fereastraAplicatie, ultimaCoordonata.x_ecran, ultimaCoordonata.y_ecran, linie.culoareLinie, lungimeLaturaTriunghi, grosimeLinie, unghi);
 	}
 }
 
-void desenareLinii(RenderWindow& fereastraAplicatie)
+void desenareLinii(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	for (const auto& linie : liniiDeDesenat)
-		desenareLinie(fereastraAplicatie, linie.second);
+		desenareLinie(fereastraAplicatie, desktop, linie.second);
 }

@@ -6,8 +6,8 @@
 #include "incarcareDate.h"
 #include "logicaInput.h"
 #include "salvareDate.h"
-#include "butoaneMeniu.h"
 #include "convertireCPlusPlus.h"
+#include "desenareButoaneMeniu.h"
 #include "logicaButoane.h"
 using namespace sf;
 
@@ -68,15 +68,15 @@ void creareFereastra()
 		}
 		fereastraAplicatie.clear(Color::White);
 		logicaExecutareInput(fereastraAplicatie, desktop, event);
-
-		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
-		desenareLinii(fereastraAplicatie);//deseneaza liniile dintre simboluri
-		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
-
 		logicaButon(fereastraAplicatie, desktop, event);
 		butoaneMeniu(fereastraAplicatie, desktop);
 
-		///functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
+		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
+		desenareLinii(fereastraAplicatie, desktop);//deseneaza liniile dintre simboluri
+		afisareListaOutput(fereastraAplicatie, desktop);//afiseaza listaConsola
+		afisareVariabile(fereastraAplicatie, desktop);//afiseaza variabilele pe ecran
+
+		//functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
 }

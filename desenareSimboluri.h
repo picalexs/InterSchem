@@ -6,6 +6,6 @@ using namespace sf;
 
 void creareSimbolPtListaArbori(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
-void desenareOutline(RenderWindow& fereastraAplicatie, const DateNod& dateNod, const int marimeOutline);
+void desenareOutline(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& dateNod, const int marimeOutline);
 
 Nod* verificareOutline(const RenderWindow& fereastraAplicatie);

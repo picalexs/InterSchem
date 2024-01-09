@@ -24,4 +24,4 @@ set<short> verificareSuprapunere(const Nod* nod);
 
 void initializareMatriceObstacole(const VideoMode& desktop);
 
-void desenareLinii(RenderWindow& fereastraAplicatie);
+void desenareLinii(RenderWindow& fereastraAplicatie, const VideoMode& desktop);

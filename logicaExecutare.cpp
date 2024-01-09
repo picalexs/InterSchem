@@ -190,7 +190,5 @@ bool logicaDaca(Nod* N)
 	if (N == nullptr || N->date.expresie.empty())
 		return false;
 	const long double rezultat = evaluareExpresie(N->date.expresie);
-	if (static_cast<bool>(rezultat))
-		return true;
-	return false;
+	return static_cast<bool>(rezultat);
 }
