@@ -134,7 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="butoaneMeniu.cpp" />
+    <ClCompile Include="desenareButoaneMeniu.cpp" />
     <ClCompile Include="convertireCPlusPlus.cpp" />
     <ClCompile Include="desenareLinie.cpp" />
     <ClCompile Include="dimensiuniSimboluri.cpp" />
@@ -157,7 +157,7 @@
     <ClCompile Include="testareArbore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="butoaneMeniu.h" />
+    <ClInclude Include="desenareButoaneMeniu.h" />
     <ClInclude Include="convertireCPlusPlus.h" />
     <ClInclude Include="desenareLinie.h" />
     <ClInclude Include="dimensiuniSimboluri.h" />

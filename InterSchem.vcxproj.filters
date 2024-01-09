@@ -72,7 +72,7 @@
     <ClCompile Include="incarcareDate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="butoaneMeniu.cpp">
+    <ClCompile Include="desenareButoaneMeniu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="logicaButoane.cpp">
@@ -128,7 +128,7 @@
     <ClInclude Include="incarcareDate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="butoaneMeniu.h">
+    <ClInclude Include="desenareButoaneMeniu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logicaButoane.h">

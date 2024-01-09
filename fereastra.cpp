@@ -5,11 +5,10 @@
 #include "functiiNod.h"
 #include "incarcareDate.h"
 #include "logicaInput.h"
-#include "logicaSimboluri.h"
 #include "salvareDate.h"
 #include "butoaneMeniu.h"
-#include "logicaButoane.h"
 #include "convertireCPlusPlus.h"
+#include "logicaButoane.h"
 using namespace sf;
 
 void creareFereastra()
@@ -62,27 +61,21 @@ void creareFereastra()
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F9) {
 				apasatF9 = false;
 			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F4)
+				convertire(fereastraAplicatie, desktop);
 			////////////////////////////////////////////////////////////
 		}
-		logicaExecutareInput(fereastraAplicatie, desktop, event);
 		fereastraAplicatie.clear(Color::White);
+		logicaExecutareInput(fereastraAplicatie, desktop, event);
 
 		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinii(fereastraAplicatie);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//deseneaza outputul
 
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F4)
-			convertire(fereastraAplicatie, desktop);
-
-		butonSalvare(fereastraAplicatie, desktop);
-		butonIncarcare(fereastraAplicatie, desktop);
-
-		butonDropDown(fereastraAplicatie, desktop);
-		butonRulare(fereastraAplicatie, desktop);
-		butonConvertire(fereastraAplicatie, desktop);
-		butonAjutor(fereastraAplicatie, desktop);
-
 		logicaButon(fereastraAplicatie, desktop, event);
+		butoaneMeniu(fereastraAplicatie, desktop);
+
 		///functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
