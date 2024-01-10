@@ -358,7 +358,7 @@ void stergeSimbolObstacol(const Nod* nod)
 
 void initializareMatriceObstacole(const VideoMode& desktop)
 {
-	marimeCasuta = 20;
+	marimeCasuta = static_cast<int>(desktop.width) / 160;
 	nrLinii = static_cast<int>(desktop.height) / marimeCasuta + 1;
 	nrColoane = static_cast<int>(desktop.width) / marimeCasuta + 1;
 	matriceObstacole = vector<vector<short int>>(nrLinii, vector<short int>(nrColoane, false));
@@ -473,7 +473,7 @@ void desenareLinie(RenderWindow& fereastraAplicatie, const VideoMode& desktop, c
 	}
 
 	if (!linie.coordonate.empty()) {
-		constexpr float lungimeLaturaTriunghi = 40;
+		const float lungimeLaturaTriunghi = static_cast<int>(desktop.width) / 80;
 		const auto ultimaCoordonata = linie.coordonate.back();
 		const auto penultimaCoordonata = linie.coordonate[linie.coordonate.size() - 2];
 		const float unghi = static_cast<float>(atan2(ultimaCoordonata.y_ecran - penultimaCoordonata.y_ecran, ultimaCoordonata.x_ecran - penultimaCoordonata.x_ecran) * 180 / PI);

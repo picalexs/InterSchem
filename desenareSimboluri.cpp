@@ -281,7 +281,7 @@ void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoM
 	noduriVizitate.insert(N);
 	if (nodCuOutline == N)
 	{
-		desenareOutline(fereastraAplicatie, desktop, N->date, 30);
+		desenareOutline(fereastraAplicatie, desktop, N->date, desktop.width / 100);
 	}
 
 	creareSimbol(fereastraAplicatie, desktop, N->date, false);
