@@ -217,8 +217,8 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreW
 	bool drumDus = true;
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2;
 	const float inaltimeSimbol2 = nod2->date.inaltimeSimbol / 2;
-	const int iStart1 = interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrColoane - 1);
-	const int iStart2 = interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2), 0, nrColoane - 1);
+	const int iStart1 = interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrLinii - 1);
+	const int iStart2 = interval(convertesteInCoordMatrice(nod2->date.y - inaltimeSimbol2), 0, nrLinii - 1);
 
 	Punct start = {
 	interval(convertesteInCoordMatrice(nod1->date.x), 0, nrColoane - 1),
