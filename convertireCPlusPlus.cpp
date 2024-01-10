@@ -52,7 +52,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			if (s[i] == '"')
 			{
 				nrG++;
-				if (nrG % 2 == 0 && i != s.size() - 1)
+				if (nrG % 2 == 0 && i != s.size() - 1) ///daca am ghilimele inchise si daca n am ajuns la final
 				{
 					codConvertit += s[i];
 					codConvertit += " <<";
@@ -61,7 +61,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 					codConvertit += s[i];
 			}
 			else
-				if (s[i + 1] == '"' && s[i-1]!='"' && nrG % 2 == 0) ///verific daca urmeaza ghilimele
+				if (s[i + 1] == '"' && s[i-1]!='"' && nrG % 2 == 0) ///verific daca urmeaza ghilimele si daca nu au fost deja
 				{
 					codConvertit += " <<";
 					codConvertit += s[i];
