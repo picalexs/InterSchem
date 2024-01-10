@@ -6,6 +6,23 @@ int nrLinii, nrColoane, marimeCasuta;
 constexpr float marimeSpatiu = 20.0f;
 vector<vector<short int>> matriceObstacole;
 
+void afisareMatrice()
+{
+	for (int i = 0; i < nrLinii; i++)
+	{
+		for (int j = 0; j < nrColoane; j++)
+		{
+			if (matriceObstacole[i][j] < 0)
+				cout << "X ";
+			else if (matriceObstacole[i][j] > 0)
+				cout << matriceObstacole[i][j] << " ";
+			else
+				cout << ". ";
+		}
+		cout << endl;
+	}
+}
+
 void resetMatrice()
 {
 	matriceObstacole.clear();

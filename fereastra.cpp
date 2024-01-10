@@ -41,6 +41,17 @@ void creareFereastra()
 			}
 			logicaInput(event);
 			//////////////////////////DEBUGGING//////////////////////////
+			static bool apasatF11 = false;
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::F11 && !apasatF11) {
+					apasatF11 = true;
+					afisareMatrice();
+				}
+			}
+			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
+				apasatF11 = false;
+			}
+
 			static bool apasatF10 = false;
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F10 && !apasatF10) {

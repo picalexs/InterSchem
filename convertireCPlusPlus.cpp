@@ -10,8 +10,11 @@ string getCodConvertit()
 	return codConvertit;
 }
 
+int nrSpatii = 1;
+
 void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
+	int i;
 	static set<const Nod*> noduriVizitate;
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent) != 0)
 		return;
@@ -24,28 +27,48 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "float " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
 	{
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "cin>> " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "cout<< " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
 	{
+		for (i = 1; i <= nrSpatii; i++)
+			 codConvertit += ' ';
 		codConvertit += "if(" + nodCurent->date.expresie + ")" + "\n";
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "{\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "}\n";
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "else\n";
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "{\n";
+		nrSpatii *= 2;
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
+		nrSpatii /= 2;
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "}\n";
 	}
 	if (nodCurent->date.tip == TipNod::CAT_TIMP)
