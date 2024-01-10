@@ -209,7 +209,7 @@ void determinareCulori(const TipNod tip, const bool& isOutline, Color& culoareSi
 		culoareDa = Color(30, 222, 30);
 		culoareNu = Color(212, 68, 52);
 		break;
-	case TipNod::WHILE:
+	case TipNod::CAT_TIMP:
 		culoareSimbol = Color(208, 149, 198);
 		culoareDa = Color(30, 222, 30);
 		culoareNu = Color(212, 68, 52);
@@ -239,7 +239,7 @@ void switchDesen(RenderWindow& fereastraAplicatie, const DateNod& date, const Co
 	case TipNod::AFISARE:
 		desenareNodAfisare(fereastraAplicatie, date, culoareSimbol); break;
 	case TipNod::DACA:
-	case TipNod::WHILE:
+	case TipNod::CAT_TIMP:
 		desenareNodDaca(fereastraAplicatie, date, culoareSimbol, culoareDa, culoareNu); break;
 	default:
 		break;

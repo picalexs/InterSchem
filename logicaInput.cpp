@@ -109,7 +109,7 @@ void actualizareSimbolDeMutat(const RenderWindow& fereastraAplicatie, Nod*& nodD
 	if (pozDeMutat != -1) {
 		//punem termenul selectat la final pentru a aparea deasupra celorlalte simboluri
 		nodDeMutatTata = gasesteNodTata(listaArbori[pozDeMutat].radacina, nodDeMutat);
-		if (nodDeMutat->date.tip == TipNod::WHILE)
+		if (nodDeMutat->date.tip == TipNod::CAT_TIMP)
 		{
 			nodLegatDeWhile = gasesteNodLegatDeWhile(nodDeMutat);
 		}
@@ -161,7 +161,7 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 	}
 	if (nodSt != nullptr) {
 		bool linieSpreWhile = false;
-		if (nodSt->date.tip == TipNod::WHILE)
+		if (nodSt->date.tip == TipNod::CAT_TIMP)
 		{
 			if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodSt)) != nullptr &&
 				gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
@@ -171,7 +171,7 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 	}
 	if (nodDr != nullptr) {
 		bool linieSpreWhile = false;
-		if (nodSt->date.tip == TipNod::WHILE)
+		if (nodSt->date.tip == TipNod::CAT_TIMP)
 		{
 			if (gasesteNodLegatDeWhile(const_cast<Nod*>(nodDr)) != nullptr &&
 				gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)

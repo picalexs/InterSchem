@@ -227,7 +227,7 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreW
 		nod1->date.y + inaltimeSimbol1
 	};
 
-	if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::WHILE)
+	if (nod1->date.tip == TipNod::DACA || nod1->date.tip == TipNod::CAT_TIMP)
 	{
 		constexpr int spatiuCasute = -2;
 		if (nod1->st == nod2)
@@ -333,7 +333,7 @@ void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
 		for (int coloana = startX; coloana <= stopX; coloana++)
 			matriceObstacole[linie][coloana] = valoareDeSetat;
 
-	if (nod->date.tip == TipNod::DACA || nod->date.tip == TipNod::WHILE)
+	if (nod->date.tip == TipNod::DACA || nod->date.tip == TipNod::CAT_TIMP)
 	{
 		constexpr int distanta = 4;
 		const int start = convertesteInCoordMatrice(nod->date.x);

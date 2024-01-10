@@ -31,10 +31,10 @@ void logicaStergereSimbol(const RenderWindow& fereastraAplicatie)
 		if (nodDeSters != nullptr)
 		{
 			cout << "Sters: tip= " << static_cast<int>(nodDeSters->date.tip) << ", (" << nodDeSters->date.x << ',' << nodDeSters->date.y << ")\n";
-			if (nodDeSters->st != nullptr && nodDeSters->st->date.tip == TipNod::WHILE
+			if (nodDeSters->st != nullptr && nodDeSters->st->date.tip == TipNod::CAT_TIMP
 				&& esteNodInArbore(nodDeSters, nodDeSters->st))
 				nodDeSters->st->date.tip = TipNod::DACA;
-			if (nodDeSters->dr != nullptr && nodDeSters->dr->date.tip == TipNod::WHILE
+			if (nodDeSters->dr != nullptr && nodDeSters->dr->date.tip == TipNod::CAT_TIMP
 				&& esteNodInArbore(nodDeSters, nodDeSters->dr))
 				nodDeSters->dr->date.tip = TipNod::DACA;
 			stergereNod(nodDeSters);
@@ -63,19 +63,19 @@ void logicaGasireNoduriDeLegat(const RenderWindow& fereastraAplicatie)
 pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodStop) {
 	if (nodStart == nullptr || nodStop == nullptr)
 		return { -1,-1 };
-	//de la nodul stop nu se poate face legatura
-	if (nodStart->date.tip == TipNod::STOP)
+	//de la nodul stop nu se poate face legatura, iar nodul start trebuie sa fie radacina
+	if (nodStart->date.tip == TipNod::STOP || nodStop->date.tip == TipNod::START)
 		return { -1,-1 };
 
 	//simbolul are deja nr. maxim de fii posibil
-	if (((nodStart->date.tip == TipNod::DACA || nodStart->date.tip == TipNod::WHILE) && nodStart->st != nullptr && nodStart->dr != nullptr)
-		|| (nodStart->date.tip != TipNod::DACA && nodStart->date.tip != TipNod::WHILE && (nodStart->st != nullptr || nodStart->dr != nullptr)))
+	if (((nodStart->date.tip == TipNod::DACA || nodStart->date.tip == TipNod::CAT_TIMP) && nodStart->st != nullptr && nodStart->dr != nullptr)
+		|| (nodStart->date.tip != TipNod::DACA && nodStart->date.tip != TipNod::CAT_TIMP && (nodStart->st != nullptr || nodStart->dr != nullptr)))
 		return { -1,-1 };
 
 	//exista deja o legatura intre nodStart si nodStop
 	if (existaLinie(nodStart, nodStop)
 		&& nodStart->date.tip != TipNod::DACA && nodStop->date.tip != TipNod::DACA
-		&& nodStart->date.tip != TipNod::WHILE && nodStop->date.tip != TipNod::WHILE)
+		&& nodStart->date.tip != TipNod::CAT_TIMP && nodStop->date.tip != TipNod::CAT_TIMP)
 		return { -1,-1 };
 
 	const int pozArbore1 = pozitiaArboreleNodului(nodStart);
@@ -86,7 +86,7 @@ pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodSto
 
 	if (pozArbore1 == pozArbore2)
 	{
-		if (nodStop->date.tip == TipNod::WHILE)
+		if (nodStop->date.tip == TipNod::CAT_TIMP)
 			return { -1,-1 };
 		if (nodStop->date.tip == TipNod::DACA) {
 			if (!esteNodInArbore(nodStart, nodStop->st) && !esteNodInArbore(nodStart, nodStop->dr))
@@ -96,9 +96,9 @@ pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodSto
 			return { -1,-1 }; // incerc sa conectez nodStart de nodStop(care nu este while, deci nu este bine)
 		}
 		if (nodStart->date.tip == TipNod::DACA)
-			nodStart->date.tip = TipNod::WHILE;
+			nodStart->date.tip = TipNod::CAT_TIMP;
 		else if (nodStop->date.tip == TipNod::DACA)
-			nodStop->date.tip = TipNod::WHILE;
+			nodStop->date.tip = TipNod::CAT_TIMP;
 	}
 	return { pozArbore1, pozArbore2 };
 }
@@ -134,7 +134,7 @@ void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata)
 			stergereDinListaArbori(nod2);
 		}
 
-		if (nod2->date.tip == TipNod::WHILE && esteNodInArbore(nod1, nod2)) {
+		if (nod2->date.tip == TipNod::CAT_TIMP && esteNodInArbore(nod1, nod2)) {
 			adaugaLinieObstacol(nod1, nod2, true);
 		}
 		else {

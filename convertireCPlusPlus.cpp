@@ -48,7 +48,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 		codConvertit += "}\n";
 	}
-	if (nodCurent->date.tip == TipNod::WHILE)
+	if (nodCurent->date.tip == TipNod::CAT_TIMP)
 	{
 		codConvertit += "while(" + nodCurent->date.expresie + ")" + "\n";
 		codConvertit += "{\n";

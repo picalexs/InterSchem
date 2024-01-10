@@ -13,7 +13,16 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, set<const Nod*>& nodur
 	if (N->date.tip == TipNod::START) {
 		nrStart++;
 		if (nrStart > 1) {//am mai mult de un Nod start
-			const string eroare = "Eroare: Are mai mult de un Nod start!";
+			const string eroare = "Eroare: Are mai mult de un nod start!";
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+	}
+	else if (N->date.tip == TipNod::CAT_TIMP || N->date.tip == TipNod::DACA)
+	{
+		if (N->st == nullptr || N->dr == nullptr) {
+			const string eroare = "Eroare: Are un nod DACA/CAT TIMP cu mai putin de 2 fii!";
 			cout << eroare << '\n';
 			listaConsola.push_back(eroare);
 			return false;
@@ -28,9 +37,9 @@ bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, set<const Nod*>& nodur
 			return false;
 		}
 	}
-	else if (N->dr == nullptr && N->st == nullptr)//se afla un Nod diferit de 1 ca frunza
+	else if (N->dr == nullptr && N->st == nullptr)//se afla un Nod diferit de stop ca frunza
 	{
-		const string eroare = "Eroare: Lipseste un Nod stop!";
+		const string eroare = "Eroare: Lipseste un nod stop!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -45,7 +54,7 @@ bool verificareStartStop(const Nod* radacina)
 	if (!nrStartStop(nrStart, nrStop, radacina, noduriVizitate))
 		return false;
 	if (nrStop == 0 || nrStart == 0) {
-		const string eroare = "Eroare: Nu are Nod start sau Nod stop!";
+		const string eroare = "Eroare: Nu are nod start sau Nod stop!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -56,7 +65,7 @@ bool verificareStartStop(const Nod* radacina)
 bool esteAlgoritmCorect()
 {
 	if (listaArbori.empty() || listaArbori.size() > 1) {
-		const string eroare = "Eroare: Nu are forma buna! Nu are exact un \"arbore\" de parcurs";
+		const string eroare = "Eroare: Nu are forma buna! Nu are exact un drum de parcurs";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -65,7 +74,7 @@ bool esteAlgoritmCorect()
 		return false;
 	if (listaArbori[0].radacina->date.tip != TipNod::START)
 	{
-		const string eroare = "Eroare: Nu are Nod start la inceput!";
+		const string eroare = "Eroare: Nu are nod start la inceput!";
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -96,7 +105,7 @@ Nod* passParcurgere(Nod* N)
 		logicaAfisare(N);
 		return N->st;
 	case TipNod::DACA:
-	case TipNod::WHILE:
+	case TipNod::CAT_TIMP:
 		if (logicaDaca(N)) {
 			return N->st;
 		}
