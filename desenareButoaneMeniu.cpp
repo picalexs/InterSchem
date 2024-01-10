@@ -1,164 +1,170 @@
 #include "desenareButoaneMeniu.h"
 
+int lungimeButonStandard = 0;
+int inaltimeButonStandard = 0;
+int pozitieXSimbolStandard = 0;
+int pozitieYSimbolStandard = 0;
+Color culoareOutlineStandard(232, 157, 51);
+Color culoareOutlineCreare(145, 15, 40);
+Color culoareOutlineCreareSimboluri(212, 42, 75);
+Color culoareOutlineRulare(24, 117, 158);
+Color culoareOutlineExecutare(33, 138, 184);
+Color culoareCreare1(235, 100, 128);
+Color culoareCreare2(232, 77, 108);
+Color culoareRulare(119, 196, 230);
+Color culoareExecutare(161, 208, 230);
+Color culoareStandard(255, 217, 106);
+
+void setDimensiuniStandard(const VideoMode& desktop)
+{
+	lungimeButonStandard = desktop.width / 10;
+	inaltimeButonStandard = desktop.height / 25;
+	pozitieXSimbolStandard = desktop.width / 100;
+	pozitieYSimbolStandard = desktop.height / 100;
+}
+
 void butonSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(desktop.width / 100, desktop.height / 100);
-	rectangle.setFillColor(sf::Color(0, 205, 205));
+	rectangle.setPosition(pozitieXSimbolStandard, pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(0, 0, 204));
+	rectangle.setOutlineColor(culoareOutlineStandard);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Salvare", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(desktop.width / 17, desktop.height / 27);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
-
 }
 
 void butonIncarcare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(12 * desktop.width / 100, desktop.height / 100);
-	rectangle.setFillColor(sf::Color(0, 205, 205));
+	rectangle.setPosition(12 * pozitieXSimbolStandard, pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(0, 0, 204));
+	rectangle.setOutlineColor(culoareOutlineStandard);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Incarcare", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(17 * desktop.width / 100, desktop.height / 27);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
-
 }
+
 
 void butonStart(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 8 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(209, 31, 120));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Start", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 10 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonStop(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 12 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(204, 0, 102));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 9.5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Stop", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 14 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonCitire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 16 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(209, 31, 120));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 14 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Citire", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 18 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonAfisare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 20 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(204, 0, 102));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 18.5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Afisare", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 22 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonAtribuire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 24 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(209, 31, 120));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 23 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Atribuire", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 26 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 28 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(204, 0, 102));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 27.5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 
 	fereastraAplicatie.draw(rectangle);
 
@@ -166,134 +172,124 @@ void butonDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	Text mainText("Decizie", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 30 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonCatTimp(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, 32 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(209, 31, 120));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 33 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Cat Timp", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, 48 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(78 * desktop.width / 100, desktop.height / 100);
-	rectangle.setFillColor(sf::Color(255, 255, 0));
+	rectangle.setPosition(78 * pozitieXSimbolStandard, pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareRulare);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(239, 255, 0));
+	rectangle.setOutlineColor(culoareOutlineRulare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Convertire C++", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(83 * desktop.width / 100, desktop.height / 27);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonSalvareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int lungimeButon = desktop.width / 16;
-	const int inaltimeButon = desktop.height / 18;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	const int inaltimeButon = desktop.height / 24;
+	RectangleShape rectangle(Vector2f(lungimeButon, inaltimeButon));
 
-	rectangle.setPosition(71 * desktop.width / 100, 12 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(0, 205, 205));
+	rectangle.setPosition(71 * pozitieXSimbolStandard, 12 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(0, 0, 204));
+	rectangle.setOutlineColor(culoareOutlineStandard);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Salvare", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(74 * desktop.width / 100, 14 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(89 * desktop.width / 100, desktop.height / 100);
-	rectangle.setFillColor(sf::Color(255, 255, 0));
+	rectangle.setPosition(89 * pozitieXSimbolStandard, pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareRulare);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(239, 255, 0));
+	rectangle.setOutlineColor(culoareOutlineRulare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Rularea codului", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(94 * desktop.width / 100, desktop.height / 27);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonRulareTotal(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(89 * desktop.width / 100, 8 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(255, 255, 0));
+	rectangle.setPosition(89 * pozitieXSimbolStandard, 5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareExecutare);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(239, 255, 0));
+	rectangle.setOutlineColor(culoareOutlineExecutare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Rulare Total", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(94 * desktop.width / 100, 10 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
 void butonRularePas(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 25;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(89 * desktop.width / 100, 12 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(255, 255, 0));
+	rectangle.setPosition(89 * pozitieXSimbolStandard, 9.5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareExecutare);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(239, 255, 0));
+	rectangle.setOutlineColor(culoareOutlineExecutare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Pas cu Pas", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(94 * desktop.width / 100, 14 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
@@ -301,41 +297,38 @@ void butonAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int lungimeButon = desktop.width / 40;
 	const int inaltimeButon = desktop.width / 40;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButon, inaltimeButon));
 
-	rectangle.setPosition(96 * desktop.width / 100, 87 * desktop.height / 100);
-	rectangle.setFillColor(sf::Color(240, 138, 138));
+	rectangle.setPosition(96.5 * pozitieXSimbolStandard, 94.5 * pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare2);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(150, 80, 80));
+	rectangle.setOutlineColor(culoareOutlineCreare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("?", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(97.25 * desktop.width / 100, 88.75 * desktop.height / 100);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
-
 void butonDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungimeButon = desktop.width / 10;
-	const int inaltimeButon = desktop.height / 15;
-	sf::RectangleShape rectangle(sf::Vector2f(lungimeButon, inaltimeButon));
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * desktop.width / 100, desktop.height / 100);
-	rectangle.setFillColor(sf::Color(204, 0, 102));
+	rectangle.setPosition(23 * pozitieXSimbolStandard, pozitieYSimbolStandard);
+	rectangle.setFillColor(culoareCreare2);
 	rectangle.setOutlineThickness(desktop.width / 350);
-	rectangle.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle.setOutlineColor(culoareOutlineCreare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Instructiuni", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin((marginiText.left) + marginiText.width / 2, (marginiText.top + marginiText.height) / 2);
-	mainText.setPosition(28 * desktop.width / 100, desktop.height / 27);
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
 
@@ -353,11 +346,11 @@ void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 }
 void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	const int lungime = 60 * desktop.width / 100;
-	const int inaltime = 72 * desktop.height / 100;
+	const int lungime = 60 * pozitieXSimbolStandard;
+	const int inaltime = 72 * pozitieYSimbolStandard;
 	RectangleShape rectangle(Vector2f(lungime, inaltime));
 
-	rectangle.setPosition(70 * desktop.width / 100, 10 * desktop.height / 100);
+	rectangle.setPosition(70 * pozitieXSimbolStandard, 10 * pozitieYSimbolStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(Color(0, 0, 0));
 	rectangle.setFillColor(Color(255, 255, 255));
@@ -374,17 +367,17 @@ void desenareDropDownRulare(RenderWindow& fereastraAplicatie, const VideoMode& d
 
 void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	float buttonX = 0.91f * desktop.width / 100;
-	float buttonY = 0.83f * desktop.height / 100;
+	float buttonX = 0.91f * pozitieXSimbolStandard;
+	float buttonY = 0.83f * pozitieYSimbolStandard;
 	Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 
-	RenderWindow newWindow(VideoMode(static_cast<float>(50 * desktop.width / 100), static_cast<float>(50 * desktop.height / 100)), "Ajutor");
+	RenderWindow newWindow(VideoMode(static_cast<float>(50 * pozitieXSimbolStandard), static_cast<float>(50 * pozitieYSimbolStandard)), "Ajutor");
 	newWindow.setFramerateLimit(60);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	Text mainText("Proiect InterSchem\n \n Blocurile se vor muta dupa mouse, daca este apasat butonul din stanga;\n \n Pentru a crea legaturi, se vor trasa cu butonul din dreapta mouse-ului; \n \n Pentru a crea blocuri, se vor apasa tastele 1(START), 2(STOP)\n 3(ATRIBUIRE), 4(CITIRE), 5(AFISARE), \n 6(DECIZIE) sau se vor folosi butoanele din meniu;\n \n Pentru a sterge un bloc si legatura sa, se va apasa ESCAPE\n \n Pentru executarea algoritmului se va folosi F12 \n \n Butonul de salvare va salva schema logica, iar cu cel de incarcare se vor \n incarca scheme logice deja facute", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::White);
-	mainText.setPosition(desktop.width / 100, desktop.height / 100);
+	mainText.setPosition(pozitieXSimbolStandard, pozitieYSimbolStandard);
 
 	while (newWindow.isOpen())
 	{

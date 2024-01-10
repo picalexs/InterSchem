@@ -28,6 +28,7 @@ void creareFereastra()
 
 	atribuireConstanteCunoscute();//PI, e, g, phi;
 	initializareMatriceObstacole(desktop);
+	setDimensiuniStandard(desktop);
 
 	while (fereastraAplicatie.isOpen())
 	{
