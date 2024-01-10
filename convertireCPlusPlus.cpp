@@ -16,6 +16,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 {
 	int i;
 	static set<const Nod*> noduriVizitate;
+	static string s;
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent) != 0)
 		return;
 	noduriVizitate.insert(nodCurent);
@@ -41,9 +42,36 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	}
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
+		int nrG = 0;
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
-		codConvertit += "cout<< " + nodCurent->date.expresie + ";\n";
+		codConvertit += "cout << ";
+		s += nodCurent->date.expresie;
+		for (i = 0; i < s.size(); i++)
+		{
+			if (s[i] == '"')
+			{
+				nrG++;
+				if (nrG % 2 == 0 && i!=s.size()-1)
+				{
+					codConvertit += s[i];
+					codConvertit += " <<";
+				}
+				else
+					codConvertit += s[i];
+			}
+			else
+				if (s[i + 1] == '"'&& s[i-2]!='"' && nrG % 2 == 0)
+				{
+					codConvertit += " <<";
+					codConvertit += s[i];
+				}
+			else
+			codConvertit += s[i];
+		}
+		codConvertit += ";\n";
+		///codConvertit += "cout<< " + nodCurent->date.expresie + ";\n";
+		s.clear();
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
@@ -54,29 +82,43 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "{\n";
+		nrSpatii += 4;
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
+		nrSpatii -= 4;
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "}\n";
-		for (i = 1; i <= nrSpatii; i++)
-			codConvertit += ' ';
-		codConvertit += "else\n";
-		for (i = 1; i <= nrSpatii; i++)
-			codConvertit += ' ';
-		codConvertit += "{\n";
-		nrSpatii *= 2;
-		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
-		nrSpatii /= 2;
-		for (i = 1; i <= nrSpatii; i++)
-			codConvertit += ' ';
-		codConvertit += "}\n";
+		if (nodCurent->dr->date.tip!=TipNod::STOP)
+		{
+			for (i = 1; i <= nrSpatii; i++)
+				codConvertit += ' ';
+			codConvertit += "else\n";
+			for (i = 1; i <= nrSpatii; i++)
+				codConvertit += ' ';
+			codConvertit += "{\n";
+			nrSpatii += 4;
+			convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
+			nrSpatii -= 4;
+			for (i = 1; i <= nrSpatii; i++)
+				codConvertit += ' ';
+			codConvertit += "}\n";
+		}
 	}
 	if (nodCurent->date.tip == TipNod::WHILE)
 	{
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "while(" + nodCurent->date.expresie + ")" + "\n";
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "{\n";
+		nrSpatii += 4;
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
+		nrSpatii -= 4;
+		for (i = 1; i <= nrSpatii; i++)
+			codConvertit += ' ';
 		codConvertit += "}\n";
+
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 	}
 	noduriVizitate.clear();
@@ -84,6 +126,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 
 void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
+	int i;
 	codConvertit.clear();
 	if (!esteAlgoritmCorect())
 		return;
@@ -94,6 +137,9 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	codConvertit += "{\n";
 
 	convertireInCodRec(listaArbori[0].radacina, fereastraAplicatie, desktop);
+
+	for (i = 1; i <= nrSpatii; i++)
+		codConvertit += ' ';
 
 	codConvertit += "return 0;\n";
 	codConvertit += "}\n";
