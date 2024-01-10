@@ -4,6 +4,8 @@
 #include "convertireCPlusPlus.h"
 #include <cstdio>
 #include <set>
-void salvareDate();
+#include <chrono>
+#include <ctime>
+void salvareDate(const VideoMode& desktop);
 
 void salvareCodConvertit();

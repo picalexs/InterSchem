@@ -53,11 +53,11 @@ void logicaButoaneRulare(const Vector2i pozitieMouse, VideoMode desktop)
 void logicaFisiere(const Vector2i pozitieMouse, VideoMode desktop)
 {
 	if (verificareButon(pozitieMouse, desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
-		salvareDate();
+		salvareDate(desktop);
 		cout << "Apasat Buton Salvare!\n";
 	}
 	else if (verificareButon(pozitieMouse, 12 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
-		incarcareDate();
+		incarcareDate(desktop);
 		cout << "Apasat Buton Incarcare!\n";
 	}
 	if (verificareButon(pozitieMouse, 71 * desktop.width / 100, 12 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {

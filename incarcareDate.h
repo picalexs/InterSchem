@@ -4,4 +4,4 @@
 #include "desenareLinie.h"
 #include "logicaSimboluri.h"
 
-void incarcareDate();
+void incarcareDate(const VideoMode& desktop);

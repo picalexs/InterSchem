@@ -1,5 +1,8 @@
 #include "salvareDate.h"
 
+#include <iomanip>
+#include <sstream>
+
 map<const Nod*, unsigned int> noduriParcurse;
 unsigned int index = 1;
 void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
@@ -75,11 +78,23 @@ FILE* creeazaFisier(const string& numeDefault, const string& numeExtensie) {
 	return fisier;
 }
 
-void salvareDate()
+string obtineDataCalendaristica() {
+	const auto acum = chrono::system_clock::now();
+	const time_t dataDeAzi = chrono::system_clock::to_time_t(acum);
+	const tm* dataFormatata = localtime(&dataDeAzi);
+	stringstream ss;
+	ss << put_time(dataFormatata, "%d/%m/%Y");
+	return ss.str();
+}
+
+void salvareDate(const VideoMode& desktop)
 {
 	FILE* fisier = creeazaFisier("date", "its");
+	const string dataCalendaristica = obtineDataCalendaristica();
+	fprintf(fisier, "%s\n", dataCalendaristica.c_str());
+	fprintf(fisier, "Rezolutie ecran: %dx%d\n", desktop.width, desktop.height);
+	fprintf(fisier, "Nr. Arbori: %d\n", static_cast<int>(listaArbori.size()));
 
-	fprintf(fisier, "%d\n", listaArbori.size());
 	for (int i = 0; i < listaArbori.size(); i++)
 	{
 		if (listaArbori[i].radacina != nullptr) {

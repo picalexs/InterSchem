@@ -1,5 +1,4 @@
 #include "executareAlgoritm.h"
-
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
 #include "logicaExecutare.h"
