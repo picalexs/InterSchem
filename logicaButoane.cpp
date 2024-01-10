@@ -23,15 +23,15 @@ void logicaButoaneCreareSimboluri(const RenderWindow& fereastraAplicatie, const 
 	}
 	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 16 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton citire
-		logicaCreareSimbol(fereastraAplicatie, desktop, 2);
+		logicaCreareSimbol(fereastraAplicatie, desktop, 3);
 	}
 	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 20 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton afisare
-		logicaCreareSimbol(fereastraAplicatie, desktop, 3);
+		logicaCreareSimbol(fereastraAplicatie, desktop, 4);
 	}
 	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 24 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton atribuire
-		logicaCreareSimbol(fereastraAplicatie, desktop, 4);
+		logicaCreareSimbol(fereastraAplicatie, desktop, 2);
 	}
 	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 28 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton decizie
