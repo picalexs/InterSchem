@@ -2,6 +2,8 @@
 #include <set>
 #include "functiiNod.h"
 
+void afisareMatrice();
+
 void resetMatrice();
 
 unsigned short getIdLinie();
