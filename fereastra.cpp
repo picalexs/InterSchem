@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <windows.h>
 #include "desenareLinie.h"
 #include "desenareSimboluri.h"
 #include "functiiExpresie.h"
@@ -16,6 +17,7 @@ void creareFereastra()
 	VideoMode desktop = VideoMode::getDesktopMode();
 	RenderWindow fereastraAplicatie(desktop, "Interschem", Style::Default); //de schimbat cu Fullscreen dupa
 	const View view(FloatRect(0, 0, static_cast<float>(desktop.width), static_cast<float>(desktop.height)));
+	::ShowWindow(fereastraAplicatie.getSystemHandle(), SW_MAXIMIZE);
 	fereastraAplicatie.setView(view);
 	fereastraAplicatie.setFramerateLimit(60);//limita de fps ca sa nu bubuie laptopul :')
 	fereastraAplicatie.setKeyRepeatEnabled(false);

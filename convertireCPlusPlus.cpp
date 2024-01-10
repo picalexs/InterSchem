@@ -1,4 +1,5 @@
 #include "convertireCPlusPlus.h"
+
 using namespace std;
 
 string codConvertit;
@@ -10,7 +11,7 @@ string getCodConvertit()
 	return codConvertit;
 }
 
-int nrSpatii = 1;
+int nrSpatii = 5;
 
 void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
@@ -61,13 +62,13 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 					codConvertit += s[i];
 			}
 			else
-				if (s[i + 1] == '"' && s[i-1]!='"' && nrG % 2 == 0) ///verific daca urmeaza ghilimele si daca nu au fost deja
+				if (s[i + 1] == '"' && s[i - 1] != '"' && nrG % 2 == 0) ///verific daca urmeaza ghilimele si daca nu au fost deja
 				{
 					codConvertit += " <<";
 					codConvertit += s[i];
 				}
-			else
-			codConvertit += s[i];
+				else
+					codConvertit += s[i];
 		}
 		codConvertit += ";\n";
 		///codConvertit += "cout<< " + nodCurent->date.expresie + ";\n";
@@ -77,7 +78,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	if (nodCurent->date.tip == TipNod::DACA)
 	{
 		for (i = 1; i <= nrSpatii; i++)
-			 codConvertit += ' ';
+			codConvertit += ' ';
 		codConvertit += "if(" + nodCurent->date.expresie + ")" + "\n";
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
@@ -88,7 +89,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "}\n";
-		if (nodCurent->dr->date.tip!=TipNod::STOP)
+		if (nodCurent->dr->date.tip != TipNod::STOP)
 		{
 			for (i = 1; i <= nrSpatii; i++)
 				codConvertit += ' ';
