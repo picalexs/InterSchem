@@ -6,6 +6,10 @@
 #include <set>
 #include <chrono>
 #include <ctime>
-void salvareDate(const VideoMode& desktop);
+#include <iomanip>
+#include <sstream>
+#include <windows.h>
+
+void salvareDateFisier(const VideoMode& desktop, string& numeFisier);
 
 void salvareCodConvertit();

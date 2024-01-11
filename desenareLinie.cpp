@@ -25,8 +25,9 @@ void afisareMatrice()
 
 void resetMatrice()
 {
-	matriceObstacole.clear();
-	matriceObstacole = vector<vector<short int>>(nrLinii, vector<short int>(nrColoane, false));
+	for (int i = 0; i < nrLinii; i++)
+		for (int j = 0; j < nrColoane; j++)
+			matriceObstacole[i][j] = 0;
 }
 
 unsigned short getIdLinie()

@@ -1,9 +1,11 @@
 #include "desenareButoaneMeniu.h"
 
-int lungimeButonStandard = 0;
-int inaltimeButonStandard = 0;
-int pozitieXSimbolStandard = 0;
-int pozitieYSimbolStandard = 0;
+#include "incarcareDate.h"
+
+float lungimeButonStandard = 0;
+float inaltimeButonStandard = 0;
+float pozitieXSimbolStandard = 0;
+float pozitieYSimbolStandard = 0;
 Color culoareOutlineStandard(232, 157, 51);
 Color culoareOutlineCreare(145, 15, 40);
 Color culoareOutlineCreareSimboluri(212, 42, 75);
@@ -42,6 +44,25 @@ void butonSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	fereastraAplicatie.draw(mainText);
 }
 
+void butonSalvareText(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const string& text)
+{
+	Text mainText(text, fontGlobal, static_cast<int>(desktop.width) / 70);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
+
+	RectangleShape rectangle(Vector2f(max(marginiText.width + 20, lungimeButonStandard), inaltimeButonStandard));
+	rectangle.setPosition(pozitieXSimbolStandard, 5.5f * pozitieYSimbolStandard);
+	rectangle.setFillColor(Color(255, 255, 180));
+	rectangle.setOutlineThickness(desktop.width / 350);
+	rectangle.setOutlineColor(culoareOutlineStandard);
+	fereastraAplicatie.draw(rectangle);
+
+	mainText.setOrigin(marginiText.left, marginiText.top);
+	mainText.setPosition(rectangle.getPosition().x, rectangle.getPosition().y + rectangle.getSize().y / 2);
+	fereastraAplicatie.draw(mainText);
+}
+
+
 void butonIncarcare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
@@ -59,6 +80,40 @@ void butonIncarcare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
 	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
+}
+
+void butonSelectareFisier(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const string& text, const int nr)
+{
+	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
+
+	rectangle.setPosition(12 * pozitieXSimbolStandard, (5 + 4.5 * nr) * pozitieYSimbolStandard);
+	rectangle.setFillColor(Color(255, 255, 180));
+	rectangle.setOutlineThickness(desktop.width / 350);
+	rectangle.setOutlineColor(culoareOutlineStandard);
+	fereastraAplicatie.draw(rectangle);
+
+	const int marimeFont = static_cast<int>(desktop.width) / 70;
+	Text mainText(text, fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+
+	const FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
+	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
+	mainText.setString(text);
+	fereastraAplicatie.draw(mainText);
+}
+
+void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie, const VideoMode& desktop, int pozScroll)
+{
+	const vector<string> fisiere = numeFisiereInFolder();
+	constexpr int nrMaximDeFisiere = 7;
+	const int startIdx = max(pozScroll, 0);
+	const int stopIdx = min(static_cast<int>(fisiere.size()), pozScroll + nrMaximDeFisiere);
+
+	for (int i = startIdx; i < stopIdx; i++)
+	{
+		butonSelectareFisier(fereastraAplicatie, desktop, fisiere[i], i - startIdx);
+	}
 }
 
 
@@ -334,15 +389,12 @@ void butonDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
-	{
-		butonStart(fereastraAplicatie, desktop);
-		butonStop(fereastraAplicatie, desktop);
-		butonCitire(fereastraAplicatie, desktop);
-		butonAfisare(fereastraAplicatie, desktop);
-		butonAtribuire(fereastraAplicatie, desktop);
-		butonDaca(fereastraAplicatie, desktop);
-	}
+	butonStart(fereastraAplicatie, desktop);
+	butonStop(fereastraAplicatie, desktop);
+	butonCitire(fereastraAplicatie, desktop);
+	butonAfisare(fereastraAplicatie, desktop);
+	butonAtribuire(fereastraAplicatie, desktop);
+	butonDaca(fereastraAplicatie, desktop);
 }
 void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
@@ -363,6 +415,11 @@ void desenareDropDownRulare(RenderWindow& fereastraAplicatie, const VideoMode& d
 {
 	butonRulareTotal(fereastraAplicatie, desktop);
 	butonRularePas(fereastraAplicatie, desktop);
+}
+
+void desenareSalvareFereastraText(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const string& text)
+{
+	butonSalvareText(fereastraAplicatie, desktop, text);
 }
 
 void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)

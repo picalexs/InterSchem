@@ -1,4 +1,7 @@
 #include "incarcareDate.h"
+
+#include <windows.h>
+
 #include "logicaInput.h"
 
 void conversieDateEcran(float& x, float& y, const VideoMode& desktop, const int& lngEcran, const int& latEcran)
@@ -94,13 +97,67 @@ void creareListaArbori(FILE* fisier, const VideoMode& desktop)
 	}
 }
 
-void incarcareDate(const VideoMode& desktop)
+vector<string> numeFisiereInFolder() {
+	const wstring& locatieFolder = L"Date";
+	const DWORD attributes = GetFileAttributes(locatieFolder.c_str());
+	if (attributes == INVALID_FILE_ATTRIBUTES || !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+		cerr << "Nu exista folderul sau nu e salvat aici" << endl;
+		return {};
+	}
+
+	vector<string> numeFisiere;
+	WIN32_FIND_DATA gasesteDate;
+	const HANDLE findHandle = FindFirstFile((locatieFolder + L"\\*").c_str(), &gasesteDate);
+	if (findHandle != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(gasesteDate.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+				wstring wFileName = gasesteDate.cFileName;
+				string fileName(wFileName.begin(), wFileName.end());
+				size_t pos = fileName.find_last_of('.');//sterge .its
+				if (pos != string::npos) {
+					fileName = fileName.substr(0, pos);
+				}
+
+				numeFisiere.push_back(fileName);
+			}
+		} while (FindNextFile(findHandle, &gasesteDate));
+		FindClose(findHandle);
+	}
+	return numeFisiere;
+}
+
+
+bool existaFolderSiFisier(const wstring& locatieFolder, const wstring& numeFisier) {
+	// Verifica daca esita folderul
+	DWORD attributes = GetFileAttributes(locatieFolder.c_str());
+	if (attributes == INVALID_FILE_ATTRIBUTES || !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+		return false; // Nu exista folderul sau nu e salvat aici
+	}
+
+	// Verifica daca exista fisierul
+	const wstring locatieFisier = locatieFolder + L"\\" + numeFisier;
+	attributes = GetFileAttributes(locatieFisier.c_str());
+	return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
+}
+
+void incarcareDateFisier(const VideoMode& desktop, string& numeFisier)
 {
-	const string numeFisier = "date.its";//temporar
-	FILE* fisier = fopen(numeFisier.c_str(), "r");
+	if (numeFisier.find(".its") == string::npos) {
+		numeFisier += ".its";//adauga extensia
+	}
+
+	const wstring locatieFolder = L"Date";
+	const wstring Fisier(numeFisier.begin(), numeFisier.end());
+
+	if (!existaFolderSiFisier(locatieFolder, Fisier)) {
+		wcout << L"Folderul sau fisierul specificat nu a fost gasit.\n";
+		return;
+	}
+
+	FILE* fisier = _wfopen((locatieFolder + L"\\" + Fisier).c_str(), L"r");
 	if (fisier == nullptr)
 	{
-		cout << "Fisierul nu a putut fi deschis.\n";
+		wcout << L"Fisierul nu a putut fi deschis.\n";
 		return;
 	}
 

@@ -132,6 +132,8 @@ void executareAlgoritmPasCuPas()
 	if (nodParcurgere == nullptr)
 	{
 		seParcurge = false;
+		variabile.clear();
+		atribuireConstanteCunoscute();
 		cout << "S-a terminat executarea algoritmului!\n";
 	}
 }
