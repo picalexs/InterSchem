@@ -107,7 +107,7 @@ void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie, const Vid
 {
 	const vector<string> fisiere = numeFisiereInFolder();
 	constexpr int nrMaximDeFisiere = 7;
-	const int startIdx = pozScroll;
+	const int startIdx = max(pozScroll, 0);
 	const int stopIdx = min(static_cast<int>(fisiere.size()), pozScroll + nrMaximDeFisiere);
 
 	for (int i = startIdx; i < stopIdx; i++)
