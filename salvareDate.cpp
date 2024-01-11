@@ -1,8 +1,5 @@
 #include "salvareDate.h"
 
-#include <iomanip>
-#include <sstream>
-
 map<const Nod*, unsigned int> noduriParcurse;
 unsigned int index = 1;
 void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
@@ -52,28 +49,39 @@ void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 	}
 }
 
-FILE* creeazaFisier(const string& numeDefault, const string& numeExtensie) {
-	string numeFisier;
+
+FILE* creeazaFisier(const string& numeFolder, const string& numeDefault, const string& numeExtensie) {
+	const wstring wideDefault(numeDefault.begin(), numeDefault.end());
+	const wstring wideExtensie(numeExtensie.begin(), numeExtensie.end());
+	const wstring numeFolderTemp = wstring(numeFolder.begin(), numeFolder.end());
+	const LPCWSTR folder = numeFolderTemp.c_str();
+	if (!CreateDirectory(folder, nullptr) && GetLastError() != ERROR_ALREADY_EXISTS) {
+		cerr << "Nu s-a putut crea folderul: Date\n";
+		return nullptr;
+	}
+
+	wstring numeFisier;
 	int nr = 0;
 	FILE* fisier;
 
 	do {
 		if (nr == 0) {
-			numeFisier = numeDefault + "." + numeExtensie;
+			numeFisier = numeFolderTemp + "/" + wideDefault + L"." + wideExtensie;
 		}
 		else {
-			numeFisier = numeDefault + to_string(nr) + "." + numeExtensie;
+			numeFisier = numeFolderTemp + "/" + wideDefault + to_wstring(nr) + L"." + wideExtensie;
 		}
-		fisier = fopen(numeFisier.c_str(), "r");
+
+		fisier = _wfopen(numeFisier.c_str(), L"r");
 		nr++;
 	} while (fisier != nullptr);
 
-	fisier = fopen(numeFisier.c_str(), "w");
+	fisier = _wfopen(numeFisier.c_str(), L"w");
 	if (fisier != nullptr) {
-		cout << "Fisier \"" << numeFisier << "\" creat!\n";
+		wcout << L"Fisier \"" << numeFisier << L"\" creat!\n";
 	}
 	else {
-		cout << "Nu s-a putut crea fisierul " << numeFisier << ".\n";
+		wcerr << L"Nu s-a putut crea fisierul " << numeFisier << L".\n";
 	}
 	return fisier;
 }
@@ -89,7 +97,7 @@ string obtineDataCalendaristica() {
 
 void salvareDate(const VideoMode& desktop)
 {
-	FILE* fisier = creeazaFisier("date", "its");
+	FILE* fisier = creeazaFisier("Date", "date", "its");
 	const string dataCalendaristica = obtineDataCalendaristica();
 	fprintf(fisier, "%s\n", dataCalendaristica.c_str());
 	fprintf(fisier, "Rezolutie ecran: %dx%d\n", desktop.width, desktop.height);
@@ -111,7 +119,7 @@ void salvareDate(const VideoMode& desktop)
 
 void salvareCodConvertit()
 {
-	FILE* fisier = creeazaFisier("codConvertit", "cpp");
+	FILE* fisier = creeazaFisier("Cod_Convertit", "codConvertit", "cpp");
 	const string codConvertit = getCodConvertit();
 	fprintf(fisier, "%s", codConvertit.c_str());
 	fclose(fisier);

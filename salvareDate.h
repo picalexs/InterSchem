@@ -6,6 +6,9 @@
 #include <set>
 #include <chrono>
 #include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <windows.h>
 void salvareDate(const VideoMode& desktop);
 
 void salvareCodConvertit();

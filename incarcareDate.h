@@ -4,4 +4,6 @@
 #include "desenareLinie.h"
 #include "logicaSimboluri.h"
 
-void incarcareDate(const VideoMode& desktop);
+vector<string> numeFisiereInFolder();
+
+void incarcareDate(const VideoMode& desktop, const string& numeFisier);

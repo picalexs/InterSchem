@@ -17,7 +17,7 @@ void creareFereastra()
 	VideoMode desktop = VideoMode::getDesktopMode();
 	RenderWindow fereastraAplicatie(desktop, "Interschem", Style::Default); //de schimbat cu Fullscreen dupa
 	const View view(FloatRect(0, 0, static_cast<float>(desktop.width), static_cast<float>(desktop.height)));
-	::ShowWindow(fereastraAplicatie.getSystemHandle(), SW_MAXIMIZE);
+	::ShowWindow(fereastraAplicatie.getSystemHandle(), SW_MAXIMIZE);//temporar
 	fereastraAplicatie.setView(view);
 	fereastraAplicatie.setFramerateLimit(60);//limita de fps ca sa nu bubuie laptopul :')
 	fereastraAplicatie.setKeyRepeatEnabled(false);
@@ -47,7 +47,7 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F11 && !apasatF11) {
 					apasatF11 = true;
-					afisareMatrice();
+					//cout << numarulDeFisiereInFolder() << '\n';
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
@@ -69,7 +69,7 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F9 && !apasatF9) {
 					apasatF9 = true;
-					incarcareDate(desktop);
+					//incarcareDate(desktop);
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F9) {

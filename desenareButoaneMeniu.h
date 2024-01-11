@@ -4,11 +4,15 @@
 
 void setDimensiuniStandard(const VideoMode& desktop);
 
+void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int pozScroll);
+
 void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void desenareDropDownRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
+
+void desenareSalvareFereastraText(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const string& text);
 
 void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
