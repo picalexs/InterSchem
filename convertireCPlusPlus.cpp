@@ -14,9 +14,12 @@ int nrSpatii = 1;
 
 void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	int i;
+	int i, j;
 	static set<const Nod*> noduriVizitate;
+	static set<string> variabileConvertire;
 	static string s;
+	static string variabila;
+	static string atribuire;
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent) != 0)
 		return;
 	noduriVizitate.insert(nodCurent);
@@ -28,9 +31,34 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
+		int ok = 0;
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
-		codConvertit += "float " + nodCurent->date.expresie + ";\n";
+		s += nodCurent->date.expresie;
+		for (i = 0; i < s.size() && ok == 0; i++)
+			if (s[i] != '=')
+				variabila += s[i];
+			else
+				if (s[i] == '=')
+					ok = 1;
+		for (j = i; j < s.size(); j++)
+			atribuire += s[j];
+
+		if (variabileConvertire.find(variabila) != variabileConvertire.end())
+		{
+			codConvertit += variabila + '=' + atribuire + ";\n";
+		}
+		else
+		{
+			variabileConvertire.insert(variabila);
+			cout << variabila << ' ' << atribuire << ' ';
+			codConvertit += "float "+variabila + '=' + atribuire + ";\n";
+		}
+		///codConvertit += "float " + nodCurent->date.expresie + ";\n";
+		ok = 0;
+		variabila.clear();
+		atribuire.clear();
+		s.clear();
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
