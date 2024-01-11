@@ -2,6 +2,7 @@
 
 map<const Nod*, unsigned int> noduriParcurse;
 unsigned int index = 1;
+
 void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 {
 	if (noduriParcurse.find(nodCurent) != noduriParcurse.end())
@@ -49,7 +50,6 @@ void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 	}
 }
 
-
 FILE* creeazaFisier(const string& numeFolder, const string& numeDefault, const string& numeExtensie) {
 	const wstring wideDefault(numeDefault.begin(), numeDefault.end());
 	const wstring wideExtensie(numeExtensie.begin(), numeExtensie.end());
@@ -82,6 +82,7 @@ FILE* creeazaFisier(const string& numeFolder, const string& numeDefault, const s
 	}
 	else {
 		wcerr << L"Nu s-a putut crea fisierul " << numeFisier << L".\n";
+		return nullptr;
 	}
 	return fisier;
 }
@@ -95,9 +96,23 @@ string obtineDataCalendaristica() {
 	return ss.str();
 }
 
-void salvareDate(const VideoMode& desktop)
+
+void salvareDate(const VideoMode& desktop, const string& numeFisier)
 {
-	FILE* fisier = creeazaFisier("Date", "date", "its");
+	if (listaArbori.empty())
+	{
+		const string text = "Nu se poate salva o schema goala!";
+		cout << text << '\n';
+		listaConsola.push_back(text);
+		return;
+	}
+	FILE* fisier = creeazaFisier("Date", numeFisier, "its");
+	if (fisier == nullptr)
+		return;
+	const string text = "Schema a fost salvata in fisierul: \"" + numeFisier + ".its\"";
+	cout << text << '\n';
+	listaConsola.push_back(text);
+
 	const string dataCalendaristica = obtineDataCalendaristica();
 	fprintf(fisier, "%s\n", dataCalendaristica.c_str());
 	fprintf(fisier, "Rezolutie ecran: %dx%d\n", desktop.width, desktop.height);

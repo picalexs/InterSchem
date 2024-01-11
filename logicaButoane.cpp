@@ -1,10 +1,5 @@
 #include "logicaButoane.h"
-#include "desenareButoaneMeniu.h"
-#include "desenareSimboluri.h"
-#include "executareAlgoritm.h"
-#include "incarcareDate.h"
-#include "logicaSimboluri.h"
-#include "salvareDate.h"
+
 using namespace sf;
 
 bool verificareButon(const Vector2i& pozitieMouse, float x, float y, float lungime, float inaltime) {
@@ -57,12 +52,11 @@ void logicaButoaneRulare(const Vector2i pozitieMouse, VideoMode desktop, const b
 void logicaFisiere(const Vector2i pozitieMouse, VideoMode desktop, bool& esteApasatSalvare, bool& esteApasatIncarcare)
 {
 	if (verificareButon(pozitieMouse, desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
-		salvareDate(desktop);
 		esteApasatSalvare = !esteApasatSalvare;
+		activeazaSalvare();
 		cout << "Apasat Buton Salvare!\n";
 	}
 	else if (verificareButon(pozitieMouse, 12 * desktop.width / 100, desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
-		//incarcareDate(desktop);
 		esteApasatIncarcare = !esteApasatIncarcare;
 		cout << "Apasat Buton Incarcare!\n";
 	}
@@ -156,11 +150,28 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 	}
 	logicaScroll(event, aFostFolositScroll, pozScroll);
 
+	static string numeFisierDeSalvat;
+
 	if (esteApasatSalvare)
 	{
-		const string text = "testText";//get text from input
-		desenareSalvareFereastraText(fereastraAplicatie, desktop, text);
+		if (!seCitesteSalvare())
+		{
+			if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
+				numeFisierDeSalvat.pop_back();
+			salvareDate(desktop, numeFisierDeSalvat);
+			numeFisierDeSalvat.clear();
+			esteApasatSalvare = false;
+		}
+		else {
+			const string numeTmp = getNumeFisierSalvare();
+			if (!numeTmp.empty())
+				numeFisierDeSalvat = numeTmp;
+			if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
+				numeFisierDeSalvat.pop_back();
+			desenareSalvareFereastraText(fereastraAplicatie, desktop, numeFisierDeSalvat);
+		}
 	}
+
 	if (esteApasatIncarcare)
 	{
 		desenareButoaneDeSelectatFisier(fereastraAplicatie, desktop, pozScroll);

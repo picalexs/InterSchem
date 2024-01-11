@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <sstream>
 #include <windows.h>
-void salvareDate(const VideoMode& desktop);
+
+void salvareDate(const VideoMode& desktop, const string& numeFisier);
 
 void salvareCodConvertit();

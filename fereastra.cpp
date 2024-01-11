@@ -58,7 +58,7 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F10 && !apasatF10) {
 					apasatF10 = true;
-					salvareDate(desktop);
+					//salvareDate(desktop);
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F10) {
@@ -82,13 +82,14 @@ void creareFereastra()
 		}
 		fereastraAplicatie.clear(Color::White);
 		logicaExecutareInput(fereastraAplicatie, desktop, event);
-		logicaButon(fereastraAplicatie, desktop, event);
-		butoaneMeniu(fereastraAplicatie, desktop);
 
 		creareSimbolPtListaArbori(fereastraAplicatie, desktop);//deseneaza simbolurile din listaArbori
 		desenareLinii(fereastraAplicatie, desktop);//deseneaza liniile dintre simboluri
 		afisareListaOutput(fereastraAplicatie, desktop);//afiseaza listaConsola
 		afisareVariabile(fereastraAplicatie, desktop);//afiseaza variabilele pe ecran
+
+		logicaButon(fereastraAplicatie, desktop, event);
+		butoaneMeniu(fereastraAplicatie, desktop);
 
 		//functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();

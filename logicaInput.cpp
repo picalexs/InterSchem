@@ -6,12 +6,16 @@
 #include "evaluareExpresie.h"
 #include "logicaExecutare.h"
 #include "logicaSimboluri.h"
+#include "salvareDate.h"
 
-void logicaEnterParcurgere(string& expresieDeCitit, bool& seCitesteParcurgere, bool& esteApasatF12)
+string expresieDeCitit;
+
+void logicaEnterParcurgere(bool& seCitesteParcurgere, bool& esteApasatF12)
 {
 	if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r')
 		expresieDeCitit.pop_back();
 	const long double rezultat = evaluareExpresie(expresieDeCitit);
+	listaConsola.push_back(to_string(rezultat));
 	seteazaVariabila(getNumeVariabila(), rezultat);
 	const string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
 	cout << output << '\n';
@@ -20,7 +24,12 @@ void logicaEnterParcurgere(string& expresieDeCitit, bool& seCitesteParcurgere, b
 	esteApasatF12 = true;
 }
 
-void logicaEnter(bool& citireExpresie, Nod* nodDeGasit, string& expresieDeCitit) {
+void logicaEnterSalvare(bool& seCitestePtSalvare)
+{
+	seCitestePtSalvare = false;
+}
+
+void logicaEnter(bool& citireExpresie, Nod* nodDeGasit) {
 	if (nodDeGasit == nullptr)
 		return;
 	citireExpresie = false;
@@ -43,7 +52,7 @@ bool esteDubluClick(const Clock& timpCeas, const bool& citireExpresie)
 	return timpCeas.getElapsedTime().asSeconds() < 1.0f && citireExpresie == false;
 }
 
-void logicaDubluClick(const RenderWindow& fereastraAplicatie, bool& citireExpresie, Nod*& nodDeGasit, string& expresieDeCitit)
+void logicaDubluClick(const RenderWindow& fereastraAplicatie, bool& citireExpresie, Nod*& nodDeGasit)
 {
 	nodDeGasit = gasesteNodListaCuPozMouse(fereastraAplicatie);
 	if (nodDeGasit != nullptr)
@@ -61,11 +70,10 @@ void logicaDubluClick(const RenderWindow& fereastraAplicatie, bool& citireExpres
 	}
 }
 
-void logicaLMB(const RenderWindow& fereastraAplicatie, bool& seCitesteExpresie, bool& esteApasatLMB, bool& esteRidicatLMB, Nod*& nodDeGasit, string& expresieDeCitit, Clock& timpCeasLMB, Clock& timpApasatLMB)
+void logicaLMB(const RenderWindow& fereastraAplicatie, bool& seCitesteExpresie, bool& esteApasatLMB, bool& esteRidicatLMB, Nod*& nodDeGasit, Clock& timpCeasLMB, Clock& timpApasatLMB)
 {
 	if (esteDubluClick(timpCeasLMB, seCitesteExpresie)) {
-		cout << "dublu";
-		logicaDubluClick(fereastraAplicatie, seCitesteExpresie, nodDeGasit, expresieDeCitit);
+		logicaDubluClick(fereastraAplicatie, seCitesteExpresie, nodDeGasit);
 	}
 	else
 	{
@@ -222,6 +230,23 @@ bool esteRidicatLegare = false;
 
 bool seCitesteExpresie = false;
 bool seCitesteParcurgere = false;
+bool seCitestePtSalvare = false;
+
+bool seCitesteSalvare()
+{
+	return seCitestePtSalvare;
+}
+
+void activeazaSalvare()
+{
+	seCitestePtSalvare = true;
+}
+
+
+string getNumeFisierSalvare()
+{
+	return expresieDeCitit;
+}
 
 void logicaInput(const Event& event)
 {
@@ -256,7 +281,7 @@ void logicaInput(const Event& event)
 		{
 			esteApasatDelete = true;
 		}
-		if (!seCitesteExpresie && !seCitesteParcurgere) {//input creare simbol
+		if (!seCitesteExpresie && !seCitesteParcurgere && !seCitestePtSalvare) {//input creare simbol
 			for (int i = Keyboard::Num0; i <= Keyboard::Num6; ++i) {
 				if (event.key.code == i) {
 					esteApasatCreare = i - Keyboard::Num0;
@@ -264,7 +289,7 @@ void logicaInput(const Event& event)
 				}
 			}
 		}
-		if (!seCitesteExpresie && !seCitesteParcurgere &&
+		if (!seCitesteExpresie && !seCitesteParcurgere && !seCitestePtSalvare &&
 			(event.key.code == Keyboard::BackSpace || event.key.code == Keyboard::Escape))//input stergere simbol
 		{
 			esteApasatStergere = true;
@@ -272,7 +297,7 @@ void logicaInput(const Event& event)
 	}
 }
 
-void citireExpresie(const Event& event, string& expresieDeCitit)
+void citireExpresie(const Event& event)
 {
 	string ch;
 	static char ultimaTastaApasata;
@@ -312,13 +337,12 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static Nod* nodDeMutat = nullptr;
 	static Nod* nodDeMutatTata = nullptr;
 	static Nod* nodLegatDeWhile = nullptr;
-	static string expresieDeCitit;
 	static Clock timpCeasLMB, timpApasatLMB;
 	static set<short> iduriLiniiDeActualizat;
 	static set<Nod*> noduriDeActualizat;
 
 	if (esteApasatLMB) {
-		logicaLMB(fereastraAplicatie, seCitesteExpresie, esteApasatLMB, esteRidicatLMB, nodDeGasit, expresieDeCitit, timpCeasLMB, timpApasatLMB);
+		logicaLMB(fereastraAplicatie, seCitesteExpresie, esteApasatLMB, esteRidicatLMB, nodDeGasit, timpCeasLMB, timpApasatLMB);
 	}
 	actualizareSimbolDeMutat(fereastraAplicatie, nodDeMutat, nodDeMutatTata, nodLegatDeWhile, timpApasatLMB);
 	if (esteRidicatLMB)
@@ -362,25 +386,33 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	}
 	if (seCitesteExpresie)
 	{
-		citireExpresie(event, expresieDeCitit);
+		citireExpresie(event);
 		modificareLungimeSimbol(desktop, nodDeGasit->date);
 		if (nodDeGasit != nullptr)
 			nodDeGasit->date.expresie = expresieDeCitit;
 	}
 	if (seCitestePtParcurgere())
 	{
-		citireExpresie(event, expresieDeCitit);
+		citireExpresie(event);
 		seCitesteParcurgere = true;
+	}
+	if (seCitestePtSalvare)
+	{
+		citireExpresie(event);
 	}
 	if (esteApasatEnter)//stop citire expresie
 	{
 		esteApasatEnter = false;
 		if (seCitesteParcurgere)
 		{
-			logicaEnterParcurgere(expresieDeCitit, seCitesteParcurgere, esteApasatF12);
+			logicaEnterParcurgere(seCitesteParcurgere, esteApasatF12);
+		}
+		else if (seCitestePtSalvare)
+		{
+			logicaEnterSalvare(seCitestePtSalvare);
 		}
 		else {
-			logicaEnter(seCitesteExpresie, nodDeGasit, expresieDeCitit);
+			logicaEnter(seCitesteExpresie, nodDeGasit);
 		}
 		expresieDeCitit.clear();
 	}

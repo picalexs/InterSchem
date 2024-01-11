@@ -5,6 +5,12 @@ using namespace sf;
 
 void logicaDelete();
 
+bool seCitesteSalvare();
+
+void activeazaSalvare();
+
+std::string getNumeFisierSalvare();
+
 void logicaInput(const Event& event);
 
 void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event);
