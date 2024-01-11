@@ -15,9 +15,9 @@ int nrSpatii = 5;
 
 void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
-	int i;
+
 	static set<const Nod*> noduriVizitate;
-	static string s;
+	static set<string> variabileConvertire;
 	if (nodCurent == nullptr || noduriVizitate.count(nodCurent) != 0)
 		return;
 	noduriVizitate.insert(nodCurent);
@@ -29,14 +29,41 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		return;
 	if (nodCurent->date.tip == TipNod::ATRIBUIRE)
 	{
+		int i;
 		for (i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
-		codConvertit += "float " + nodCurent->date.expresie + ";\n";
+		string s;
+		string variabila;
+		string atribuire;
+		s += nodCurent->date.expresie;
+		bool ok = false;
+		for (i = 0; i < s.size() && ok == false; i++) {
+			if (s[i] != '=') {
+				variabila += s[i];
+			}
+			else {
+				ok = true;
+			}
+		}
+		for (int j = i; j < s.size(); j++) {
+			atribuire += s[j];
+		}
+		if (variabileConvertire.find(variabila) != variabileConvertire.end())
+		{
+			codConvertit += variabila + '=' + atribuire + ";\n";
+		}
+		else
+		{
+			variabileConvertire.insert(variabila);
+			cout << variabila << ' ' << atribuire << ' ';
+			codConvertit += "float " + variabila + '=' + atribuire + ";\n";
+		}
+		///codConvertit += "float " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
 	{
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "cin>> " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
@@ -44,11 +71,12 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	if (nodCurent->date.tip == TipNod::AFISARE)
 	{
 		int nrG = 0;
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "cout << ";
+		string s;
 		s += nodCurent->date.expresie;
-		for (i = 0; i < s.size(); i++)
+		for (int i = 0; i < s.size(); i++)
 		{
 			if (s[i] == '"')
 			{
@@ -77,52 +105,53 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	}
 	if (nodCurent->date.tip == TipNod::DACA)
 	{
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "if(" + nodCurent->date.expresie + ")" + "\n";
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "{\n";
 		nrSpatii += 4;
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 		nrSpatii -= 4;
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "}\n";
 		if (nodCurent->dr->date.tip != TipNod::STOP)
 		{
-			for (i = 1; i <= nrSpatii; i++)
+			for (int i = 1; i <= nrSpatii; i++)
 				codConvertit += ' ';
 			codConvertit += "else\n";
-			for (i = 1; i <= nrSpatii; i++)
+			for (int i = 1; i <= nrSpatii; i++)
 				codConvertit += ' ';
 			codConvertit += "{\n";
 			nrSpatii += 4;
 			convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 			nrSpatii -= 4;
-			for (i = 1; i <= nrSpatii; i++)
+			for (int i = 1; i <= nrSpatii; i++)
 				codConvertit += ' ';
 			codConvertit += "}\n";
 		}
 	}
 	if (nodCurent->date.tip == TipNod::CAT_TIMP)
 	{
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "while(" + nodCurent->date.expresie + ")" + "\n";
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "{\n";
 		nrSpatii += 4;
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 		nrSpatii -= 4;
-		for (i = 1; i <= nrSpatii; i++)
+		for (int i = 1; i <= nrSpatii; i++)
 			codConvertit += ' ';
 		codConvertit += "}\n";
 
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 	}
 	noduriVizitate.clear();
+	variabileConvertire.clear();
 }
 
 void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
