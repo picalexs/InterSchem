@@ -18,7 +18,7 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
 	constexpr float spatiuY = 10;
 	constexpr float spatiuMargini = 20;
-	const float spatiuJos = static_cast<float>(desktop.height) / 10;
+	const float spatiuJos = static_cast<float>(desktop.height) / 50;
 
 	//deseneaza primul element din listaConsola (ultimul element adaugat) mai intunecat la culoare
 	Text textOutput(listaConsola[listaConsola.size() - 1], fontGlobal, marimeFont);
@@ -40,16 +40,23 @@ void afisareListaOutput(RenderWindow& fereastraAplicatie, const VideoMode& deskt
 void afisareVariabile(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	float spatiuMargini = 20;
+	constexpr float spatiuMargini = 20;
 
 	string textVariabile = "Variabile:";
 	for (const auto& variabila : variabile) {
-		textVariabile += "\n" + variabila.first + "= ";
+		if ((variabila.first == "PI" && variabila.second == obtineValDupaNume("PI"))
+			|| (variabila.first == "e" && variabila.second == obtineValDupaNume("e"))
+			|| (variabila.first == "g" && variabila.second == obtineValDupaNume("g"))
+			|| (variabila.first == "phi" && variabila.second == obtineValDupaNume("phi")))
+			continue;
 
+		textVariabile += "\n" + variabila.first + "= ";
 		stringstream stream;
 		stream << defaultfloat << setprecision(6) << variabila.second;
 		textVariabile += stream.str();
 	}
+	if (textVariabile == "Variabile:")
+		return;
 
 	Text textVariabileAfisate(textVariabile, fontGlobal, marimeFont);
 	textVariabileAfisate.setFillColor(Color::Black);

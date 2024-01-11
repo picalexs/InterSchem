@@ -96,8 +96,7 @@ string obtineDataCalendaristica() {
 	return ss.str();
 }
 
-
-void salvareDate(const VideoMode& desktop, const string& numeFisier)
+void salvareDateFisier(const VideoMode& desktop, string& numeFisier)
 {
 	if (listaArbori.empty())
 	{
@@ -106,6 +105,12 @@ void salvareDate(const VideoMode& desktop, const string& numeFisier)
 		listaConsola.push_back(text);
 		return;
 	}
+
+	size_t pos = numeFisier.find(".its");
+	if (pos != string::npos) {
+		numeFisier.erase(pos, 4); // Sterge extensia
+	}
+
 	FILE* fisier = creeazaFisier("Date", numeFisier, "its");
 	if (fisier == nullptr)
 		return;

@@ -46,22 +46,22 @@ void butonSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 void butonSalvareText(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const string& text)
 {
-	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
+	Text mainText(text, fontGlobal, static_cast<int>(desktop.width) / 70);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
 
-	rectangle.setPosition(pozitieXSimbolStandard, 5 * pozitieYSimbolStandard);
+	RectangleShape rectangle(Vector2f(max(marginiText.width + 20, lungimeButonStandard), inaltimeButonStandard));
+	rectangle.setPosition(pozitieXSimbolStandard, 5.5f * pozitieYSimbolStandard);
 	rectangle.setFillColor(Color(255, 255, 180));
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineStandard);
 	fereastraAplicatie.draw(rectangle);
 
-	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	Text mainText(text, fontGlobal, marimeFont);
-	mainText.setFillColor(Color::Black);
-	const FloatRect marginiText = mainText.getLocalBounds();
-	mainText.setOrigin(marginiText.left + marginiText.width, marginiText.top + marginiText.height / 2);
-	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
+	mainText.setOrigin(marginiText.left, marginiText.top);
+	mainText.setPosition(rectangle.getPosition().x, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 }
+
 
 void butonIncarcare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {

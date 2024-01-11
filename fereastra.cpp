@@ -58,7 +58,7 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F10 && !apasatF10) {
 					apasatF10 = true;
-					//salvareDate(desktop);
+					//salvareDateFisier(desktop);
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F10) {
@@ -69,7 +69,7 @@ void creareFereastra()
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::F9 && !apasatF9) {
 					apasatF9 = true;
-					//incarcareDate(desktop);
+					//incarcareDateFisier(desktop);
 				}
 			}
 			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F9) {

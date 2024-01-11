@@ -6,4 +6,4 @@
 
 vector<string> numeFisiereInFolder();
 
-void incarcareDate(const VideoMode& desktop, const string& numeFisier);
+void incarcareDateFisier(const VideoMode& desktop, string& numeFisier);

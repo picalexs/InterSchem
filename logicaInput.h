@@ -9,6 +9,8 @@ bool seCitesteSalvare();
 
 void activeazaSalvare();
 
+void opresteSalvare();
+
 std::string getNumeFisierSalvare();
 
 void logicaInput(const Event& event);

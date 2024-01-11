@@ -10,6 +10,6 @@
 #include <sstream>
 #include <windows.h>
 
-void salvareDate(const VideoMode& desktop, const string& numeFisier);
+void salvareDateFisier(const VideoMode& desktop, string& numeFisier);
 
 void salvareCodConvertit();

@@ -113,6 +113,11 @@ vector<string> numeFisiereInFolder() {
 			if (!(gasesteDate.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 				wstring wFileName = gasesteDate.cFileName;
 				string fileName(wFileName.begin(), wFileName.end());
+				size_t pos = fileName.find_last_of('.');//sterge .its
+				if (pos != string::npos) {
+					fileName = fileName.substr(0, pos);
+				}
+
 				numeFisiere.push_back(fileName);
 			}
 		} while (FindNextFile(findHandle, &gasesteDate));
@@ -120,6 +125,7 @@ vector<string> numeFisiereInFolder() {
 	}
 	return numeFisiere;
 }
+
 
 bool existaFolderSiFisier(const wstring& locatieFolder, const wstring& numeFisier) {
 	// Verifica daca esita folderul
@@ -134,8 +140,12 @@ bool existaFolderSiFisier(const wstring& locatieFolder, const wstring& numeFisie
 	return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-void incarcareDate(const VideoMode& desktop, const string& numeFisier)
+void incarcareDateFisier(const VideoMode& desktop, string& numeFisier)
 {
+	if (numeFisier.find(".its") == string::npos) {
+		numeFisier += ".its";//adauga extensia
+	}
+
 	const wstring locatieFolder = L"Date";
 	const wstring Fisier(numeFisier.begin(), numeFisier.end());
 

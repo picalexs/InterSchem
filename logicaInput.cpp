@@ -242,6 +242,10 @@ void activeazaSalvare()
 	seCitestePtSalvare = true;
 }
 
+void opresteSalvare()
+{
+	seCitestePtSalvare = false;
+}
 
 string getNumeFisierSalvare()
 {
@@ -304,26 +308,29 @@ void citireExpresie(const Event& event)
 	static Clock timpCeasTastatura;
 	if (event.type == Event::TextEntered)
 	{
-		if (event.text.unicode < 128)
+		const auto caracter = event.text.unicode;
+		if (caracter < 128 && (isprint(caracter) || caracter == '\b')) // Verifica daca este un caracter ce se poate afisa ca char
 		{
-			ch = static_cast<char>(event.text.unicode);
+			ch = static_cast<char>(caracter);
+		}
+		else {
+			return; // Ignore non-printable characters
 		}
 	}
 	else {
 		ultimaTastaApasata = '\0';
 	}
 
-	//daca tasta e apasata prelungit, nu se repeta decat daca e tinuta apasat de mai mult de 0.35 secunde
+	// Repeta simbolul doar daca tasta este apasata mai mult de 0.35 secunde
 	if (ultimaTastaApasata == ch[0] && timpCeasTastatura.getElapsedTime().asSeconds() < 0.35f)
 		return;
 	if (ultimaTastaApasata != ch)
 		timpCeasTastatura.restart();
 	ultimaTastaApasata = ch[0];
 
-	if (ch == "\b") {//logica de stergere prin backspace
+	if (ch == '\b') { // Stergere caractere
 		if (!expresieDeCitit.empty()) {
 			expresieDeCitit.pop_back();
-			cout << "Stergere\n";
 		}
 	}
 	else if (!ch.empty()) {
