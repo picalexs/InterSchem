@@ -288,6 +288,8 @@ void logicaInput(const Event& event)
 		}
 		if (event.key.code == Keyboard::F2) {
 			esteApasatF2 = true;
+			if (!esteAlgoritmCorect())
+				esteApasatF2 = false;
 		}
 		if (event.key.code == Keyboard::Delete)
 		{
@@ -396,9 +398,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	}
 	if (esteApasatF2)//executa algoritmul
 	{
-		const Time vitezaParcurgere = seconds(0.5f);
 		if (!seCitesteParcurgere)
-			executareTotAlgoritm(vitezaParcurgere);
+			executareTotAlgoritm();
 
 		static bool saInceputParcurgerea = false;
 		if (seParcurgeAlgoritmul())

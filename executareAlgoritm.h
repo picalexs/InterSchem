@@ -5,8 +5,10 @@ bool esteAlgoritmCorect();
 
 void executareAlgoritmPasCuPas();
 
-void executareTotAlgoritm(const Time& vitezaParcurgere);
+void executareTotAlgoritm();
 
 bool seParcurgeAlgoritmul();
 
 Nod* nodCurentDeParcurgere();
+
+void updateazaValoareVitezaDeRulare(float valoare);

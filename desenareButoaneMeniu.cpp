@@ -1,5 +1,8 @@
 #include "desenareButoaneMeniu.h"
+#include <iomanip>
+#include <sstream>
 
+#include "executareAlgoritm.h"
 #include "incarcareDate.h"
 
 float lungimeButonStandard = 0;
@@ -24,6 +27,81 @@ void setDimensiuniStandard(const VideoMode& desktop)
 	pozitieXSimbolStandard = desktop.width / 100;
 	pozitieYSimbolStandard = desktop.height / 100;
 }
+
+bool verificareButonTMP(const Vector2i& pozitieMouse, float x, float y, float lungime, float inaltime) {
+	return (pozitieMouse.x >= x && pozitieMouse.x <= x + lungime && pozitieMouse.y >= y && pozitieMouse.y <= y + inaltime);
+}
+
+int clamp(float value, float minim, float maxim) {
+	return max(minim, min(value, maxim));
+}
+
+void updateazaPozSlider(RectangleShape& slider, const RectangleShape& fundalSlider, float valoare, float minim, float maxim) {
+	const float interval = maxim - minim;
+	const float procentaj = (valoare - minim) / interval;
+	const float sliderX = fundalSlider.getPosition().x + (fundalSlider.getSize().x - slider.getSize().x) * procentaj;
+	slider.setPosition(sliderX, slider.getPosition().y);
+}
+
+void slider(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+{
+	RectangleShape dreptunghi(Vector2f(lungimeButonStandard, inaltimeButonStandard));
+
+	dreptunghi.setPosition(89 * pozitieXSimbolStandard, 14.5f * pozitieYSimbolStandard);
+	dreptunghi.setFillColor(culoareExecutare);
+	dreptunghi.setOutlineThickness(desktop.width / 350);
+	dreptunghi.setOutlineColor(culoareOutlineExecutare);
+	fereastraAplicatie.draw(dreptunghi);
+
+	RectangleShape background(Vector2f(desktop.width / 14, desktop.height / 60));
+	background.setFillColor(Color(110, 162, 186));
+	background.setPosition(91.75f * pozitieXSimbolStandard, 15.75 * pozitieYSimbolStandard);
+
+	RectangleShape slider(Vector2f(40, 60));
+	slider.setFillColor(culoareOutlineRulare);
+	slider.setPosition(89 * pozitieXSimbolStandard, 15.0f * pozitieYSimbolStandard);
+
+	constexpr float valMin = 0.01f;
+	constexpr float valMax = 2;
+	static float valoare = 0.5f;
+	Vector2i pozMouse = Mouse::getPosition(fereastraAplicatie);
+
+	if (verificareButonTMP(pozMouse, background.getPosition().x, slider.getPosition().y - slider.getSize().y / 2, background.getSize().x + slider.getSize().x / 2, slider.getSize().y)
+		&& Mouse::isButtonPressed(Mouse::Left))
+	{
+		pozMouse = Mouse::getPosition(fereastraAplicatie);
+		float xNou = clamp(static_cast<float>(pozMouse.x), background.getPosition().x, background.getPosition().x + background.getSize().x - slider.getSize().x);
+		slider.setPosition(xNou, slider.getPosition().y);
+
+		float range = valMax - valMin;
+		float percentage = (xNou - background.getPosition().x) / (background.getSize().x - slider.getSize().x);
+		valoare = valMin + range * percentage;
+	}
+
+	const int marimeFont = static_cast<int>(desktop.width) / 90;
+	stringstream stream;
+	if (valoare < 0.01f) {
+		stream << fixed << setprecision(1) << valoare;
+	}
+	else {
+		stream << fixed << setprecision(2) << valoare;
+	}
+
+	Text mainText(stream.str(), fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin(marginiText.left, marginiText.top);
+	mainText.setPosition(dreptunghi.getPosition().x + desktop.width / 200, 15.75 * pozitieYSimbolStandard);
+
+	updateazaPozSlider(slider, background, valoare, valMin, valMax);
+
+	fereastraAplicatie.draw(mainText);
+	fereastraAplicatie.draw(background);
+	fereastraAplicatie.draw(slider);
+
+	updateazaValoareVitezaDeRulare(valoare);
+}
+
 
 void butonSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
@@ -86,7 +164,7 @@ void butonSelectareFisier(RenderWindow& fereastraAplicatie, const VideoMode& des
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(12 * pozitieXSimbolStandard, (5 + 4.5 * nr) * pozitieYSimbolStandard);
+	rectangle.setPosition(12 * pozitieXSimbolStandard, (5.5 + 4.5 * nr) * pozitieYSimbolStandard);
 	rectangle.setFillColor(Color(255, 255, 180));
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineStandard);
@@ -121,7 +199,7 @@ void butonStart(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 5 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 5.5 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -140,7 +218,7 @@ void butonStop(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 9.5 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 10 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -159,7 +237,7 @@ void butonCitire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 14 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 14.5 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -178,7 +256,7 @@ void butonAfisare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 18.5 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 19 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -197,7 +275,7 @@ void butonAtribuire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 23 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 23.5 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -216,7 +294,7 @@ void butonDaca(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 27.5 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 28 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -236,7 +314,7 @@ void butonCatTimp(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(23 * pozitieXSimbolStandard, 33 * pozitieYSimbolStandard);
+	rectangle.setPosition(23 * pozitieXSimbolStandard, 33.5 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareCreare1);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineCreareSimboluri);
@@ -314,26 +392,28 @@ void butonRulareTotal(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(89 * pozitieXSimbolStandard, 5 * pozitieYSimbolStandard);
+	rectangle.setPosition(89 * pozitieXSimbolStandard, 10.0f * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareExecutare);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineExecutare);
 	fereastraAplicatie.draw(rectangle);
 
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	Text mainText("Rulare Total", fontGlobal, marimeFont);
+	Text mainText("Rulare Totala", fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
 	const FloatRect marginiText = mainText.getLocalBounds();
 	mainText.setOrigin(marginiText.left + marginiText.width / 2, marginiText.top + marginiText.height / 2);
 	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
+
+	slider(fereastraAplicatie, desktop);
 }
 
 void butonRularePas(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape rectangle(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
-	rectangle.setPosition(89 * pozitieXSimbolStandard, 9.5 * pozitieYSimbolStandard);
+	rectangle.setPosition(89 * pozitieXSimbolStandard, 5.5f * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareExecutare);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineExecutare);

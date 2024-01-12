@@ -52,6 +52,7 @@ void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 	}
 }
 
+
 FILE* creeazaFisier(const string& numeFolder, const string& numeDefault, const string& numeExtensie) {
 	const wstring wideDefault(numeDefault.begin(), numeDefault.end());
 	const wstring wideExtensie(numeExtensie.begin(), numeExtensie.end());

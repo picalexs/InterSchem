@@ -121,6 +121,7 @@ bool seParcurge = false;
 Nod* ultimNodParcurs = nullptr;
 Nod* antepenultimNodParcurs = nullptr;
 Nod* nodParcurgere = nullptr;
+
 void executareAlgoritmPasCuPas()
 {
 	if (seParcurge == false) {
@@ -150,11 +151,12 @@ void executareAlgoritmPasCuPas()
 	}
 }
 
-void executareTotAlgoritm(const Time& vitezaParcurgere)
+float vitezaDeRulare = 0.5f;
+void executareTotAlgoritm()
 {
 	static Clock ceas;
 	const Time timp = ceas.getElapsedTime();
-	if (timp.asSeconds() > vitezaParcurgere.asSeconds())
+	if (timp.asSeconds() > vitezaDeRulare)
 	{
 		executareAlgoritmPasCuPas();
 		ceas.restart();
@@ -172,3 +174,7 @@ Nod* nodCurentDeParcurgere()
 }
 
 
+void updateazaValoareVitezaDeRulare(float valoare)
+{
+	vitezaDeRulare = valoare;
+}

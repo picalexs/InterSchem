@@ -1,5 +1,7 @@
 #include "logicaButoane.h"
 
+#include "convertireCPlusPlus.h"
+
 using namespace sf;
 
 bool verificareButon(const Vector2i& pozitieMouse, float x, float y, float lungime, float inaltime) {
@@ -10,40 +12,40 @@ void logicaButoaneCreareSimboluri(const RenderWindow& fereastraAplicatie, const 
 {
 	if (!esteActivatDrop)
 		return;
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 5.5f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton start
 		logicaCreareSimbol(fereastraAplicatie, desktop, 0);
 	}
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 9.5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 10.0f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton stop
 		logicaCreareSimbol(fereastraAplicatie, desktop, 1);
 	}
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 14 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 14.5f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton citire
 		logicaCreareSimbol(fereastraAplicatie, desktop, 3);
 	}
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 18.5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 19.0f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton afisare
 		logicaCreareSimbol(fereastraAplicatie, desktop, 4);
 	}
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 23 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 23.5f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton atribuire
 		logicaCreareSimbol(fereastraAplicatie, desktop, 2);
 	}
-	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 27.5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 23 * desktop.width / 100, 28.0f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		///buton decizie
 		logicaCreareSimbol(fereastraAplicatie, desktop, 5);
 	}
 }
 
-void logicaButoaneRulare(const Vector2i pozitieMouse, VideoMode desktop, const bool& esteActivatDropRulare)
+void logicaButoaneRulare(RenderWindow& fereastraAplicatie, const Vector2i pozitieMouse, VideoMode desktop, const bool& esteActivatDropRulare)
 {
 	if (!esteActivatDropRulare)
 		return;
-	if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 10.0f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		cout << "Apasat Buton Rulare Totala!\n";
 	}
-	else if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 9.5 * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
+	else if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 5.5f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		executareAlgoritmPasCuPas();
 		cout << "Apasat Buton Rulare Pas cu Pas!\n";
 	}
@@ -166,7 +168,6 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 	static bool esteApasatIncarcare = false;
 	static int pozScroll = 0;
 	static bool aFostFolositScroll = false;
-
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && esteApasatMouse == false)
 	{
 		esteApasatMouse = true;
@@ -176,7 +177,7 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 		const Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 
 		logicaButoaneCreareSimboluri(fereastraAplicatie, pozitieMouse, desktop, esteActivatDrop);
-		logicaButoaneRulare(pozitieMouse, desktop, esteActivatDropRulare);
+		logicaButoaneRulare(fereastraAplicatie, pozitieMouse, desktop, esteActivatDropRulare);
 		logicaFisiere(pozitieMouse, desktop, esteApasatSalvare, esteApasatIncarcare);
 		logicaMeniuri(fereastraAplicatie, pozitieMouse, desktop, esteActivatDrop, esteActivatDropRulare, esteActivatConvertire);
 		logicaApasareButonIncarcare(fereastraAplicatie, desktop, pozScroll, esteApasatIncarcare);
