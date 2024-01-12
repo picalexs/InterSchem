@@ -6,9 +6,11 @@ void afisareMatrice();
 
 void resetMatrice();
 
-unsigned short getIdLinie();
+unsigned getIdLinie();
 
-bool existaLinie(Nod*& nodStart, Nod*& nodStop);
+int existaLinie(Nod*& nodStart, Nod*& nodStop);
+
+void reseteazaCuloareLinii();
 
 void adaugaSimbolCaObstacole(const Nod* nod);
 
@@ -22,7 +24,7 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod);
 
 Nod* gasesteNodObstacolInLista(Nod*& nodCurent);
 
-set<short> verificareSuprapunere(const Nod* nod);
+set<int> verificareSuprapunere(const Nod* nod);
 
 void initializareMatriceObstacole(const VideoMode& desktop);
 

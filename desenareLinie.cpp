@@ -4,7 +4,7 @@
 
 int nrLinii, nrColoane, marimeCasuta;
 constexpr float marimeSpatiu = 20.0f;
-vector<vector<short int>> matriceObstacole;
+vector<vector<int>> matriceObstacole;
 
 void afisareMatrice()
 {
@@ -30,9 +30,9 @@ void resetMatrice()
 			matriceObstacole[i][j] = 0;
 }
 
-unsigned short getIdLinie()
+unsigned getIdLinie()
 {
-	unsigned short id = 1;
+	unsigned id = 1;
 	while (true)
 	{
 		if (liniiDeDesenat.count(id) == 0)
@@ -41,15 +41,16 @@ unsigned short getIdLinie()
 	}
 }
 
-bool existaLinie(Nod*& nodStart, Nod*& nodStop)
+int existaLinie(Nod*& nodStart, Nod*& nodStop)
 {
-	for (const auto& linie : liniiDeDesenat)
+	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
 	{
-		if ((linie.second.nodStart == nodStart && linie.second.nodStop == nodStop) ||
-			(linie.second.nodStop == nodStart && linie.second.nodStart == nodStop))
-			return true;
+		const Linie linie = liniiDeDesenat[i];
+		if ((linie.nodStart == nodStart && linie.nodStop == nodStop) ||
+			(linie.nodStop == nodStart && linie.nodStart == nodStop))
+			return i;
 	}
-	return false;
+	return -1;
 }
 
 int interval(int valoare, int min, int max)
@@ -87,20 +88,10 @@ float convertesteInCoordEcran(float valoare)
 	return valoare * marimeCasuta;
 }
 
-void afisareMatriceObstacole()
+void reseteazaCuloareLinii()
 {
-	for (int i = 0; i < nrLinii; i++)
-	{
-		for (int j = 0; j < nrColoane; j++) {
-			if (matriceObstacole[i][j] < 0)
-				cout << "X ";
-			else if (matriceObstacole[i][j] > 0)
-				cout << matriceObstacole[i][j] << " ";
-			else
-				cout << ". ";
-		}
-		cout << endl;
-	}
+	for (auto& linie : liniiDeDesenat)
+		linie.second.culoareLinie = Color::Black;
 }
 
 vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
@@ -195,7 +186,7 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop, const bool d
 	return optimizareDrumBFS(drum);
 }
 
-void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int short valoareDeSetat) {
+void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int valoareDeSetat) {
 	//algoritmul Bresenham pentru a desena linii intre puncte
 	if (drumOptimizat.size() < 2)
 	{
@@ -336,7 +327,7 @@ void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat)
 	adaugaLinieObstacol(nodStart, nodStop, false);//actualizeaza linia Suprapusa de nodDeMutat
 }
 
-void modificareSimbolObstacol(const Nod* nod, const short int valoareDeSetat)
+void modificareSimbolObstacol(const Nod* nod, const int valoareDeSetat)
 {
 	const float lungimeSimbol = nod->date.lungimeSimbol / 2 + marimeSpatiu;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
@@ -379,10 +370,10 @@ void initializareMatriceObstacole(const VideoMode& desktop)
 	marimeCasuta = static_cast<int>(desktop.width) / 160;
 	nrLinii = static_cast<int>(desktop.height) / marimeCasuta + 1;
 	nrColoane = static_cast<int>(desktop.width) / marimeCasuta + 1;
-	matriceObstacole = vector<vector<short int>>(nrLinii, vector<short int>(nrColoane, false));
+	matriceObstacole = vector<vector<int>>(nrLinii, vector<int>(nrColoane, false));
 }
 
-set<short> verificareSuprapunere(const Nod* nod)
+set<int> verificareSuprapunere(const Nod* nod)
 {
 	const float lungimeSimbol = nod->date.lungimeSimbol / 2 + marimeSpatiu;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
@@ -392,7 +383,7 @@ set<short> verificareSuprapunere(const Nod* nod)
 	const int stopX = min(convertesteInCoordMatrice(nod->date.x + lungimeSimbol), nrColoane - 1);
 	const int stopY = min(convertesteInCoordMatrice(nod->date.y + inaltimeSimbol), nrLinii - 1);
 
-	set<short> obiecteSuprapuse;
+	set<int> obiecteSuprapuse;
 	for (int linie = startY; linie <= stopY; linie++) {
 		if (matriceObstacole[linie][startX] != 0 && obiecteSuprapuse.count(matriceObstacole[linie][startX]) == 0)
 			obiecteSuprapuse.insert(matriceObstacole[linie][startX]);

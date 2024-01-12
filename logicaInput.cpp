@@ -14,8 +14,12 @@ void logicaEnterParcurgere(bool& seCitesteParcurgere, bool& esteApasatF12)
 {
 	if (!expresieDeCitit.empty() && expresieDeCitit.back() == '\r')
 		expresieDeCitit.pop_back();
+
 	const long double rezultat = evaluareExpresie(expresieDeCitit);
-	listaConsola.push_back(to_string(rezultat));
+	stringstream stream;
+	stream << defaultfloat << setprecision(6) << rezultat;
+	listaConsola.push_back(stream.str());
+
 	seteazaVariabila(getNumeVariabila(), rezultat);
 	const string output = "S-a atribuit variabilei " + getNumeVariabila() + " valoarea " + to_string(rezultat);
 	cout << output << '\n';
@@ -127,7 +131,7 @@ void actualizareSimbolDeMutat(const RenderWindow& fereastraAplicatie, Nod*& nodD
 	}
 }
 
-void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodDeMutatTata, Nod*& nodLegatDeWhile, set<short>& iduriLiniiDeActualizat, set<Nod*>& noduriDeActualizat)
+void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodDeMutatTata, Nod*& nodLegatDeWhile, set<unsigned>& iduriLiniiDeActualizat, set<Nod*>& noduriDeActualizat)
 {
 	if (nodDeMutat == nullptr)
 		return;
@@ -138,7 +142,7 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 
 	nodDeMutat->date.x = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).x;
 	nodDeMutat->date.y = fereastraAplicatie.mapPixelToCoords(Mouse::getPosition(fereastraAplicatie)).y;
-	const set<short> valoareSuprapusa = verificareSuprapunere(nodDeMutat);
+	const set<int> valoareSuprapusa = verificareSuprapunere(nodDeMutat);
 	for (auto& valoare : valoareSuprapusa)
 	{
 		if (valoare > 0) {
@@ -192,7 +196,7 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 	}
 }
 
-void stopMutareSimbol(set<short>& iduriLiniiDeActualizat, set<Nod*> noduriDeActualizat, Nod*& nodDeMutat, Nod*& nodLegatDeWhile, Clock& timpApasatLMB)
+void stopMutareSimbol(set<unsigned>& iduriLiniiDeActualizat, set<Nod*> noduriDeActualizat, Nod*& nodDeMutat, Nod*& nodLegatDeWhile, Clock& timpApasatLMB)
 {
 	for (const auto& nod : noduriDeActualizat) {
 		adaugaSimbolCaObstacole(nod);
@@ -220,7 +224,8 @@ void logicaDelete()
 bool esteApasatLMB = false;
 bool esteRidicatLMB = true;
 bool esteApasatEnter = false;
-bool esteApasatF12 = false;
+bool esteApasatF1 = false;
+bool esteApasatF2 = false;
 bool esteApasatDelete = false;
 
 int esteApasatCreare = 0;
@@ -278,8 +283,11 @@ void logicaInput(const Event& event)
 		if (event.key.code == Keyboard::Enter) {
 			esteApasatEnter = true;
 		}
-		if (event.key.code == Keyboard::F12) {
-			esteApasatF12 = true;
+		if (event.key.code == Keyboard::F1) {
+			esteApasatF1 = true;
+		}
+		if (event.key.code == Keyboard::F2) {
+			esteApasatF2 = true;
 		}
 		if (event.key.code == Keyboard::Delete)
 		{
@@ -345,7 +353,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static Nod* nodDeMutatTata = nullptr;
 	static Nod* nodLegatDeWhile = nullptr;
 	static Clock timpCeasLMB, timpApasatLMB;
-	static set<short> iduriLiniiDeActualizat;
+	static set<unsigned> iduriLiniiDeActualizat;
 	static set<Nod*> noduriDeActualizat;
 
 	if (esteApasatLMB) {
@@ -380,11 +388,25 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		esteApasatLegare = false;
 		esteRidicatLegare = false;
 	}
-	if (esteApasatF12)//executa algoritmul
+	if (esteApasatF1)//pas de executare 
 	{
 		if (!seCitesteParcurgere)
 			executareAlgoritmPasCuPas();
-		esteApasatF12 = false;
+		esteApasatF1 = false;
+	}
+	if (esteApasatF2)//executa algoritmul
+	{
+		const Time vitezaParcurgere = seconds(0.5f);
+		if (!seCitesteParcurgere)
+			executareTotAlgoritm(vitezaParcurgere);
+
+		static bool saInceputParcurgerea = false;
+		if (seParcurgeAlgoritmul())
+			saInceputParcurgerea = true;
+		if (!seParcurgeAlgoritmul() && saInceputParcurgerea) {
+			esteApasatF2 = false;
+			saInceputParcurgerea = false;
+		}
 	}
 	if (esteApasatDelete)//resetaza totul
 	{
@@ -412,7 +434,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 		esteApasatEnter = false;
 		if (seCitesteParcurgere)
 		{
-			logicaEnterParcurgere(seCitesteParcurgere, esteApasatF12);
+			logicaEnterParcurgere(seCitesteParcurgere, esteApasatF1);
 		}
 		else if (seCitestePtSalvare)
 		{

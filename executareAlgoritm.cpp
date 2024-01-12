@@ -1,4 +1,6 @@
 #include "executareAlgoritm.h"
+
+#include "desenareLinie.h"
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
 #include "logicaExecutare.h"
@@ -117,24 +119,45 @@ Nod* passParcurgere(Nod* N)
 
 bool seParcurge = false;
 Nod* ultimNodParcurs = nullptr;
+Nod* antepenultimNodParcurs = nullptr;
 Nod* nodParcurgere = nullptr;
 void executareAlgoritmPasCuPas()
 {
 	if (seParcurge == false) {
 		if (!esteAlgoritmCorect())
 			return;
+		listaConsola.clear();
 		nodParcurgere = listaArbori[0].radacina;
 		seParcurge = true;
 	}
 	cout << "Executare nod cu expresia: " << nodParcurgere->date.expresie << '\n';
+	antepenultimNodParcurs = ultimNodParcurs;
 	ultimNodParcurs = nodParcurgere;
 	nodParcurgere = passParcurgere(nodParcurgere);
+	if (antepenultimNodParcurs != nullptr && ultimNodParcurs != nullptr) {
+		const unsigned idLinie = existaLinie(antepenultimNodParcurs, ultimNodParcurs);
+		if (idLinie != -1)
+			liniiDeDesenat[idLinie].culoareLinie = Color(255, 134, 20);
+		//coloreaza linia de la ultimul simbol la cel curent
+	}
 	if (nodParcurgere == nullptr)
 	{
 		seParcurge = false;
 		variabile.clear();
+		reseteazaCuloareLinii();
 		atribuireConstanteCunoscute();
 		cout << "S-a terminat executarea algoritmului!\n";
+	}
+}
+
+void executareTotAlgoritm(const Time& vitezaParcurgere)
+{
+	static Clock ceas;
+	const Time timp = ceas.getElapsedTime();
+	if (timp.asSeconds() > vitezaParcurgere.asSeconds())
+	{
+		executareAlgoritmPasCuPas();
+		ceas.restart();
 	}
 }
 

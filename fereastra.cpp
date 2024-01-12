@@ -4,7 +4,6 @@
 #include "desenareSimboluri.h"
 #include "functiiExpresie.h"
 #include "functiiNod.h"
-#include "incarcareDate.h"
 #include "logicaInput.h"
 #include "salvareDate.h"
 #include "convertireCPlusPlus.h"
@@ -42,43 +41,6 @@ void creareFereastra()
 				fereastraAplicatie.close();
 			}
 			logicaInput(event);
-			//////////////////////////DEBUGGING//////////////////////////
-			static bool apasatF11 = false;
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::F11 && !apasatF11) {
-					apasatF11 = true;
-					//cout << numarulDeFisiereInFolder() << '\n';
-				}
-			}
-			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
-				apasatF11 = false;
-			}
-
-			static bool apasatF10 = false;
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::F10 && !apasatF10) {
-					apasatF10 = true;
-					//salvareDateFisier(desktop);
-				}
-			}
-			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F10) {
-				apasatF10 = false;
-			}
-
-			static bool apasatF9 = false;
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::F9 && !apasatF9) {
-					apasatF9 = true;
-					//incarcareDateFisier(desktop);
-				}
-			}
-			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F9) {
-				apasatF9 = false;
-			}
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F4)
-				convertire(fereastraAplicatie, desktop);
-			////////////////////////////////////////////////////////////
 		}
 		fereastraAplicatie.clear(Color::White);
 		logicaExecutareInput(fereastraAplicatie, desktop, event);

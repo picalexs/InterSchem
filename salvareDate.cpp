@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "salvareDate.h"
+#include "convertireCPlusPlus.h"
 
 map<const Nod*, unsigned int> noduriParcurse;
 unsigned int index = 1;

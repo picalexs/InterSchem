@@ -73,7 +73,7 @@ pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodSto
 		return { -1,-1 };
 
 	//exista deja o legatura intre nodStart si nodStop
-	if (existaLinie(nodStart, nodStop)
+	if (existaLinie(nodStart, nodStop) >= 0
 		&& nodStart->date.tip != TipNod::DACA && nodStop->date.tip != TipNod::DACA
 		&& nodStart->date.tip != TipNod::CAT_TIMP && nodStop->date.tip != TipNod::CAT_TIMP)
 		return { -1,-1 };

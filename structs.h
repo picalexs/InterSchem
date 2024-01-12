@@ -48,10 +48,10 @@ struct Linie
 	vector<Punct> coordonate;
 	Color culoareLinie = Color::Black;
 	const Nod* nodStart, * nodStop;
-	unsigned short id;
+	unsigned id;
 };
 
-extern map<unsigned short, Linie> liniiDeDesenat;;
+extern map<unsigned, Linie> liniiDeDesenat;;
 extern vector<Arbore> listaArbori;
 extern map<string, long double> variabile;
 extern vector<string> listaConsola;
