@@ -41,7 +41,7 @@ unsigned getIdLinie()
 	}
 }
 
-int existaLinie(Nod*& nodStart, Nod*& nodStop)
+int existaLinie(Nod* nodStart, Nod* nodStop)
 {
 	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
 	{
@@ -53,25 +53,36 @@ int existaLinie(Nod*& nodStart, Nod*& nodStop)
 	return -1;
 }
 
-int existaLinieCuNodStop(Nod* nodStop)
+vector<int> existaLinieCuNodStop(Nod* nodStop)
 {
+	vector<int> idLinii;
 	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
 	{
 		const Linie linie = liniiDeDesenat[i];
 		if (linie.nodStop == nodStop)
-			return i;
+			idLinii.push_back(i);
 	}
-	return -1;
+	return idLinii;
 }
 
-vector<Nod*> toateLiniileCuNodStop(Nod* nodStop)
+vector<Nod*> toateLiniileCuNodStop(Nod*& nodStop)
 {
 	vector<Nod*> noduri;
-	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
+	for (const auto& i : liniiDeDesenat)
 	{
-		const Linie linie = liniiDeDesenat[i];
-		if (linie.nodStop == nodStop)
-			noduri.push_back(const_cast<Nod*>(linie.nodStart));
+		if (i.second.nodStop == nodStop)
+			noduri.push_back(const_cast<Nod*>(i.second.nodStart));
+	}
+	return noduri;
+}
+
+vector<Nod*> toateLiniileCuNodStart(Nod*& nodStart)
+{
+	vector<Nod*> noduri;
+	for (const auto& i : liniiDeDesenat)
+	{
+		if (i.second.nodStart == nodStart)
+			noduri.push_back(const_cast<Nod*>(i.second.nodStop));
 	}
 	return noduri;
 }
@@ -158,7 +169,7 @@ vector<Punct> optimizareDrumBFS(const vector<Punct>& drum)
 	return drumOptimizat;
 }
 
-vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop, const unsigned poateTrecePrinIdLinie) {
+vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop, const vector<int>& poateTrecePrinIdLinii) {
 	vector<vector<bool>> vizitat(nrLinii, vector<bool>(nrColoane, false));
 	vector<vector<Punct>> parinte(nrLinii, vector<Punct>(nrColoane, { -1, -1 }));
 	queue<Punct> coada;
@@ -180,9 +191,24 @@ vector<Punct> gasesteDrumBFS(const Punct& start, const Punct& stop, const unsign
 
 			const int newX = current.x_matrice + dirX[i];
 			const int newY = current.y_matrice + dirY[i];
-
-			if (newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX]
-				&& (matriceObstacole[newY][newX] == 0 || matriceObstacole[newY][newX] == static_cast<int>(poateTrecePrinIdLinie))) {
+			if (!(newX >= 0 && newX < nrColoane && newY >= 0 && newY < nrLinii && !vizitat[newY][newX]))
+				continue;
+			bool poateTrece = false;
+			if (matriceObstacole[newY][newX] == 0)
+				poateTrece = true;
+			else
+			{
+				for (const auto& idLinie : poateTrecePrinIdLinii)
+				{
+					if (matriceObstacole[newY][newX] == idLinie)
+					{
+						poateTrece = true;
+						break;
+					}
+				}
+			}
+			if (poateTrece)
+			{
 				vizitat[newY][newX] = true;
 				parinte[newY][newX] = current;
 				coada.push({ newX, newY, convertesteInCoordEcran(newX), convertesteInCoordEcran(newY) });
@@ -237,8 +263,11 @@ void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int valoare
 	}
 }
 
-void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile, const unsigned poateTrecePrinIdLinie)
+void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile, const vector<int>& poateTrecePrinIdLinii)
 {
+	if (existaLinie(const_cast<Nod*>(nod1), const_cast<Nod*>(nod2)) != -1)
+		return;
+
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2;
 	const float inaltimeSimbol2 = nod2->date.inaltimeSimbol / 2;
 	const int iStart1 = interval(convertesteInCoordMatrice(nod1->date.y + inaltimeSimbol1), 0, nrLinii - 1);
@@ -295,7 +324,7 @@ void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreW
 		matriceObstacole[i][start.x_matrice] = 0;
 
 
-	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop, poateTrecePrinIdLinie);
+	const vector<Punct> drumOptimizat = gasesteDrumBFS(start, stop, poateTrecePrinIdLinii);
 	Linie linie;
 	linie.coordonate = drumOptimizat;
 	linie.nodStart = nod1;
@@ -322,7 +351,7 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
 	}
 }
 
-void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, const unsigned poateTrecePrinIdLinie)
+void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, const vector<int>& poateTrecePrinIdLinii)
 {
 	if (idLinie < 1 || liniiDeDesenat.count(idLinie) == 0)
 		return;
@@ -336,7 +365,7 @@ void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, c
 	const Nod* nodStop = liniiDeDesenat[idLinie].nodStop;
 	liniiDeDesenat.erase(idLinie);
 	adaugaSimbolCaObstacole(nodDeMutat);
-	adaugaLinieObstacol(nodStart, nodStop, false, poateTrecePrinIdLinie);//actualizeaza linia Suprapusa de nodDeMutat
+	adaugaLinieObstacol(nodStart, nodStop, false, poateTrecePrinIdLinii);//actualizeaza linia Suprapusa de nodDeMutat
 }
 
 void modificareSimbolObstacol(const Nod* nod, const int valoareDeSetat)
@@ -390,10 +419,10 @@ void verificareSuprapunere(set<int>& obiecteSuprapuse, const Nod* nod)
 	const float lungimeSimbol = nod->date.lungimeSimbol / 2 + marimeSpatiu;
 	const float inaltimeSimbol = nod->date.inaltimeSimbol / 2 + marimeSpatiu;
 
-	const int startX = max(convertesteInCoordMatrice(nod->date.x - lungimeSimbol), 0);
-	const int startY = max(convertesteInCoordMatrice(nod->date.y - inaltimeSimbol), 0);
-	const int stopX = min(convertesteInCoordMatrice(nod->date.x + lungimeSimbol), nrColoane - 1);
-	const int stopY = min(convertesteInCoordMatrice(nod->date.y + inaltimeSimbol), nrLinii - 1);
+	const int startX = interval(convertesteInCoordMatrice(nod->date.x - lungimeSimbol), 0, nrColoane - 1);
+	const int startY = interval(convertesteInCoordMatrice(nod->date.y - inaltimeSimbol), 0, nrLinii - 1);
+	const int stopX = interval(convertesteInCoordMatrice(nod->date.x + lungimeSimbol), 0, nrColoane - 1);
+	const int stopY = interval(convertesteInCoordMatrice(nod->date.y + inaltimeSimbol), 0, nrLinii - 1);
 
 
 	for (int linie = startY; linie <= stopY; linie++) {

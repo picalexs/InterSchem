@@ -67,7 +67,7 @@ void afisareVariabile(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	float pozY = 0;
+	float pozY = desktop.height / 15;
 	float spatiuY = 10;
 	float spatiuMargini = 20;
 
@@ -86,29 +86,6 @@ void functieDebugging(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	text2.setPosition(spatiuMargini, pozY);
 	fereastraAplicatie.draw(text2);
 	pozY += text2.getGlobalBounds().height + spatiuY;
-
-
-	pozY = 0;
-	Text text4("Resetaza lista cu 'Del'", fontGlobal, marimeFont);
-	text4.setFillColor(Color::Black);
-	text4.setPosition(desktop.width - spatiuMargini - text4.getLocalBounds().width, pozY);
-	fereastraAplicatie.draw(text4);
-	pozY += text4.getGlobalBounds().height + spatiuY;
-
-	Text text6("Legatura cu RMB", fontGlobal, marimeFont);
-	text6.setFillColor(Color::Black);
-	text6.setPosition(desktop.width - spatiuMargini - text6.getLocalBounds().width, pozY);
-	fereastraAplicatie.draw(text6);
-	pozY += text6.getGlobalBounds().height + spatiuY;
-
-	//(Mouse Position)
-	Vector2i pozMouse = Mouse::getPosition(fereastraAplicatie);
-	string textPozMouse = "(" + to_string(pozMouse.x) + "," + to_string(pozMouse.y) + ")";
-	Text text5(textPozMouse, fontGlobal, marimeFont);
-	text5.setFillColor(Color::Black);
-	text5.setPosition(desktop.width - spatiuMargini - text5.getLocalBounds().width, pozY);
-	fereastraAplicatie.draw(text5);
-	pozY += text5.getGlobalBounds().height + spatiuY;
 }
 
 void stergereSpatii(string& expresie)
