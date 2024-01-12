@@ -67,7 +67,7 @@ bool esteVariabila(const std::string& token);
 
 void atribuireConstanteCunoscute();
 
-void seteazaValoareVector(const string& nume, const int idx, const int valoare);
+void seteazaVector(const string& nume, const int idx, const int valoare);
 
 bool esteVector(const string& token);
 

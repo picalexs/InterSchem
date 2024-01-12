@@ -349,7 +349,7 @@ void atribuireConstanteCunoscute()
 	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890L);
 }
 
-void seteazaValoareVector(const string& nume, const int idx, const int valoare)
+void seteazaVector(const string& nume, const int idx, const int valoare)
 {
 	if (vectori[nume].empty())
 		vectori[nume] = vector<long double>(100, 0);

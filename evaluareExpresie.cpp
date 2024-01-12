@@ -10,7 +10,9 @@ enum class TipAtom
 	OPERATOR,
 	FUNCTIE,
 	PARANTEZA,
+	PARANTEZA_DREAPTA,
 	VARIABILA,
+	VECTOR,
 	NECUNOSCUT
 };
 
@@ -20,10 +22,180 @@ struct atom
 	string val;
 };
 
+bool verificareParanteza(const vector<atom>& atomi, const int i, int& parantezeDeschise)
+{
+	if (atomi[i].val == "(")
+	{
+		if (atomi.size() > i + 1 && atomi[i + 1].val == ")")
+		{
+			const string eroare = "Eroare: Paranteza deschisa fix langa paranteza inchisa!" + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+
+		parantezeDeschise++;
+	}
+	else if (atomi[i].val == ")")
+	{
+		if (atomi.size() > i + 1 && atomi[i + 1].val == "(")
+		{
+			const string eroare = "Eroare: Paranteza deschisa fix langa paranteza inchisa!" + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+		parantezeDeschise--;
+		if (parantezeDeschise < 0)
+		{
+			const string eroare = "Eroare: Paranteza inchise in exces la pozitia " + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+	}
+	return  true;
+}
+
+
+bool verificareParantezaDreapta(const vector<atom>& atomi, const int i, int& parantezeDrepteDeschise)
+{
+	if (atomi[i].val == "[")
+	{
+		if (atomi.size() > i + 1 && atomi[i + 1].val == "]")
+		{
+			const string eroare = "Eroare: Paranteza dreapta deschisa fix langa paranteza inchisa!" + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+
+		parantezeDrepteDeschise++;
+	}
+	else if (atomi[i].val == "]")
+	{
+		if (atomi.size() > i + 1 && atomi[i + 1].val == "[")
+		{
+			const string eroare = "Eroare: Paranteza dreapta deschisa fix langa paranteza inchisa!" + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+		parantezeDrepteDeschise--;
+		if (parantezeDrepteDeschise < 0)
+		{
+			const string eroare = "Eroare: Paranteza dreapta inchise in exces la pozitia " + to_string(i);
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return false;
+		}
+	}
+	return  true;
+}
+
+bool verificareFunctie(const vector<atom>& atomi, const int i)
+{
+	// Verificam daca functia are paranteze deschise dupa ea
+	if (i + 1 >= atomi.size() || atomi[i + 1].val != "(")
+	{
+		const string eroare = "Eroare: Functia " + atomi[i].val +
+			" trebuie sa fie urmata de o paranteza deschisa la pozitia " + to_string(i);
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return false;
+	}
+	return true;
+}
+
+bool verificareOperator(const vector<atom>& atomi, const int i)
+{
+	bool esteCazRau = false;
+	// Verificam daca operatorul este intre doi atomi corespunzatori
+	if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1)
+	{
+		esteCazRau = true;
+		//daca avem un op. pe prima pozitie si nu e unar sau avem unul pe ultima pozitie, atunci nu e bine
+	}
+	else if (i > 0 && atomi[i - 1].val == "("
+		&& ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].val == ")"))
+	{
+		esteCazRau = true;
+		//daca avem un op. dupa '(' si e diferit de +,- sau urmeaza o paranteza inchisa dupa op., atunci nu e bine
+	}
+	else if (i > 0 && atomi[i - 1].tip != TipAtom::NUMAR && atomi[i - 1].tip != TipAtom::VARIABILA
+		&& atomi[i - 1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA)
+	{
+		esteCazRau = true;
+		//daca nu avem un nr,var,fct sau '(' inainte de op., atunci nu e bine
+	}
+	else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip !=
+		TipAtom::VARIABILA
+		&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(")
+	{
+		esteCazRau = true;
+		//daca nu avem un nr, var, fct sau '(' dupa op., atunci nu e bine
+	}
+	else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && (atomi[i - 1].val == "("))
+	{
+		esteCazRau = true;
+		//daca avem (op) nu este bine
+	}
+	if (esteCazRau)
+	{
+		const string eroare = "Eroare: Operatorul " + atomi[i].val + " trebuie sa fie intre doi atomi la pozitia " +
+			to_string(i);
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return false;
+	}
+	return true;
+}
+
+bool verificareVariabila(const vector<atom>& atomi, const int i)
+{
+	// Verificam daca dupa o variabila apare altceva decat un operator sau o paranteza
+	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")" && atomi[i + 1].val != "]")
+	{
+		const string eroare = "Eroare: Variabila " + atomi[i].val +
+			" trebuie sa fie urmata de un operator la pozitia " + to_string(i);
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return false;
+	}
+	return true;
+}
+
+bool verificareVector(const vector<atom>& atomi, const int i)
+{
+	// Verificam daca dupa un vector apare altceva deca o paranteza dreapta deschisa
+	if (i + 1 < atomi.size() && atomi[i + 1].val != "[")
+	{
+		const string eroare = "Eroare: Vectorul " + atomi[i].val +
+			" trebuie sa fie urmat de o paranteza dreapta deschisa la pozitia " + to_string(i);
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return false;
+	}
+	return true;
+}
+
+bool verificareNumar(const vector<atom>& atomi, const int i)
+{
+	// Verificam daca dupa un numar apare altceva decat un operator sau o paranteza
+	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")" && atomi[i + 1].val != "]")
+	{
+		const string eroare = atomi[i].val + " trebuie sa fie urmat de un operator la pozitia " + to_string(i);
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return false;
+	}
+	return true;
+}
+
 bool esteExpresieCorecta(const vector<atom>& atomi)
 {
 	int parantezeDeschise = 0;
-	bool esteCazRau = false;
+	int parantezeDrepteDeschise = 0;
 	if (atomi.empty())
 		return false;
 	for (size_t i = 0; i < atomi.size(); ++i)
@@ -31,108 +203,32 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 		switch (atomi[i].tip)
 		{
 		case TipAtom::PARANTEZA:
-			if (atomi[i].val == "(")
-			{
-				if (atomi.size() > i + 1 && atomi[i + 1].val == ")")
-				{
-					const string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
-					cout << eroare << '\n';
-					listaConsola.push_back(eroare);
-					return false;
-				}
-
-				parantezeDeschise++;
-			}
-			else if (atomi[i].val == ")")
-			{
-				if (atomi.size() > i + 1 && atomi[i + 1].val == "(")
-				{
-					const string eroare = "Eroare: Paranteze deschisa fix langa paranteza inchisa!" + to_string(i);
-					cout << eroare << '\n';
-					listaConsola.push_back(eroare);
-					return false;
-				}
-				parantezeDeschise--;
-				if (parantezeDeschise < 0)
-				{
-					const string eroare = "Eroare: Paranteze inchise in exces la pozitia " + to_string(i);
-					cout << eroare << '\n';
-					listaConsola.push_back(eroare);
-					return false;
-				}
-			}
+			if (!verificareParanteza(atomi, i, parantezeDeschise))
+				return false;
+			break;
+		case TipAtom::PARANTEZA_DREAPTA:
+			if (!verificareParantezaDreapta(atomi, i, parantezeDrepteDeschise))
+				return false;
 			break;
 		case TipAtom::FUNCTIE:
-			// Verificam daca functia are paranteze deschise dupa ea
-			if (i + 1 >= atomi.size() || atomi[i + 1].val != "(")
-			{
-				const string eroare = "Eroare: Functia " + atomi[i].val +
-					" trebuie sa fie urmata de o paranteza deschisa la pozitia " + to_string(i);
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
+			if (!verificareFunctie(atomi, i))
 				return false;
-			}
 			break;
 		case TipAtom::OPERATOR:
-			// Verificam daca operatorul este intre doi atomi corespunzatori
-			if ((i == 0 && atomi[i].val != "-" && atomi[i].val != "+") || i == atomi.size() - 1)
-			{
-				esteCazRau = true;
-				//daca avem un op. pe prima pozitie si nu e unar sau avem unul pe ultima pozitie, atunci nu e bine
-			}
-			else if (i > 0 && atomi[i - 1].val == "("
-				&& ((atomi[i].val != "+" && atomi[i].val != "-") || atomi[i + 1].val == ")"))
-			{
-				esteCazRau = true;
-				//daca avem un op. dupa '(' si e diferit de +,- sau urmeaza o paranteza inchisa dupa op., atunci nu e bine
-			}
-			else if (i > 0 && atomi[i - 1].tip != TipAtom::NUMAR && atomi[i - 1].tip != TipAtom::VARIABILA
-				&& atomi[i - 1].tip != TipAtom::FUNCTIE && atomi[i - 1].tip != TipAtom::PARANTEZA)
-			{
-				esteCazRau = true;
-				//daca nu avem un nr,var,fct sau '(' inainte de op., atunci nu e bine
-			}
-			else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip !=
-				TipAtom::VARIABILA
-				&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(")
-			{
-				esteCazRau = true;
-				//daca nu avem un nr, var, fct sau '(' dupa op., atunci nu e bine
-			}
-			else if (atomi.size() > i + 1 && atomi[i + 1].val == ")" && (atomi[i - 1].val == "("))
-			{
-				esteCazRau = true;
-				//daca avem (op) nu este bine
-			}
-			if (esteCazRau)
-			{
-				const string eroare = "Eroare: Operatorul " + atomi[i].val + " trebuie sa fie intre doi atomi la pozitia " +
-					to_string(i);
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
+			if (!verificareOperator(atomi, i))
 				return false;
-			}
 			break;
 		case TipAtom::VARIABILA:
-			// Verificam daca dupa o variabila apare altceva decat un operator sau o paranteza
-			if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
-			{
-				const string eroare = "Eroare: Variabila " + atomi[i].val +
-					" trebuie sa fie urmata de un operator la pozitia " + to_string(i);
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
+			if (!verificareVariabila(atomi, i))
 				return false;
-			}
+			break;
+		case TipAtom::VECTOR:
+			if (!verificareVector(atomi, i))
+				return false;
 			break;
 		case TipAtom::NUMAR:
-			// Verificam daca dupa un numar apare altceva decat un operator sau o paranteza
-			if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
-			{
-				const string eroare = atomi[i].val + " trebuie sa fie urmat de un operator la pozitia " + to_string(i);
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
+			if (!verificareNumar(atomi, i))
 				return false;
-			}
 			break;
 		case TipAtom::NECUNOSCUT:
 		{
@@ -141,11 +237,8 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 			listaConsola.push_back(eroare);
 			return false;
 		}
-		default:
-			break;
 		}
 	}
-
 	if (parantezeDeschise != 0)
 	{
 		const string eroare = "Eroare: Paranteze deschise fara inchidere";
@@ -153,7 +246,6 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 		listaConsola.push_back(eroare);
 		return false;
 	}
-
 	return true;
 }
 
@@ -188,6 +280,11 @@ vector<atom> atomizare(const string& expresie)
 					atomi.push_back({ TipAtom::VARIABILA, atomCurent });
 					atomCurent.clear();
 				}
+				else if (esteVector(atomCurent))//VECTOR
+				{
+					atomi.push_back({ TipAtom::VECTOR, atomCurent });
+					atomCurent.clear();
+				}
 
 				string op = expresie.substr(i, 2);
 				if (esteOperator(ch) && !esteOperatorLung(op)) //OPERATOR
@@ -218,6 +315,15 @@ vector<atom> atomizare(const string& expresie)
 					}
 					atomi.push_back({ TipAtom::PARANTEZA, string(1, ch) });
 				}
+				else if (ch == '[' || ch == ']') //PARANTEZA DREAPTA
+				{
+					if (!atomCurent.empty())
+					{
+						atomi.push_back({ TipAtom::NECUNOSCUT, atomCurent });
+						atomCurent.clear();
+					}
+					atomi.push_back({ TipAtom::PARANTEZA_DREAPTA, string(1, ch) });
+				}
 				else //SI...(N), Varia...(bila), C..(os), -...(1)
 				{
 					atomCurent += ch;
@@ -235,6 +341,10 @@ vector<atom> atomizare(const string& expresie)
 				else if (esteVariabila(atomCurent))
 				{
 					atomi.push_back({ TipAtom::VARIABILA, atomCurent });
+				}
+				else if (esteVector(atomCurent))
+				{
+					atomi.push_back({ TipAtom::VECTOR, atomCurent });
 				}
 				else if (atomCurent.size() == 1 && esteOperator(atomCurent[0]))
 				{
@@ -265,6 +375,10 @@ vector<atom> atomizare(const string& expresie)
 		else if (esteVariabila(atomCurent))
 		{
 			atomi.push_back({ TipAtom::VARIABILA, atomCurent });
+		}
+		else if (esteVector(atomCurent))
+		{
+			atomi.push_back({ TipAtom::VECTOR, atomCurent });
 		}
 		else if (atomCurent.size() == 1 && esteOperator(atomCurent[0]))
 		{
@@ -301,6 +415,7 @@ map<string, operatori> reguliOperatori = {
 	{">", {1, false}},
 	{"<=", {1, false}},
 	{">=", {1, false}},
+	{"[",{2,false}},
 	{"(", {2, false}},
 	{"+", {3, false}},
 	{"-", {3, false}},
@@ -315,6 +430,7 @@ map<string, operatori> reguliOperatori = {
 	{"ln", {6, false}},
 	{"abs", {6, false}},
 	{"sqrt", {6, false}}
+
 };
 
 vector<atom> conversieInPostfixat(const vector<atom>& atomi)
@@ -335,6 +451,7 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 		}
 		case TipAtom::OPERATOR:
 		case TipAtom::FUNCTIE:
+		case TipAtom::VECTOR:
 		{
 			const atom& op1 = at;
 			while (!coada.empty())
@@ -368,6 +485,23 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 					coada.pop();
 				}
 				coada.pop(); // Eliminate ( din coada
+			}
+			break;
+		}
+		case TipAtom::PARANTEZA_DREAPTA:
+		{
+			if (at.val == "[")
+			{
+				coada.push(at);
+			}
+			else if (at.val == "]")
+			{
+				while (!coada.empty() && coada.top().val != "[")
+				{
+					atomiPostfixat.push_back(coada.top());
+					coada.pop();
+				}
+				coada.pop(); // Eliminate [ din coada
 			}
 			break;
 		}
@@ -546,8 +680,14 @@ void afisareAtomi(const vector<atom>& atomi)
 		case TipAtom::PARANTEZA:
 			cout << "paranteza";
 			break;
+		case TipAtom::PARANTEZA_DREAPTA:
+			cout << "paranteza dreapta";
+			break;
 		case TipAtom::VARIABILA:
 			cout << "variabila";
+			break;
+		case TipAtom::VECTOR:
+			cout << "vector";
 			break;
 		case TipAtom::NECUNOSCUT:
 			cout << "!! necunoscut";
@@ -563,6 +703,11 @@ void testareEvaluator()
 	seteazaVariabila("x1", 7.0);
 	seteazaVariabila("zero", 0);
 	seteazaVariabila("val", 15);
+	seteazaVector("v", 1, 10);
+	seteazaVector("v", 2, 9);
+	seteazaVector("v", 3, 8);
+	seteazaVector("test", 1, 99);
+
 	atribuireConstanteCunoscute(); //PI,g,e,phi
 
 	//expresie ="-sin(-sin(-cos(-x1)))+ln(abs(-2/2.3))-2+2/2*3.2/2+cos(-zero*(tg(1)+ctg(2)))";
