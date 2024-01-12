@@ -328,15 +328,13 @@ void seteazaVariabila(const string& nume, const long double valoare) {
 	variabile[nume] = valoare;
 }
 
-long double obtineValDupaNume(const string& nume) {
+long double valoareVariabila(const string& nume) {
 	const auto it = variabile.find(nume);
 	if (it != variabile.end()) {
 		return it->second;
 	}
-	else {
-		cout << "Variabila \"" << nume << "\" nu a fost gasita.\n";
-		return NAN;
-	}
+	cout << "Variabila \"" << nume << "\" nu a fost gasita.\n";
+	return NAN;
 }
 
 bool esteVariabila(const string& token) {
@@ -349,4 +347,23 @@ void atribuireConstanteCunoscute()
 	seteazaVariabila("e", 2.718281828459045235360287471352662497757247093699959574966967627724076630353L);
 	seteazaVariabila("g", 9.80665f);
 	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890L);
+}
+
+void seteazaValoareVector(const string& nume, const int idx, const int valoare)
+{
+	if (vectori[nume].empty())
+		vectori[nume] = vector<long double>(100, 0);
+	vectori[nume][idx] = valoare;
+}
+
+bool esteVector(const string& token)
+{
+	return vectori.find(token) != vectori.end();
+}
+
+long double valoareVector(const string& nume, const int idx)
+{
+	if (vectori[nume].empty())
+		return 0;
+	return vectori[nume][idx];
 }

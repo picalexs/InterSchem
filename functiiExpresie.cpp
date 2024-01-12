@@ -44,10 +44,10 @@ void afisareVariabile(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 
 	string textVariabile = "Variabile:";
 	for (const auto& variabila : variabile) {
-		if ((variabila.first == "PI" && variabila.second == obtineValDupaNume("PI"))
-			|| (variabila.first == "e" && variabila.second == obtineValDupaNume("e"))
-			|| (variabila.first == "g" && variabila.second == obtineValDupaNume("g"))
-			|| (variabila.first == "phi" && variabila.second == obtineValDupaNume("phi")))
+		if ((variabila.first == "PI" && variabila.second == valoareVariabila("PI"))
+			|| (variabila.first == "e" && variabila.second == valoareVariabila("e"))
+			|| (variabila.first == "g" && variabila.second == valoareVariabila("g"))
+			|| (variabila.first == "phi" && variabila.second == valoareVariabila("phi")))
 			continue;
 
 		textVariabile += "\n" + variabila.first + "= ";

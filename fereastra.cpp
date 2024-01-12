@@ -13,6 +13,7 @@ using namespace sf;
 
 void creareFereastra()
 {
+
 	VideoMode desktop = VideoMode::getDesktopMode();
 	RenderWindow fereastraAplicatie(desktop, "Interschem", Style::Default); //de schimbat cu Fullscreen dupa
 	const View view(FloatRect(0, 0, static_cast<float>(desktop.width), static_cast<float>(desktop.height)));

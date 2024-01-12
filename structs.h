@@ -54,5 +54,6 @@ struct Linie
 extern map<unsigned, Linie> liniiDeDesenat;;
 extern vector<Arbore> listaArbori;
 extern map<string, long double> variabile;
+extern map<string, vector<long double>> vectori;
 extern vector<string> listaConsola;
 extern Font fontGlobal;

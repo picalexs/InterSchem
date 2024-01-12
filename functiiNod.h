@@ -61,8 +61,14 @@ void stergereNod(Nod* N);
 
 void seteazaVariabila(const std::string& nume, long double valoare);
 
-long double obtineValDupaNume(const std::string& nume);
+long double valoareVariabila(const std::string& nume);
 
 bool esteVariabila(const std::string& token);
 
 void atribuireConstanteCunoscute();
+
+void seteazaValoareVector(const string& nume, const int idx, const int valoare);
+
+bool esteVector(const string& token);
+
+long double valoareVector(const string& nume, const int idx);
