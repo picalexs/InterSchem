@@ -92,18 +92,26 @@ pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodSto
 			if (!esteNodInArbore(nodStart, nodStop->st) && !esteNodInArbore(nodStart, nodStop->dr))
 				return { -1,-1 };//nu se poate face legatura intre nodStart si nodStop
 		}
-		else {
-			return { -1,-1 }; // incerc sa conectez nodStart de nodStop(care nu este while, deci nu este bine)
-		}
 		if (nodStart->date.tip == TipNod::DACA)
 			nodStart->date.tip = TipNod::CAT_TIMP;
 		else if (nodStop->date.tip == TipNod::DACA)
 			nodStop->date.tip = TipNod::CAT_TIMP;
 	}
+	else
+	{
+		Nod* nod2Tata = gasesteNodTata(listaArbori[pozArbore2].radacina, nod2);
+		if (nod2Tata != nullptr)
+		{
+			if (existaLinie(nod2Tata, nod2) != -1)
+			{
+				return { -1,-1 };
+			}
+		}
+	}
 	return { pozArbore1, pozArbore2 };
 }
 
-void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata)
+void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata, const unsigned poateTrecePrinIdLinie)
 {
 	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
 	{
@@ -135,10 +143,10 @@ void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata)
 		}
 
 		if (nod2->date.tip == TipNod::CAT_TIMP && esteNodInArbore(nod1, nod2)) {
-			adaugaLinieObstacol(nod1, nod2, true);
+			adaugaLinieObstacol(nod1, nod2, true, 0);
 		}
 		else {
-			adaugaLinieObstacol(nod1, nod2, false);
+			adaugaLinieObstacol(nod1, nod2, false, poateTrecePrinIdLinie);
 		}
 		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
 			nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
@@ -151,5 +159,9 @@ void adaugaLinie(Nod*& nodStart, Nod*& nodStop)
 {
 	nod1 = nodStart;
 	nod2 = nodStop;
-	logicaLegaturaIntreSimboluri(true);
+	const unsigned poateTrecePrinIdLinie = existaLinieCuNodStop(nodStop);
+	if (poateTrecePrinIdLinie != -1)
+		logicaLegaturaIntreSimboluri(true, poateTrecePrinIdLinie);
+	else
+		logicaLegaturaIntreSimboluri(true, 0);
 }
