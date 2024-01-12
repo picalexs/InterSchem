@@ -257,6 +257,16 @@ string getNumeFisierSalvare()
 	return expresieDeCitit;
 }
 
+bool seCitesteParcurgereProgram()
+{
+	return seCitesteParcurgere;
+}
+
+void activeazaParcurgereaTotala()
+{
+	esteApasatF2 = true;
+}
+
 void logicaInput(const Event& event)
 {
 	if (event.type == Event::MouseButtonPressed)

@@ -38,15 +38,17 @@ void logicaButoaneCreareSimboluri(const RenderWindow& fereastraAplicatie, const 
 	}
 }
 
-void logicaButoaneRulare(RenderWindow& fereastraAplicatie, const Vector2i pozitieMouse, VideoMode desktop, const bool& esteActivatDropRulare)
+void logicaButoaneRulare(const Vector2i pozitieMouse, VideoMode desktop, const bool& esteActivatDropRulare)
 {
 	if (!esteActivatDropRulare)
 		return;
 	if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 10.0f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
 		cout << "Apasat Buton Rulare Totala!\n";
+		activeazaParcurgereaTotala();
 	}
 	else if (verificareButon(pozitieMouse, 89 * desktop.width / 100, 5.5f * desktop.height / 100, desktop.width / 10, desktop.height / 25)) {
-		executareAlgoritmPasCuPas();
+		if (!seCitesteParcurgereProgram())
+			executareAlgoritmPasCuPas();
 		cout << "Apasat Buton Rulare Pas cu Pas!\n";
 	}
 
@@ -177,7 +179,7 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 		const Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 
 		logicaButoaneCreareSimboluri(fereastraAplicatie, pozitieMouse, desktop, esteActivatDrop);
-		logicaButoaneRulare(fereastraAplicatie, pozitieMouse, desktop, esteActivatDropRulare);
+		logicaButoaneRulare(pozitieMouse, desktop, esteActivatDropRulare);
 		logicaFisiere(pozitieMouse, desktop, esteApasatSalvare, esteApasatIncarcare);
 		logicaMeniuri(fereastraAplicatie, pozitieMouse, desktop, esteActivatDrop, esteActivatDropRulare, esteActivatConvertire);
 		logicaApasareButonIncarcare(fereastraAplicatie, desktop, pozScroll, esteApasatIncarcare);

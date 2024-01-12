@@ -11,7 +11,11 @@ void activeazaSalvare();
 
 void opresteSalvare();
 
+bool seCitesteParcurgereProgram();
+
 std::string getNumeFisierSalvare();
+
+void activeazaParcurgereaTotala();
 
 void logicaInput(const Event& event);
 
