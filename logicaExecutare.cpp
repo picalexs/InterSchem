@@ -5,14 +5,15 @@
 #include "functiiExpresie.h"
 
 
-void setareVector(const string& expresie, string& expresieDeCitit, const string& numeElement, size_t& i, const size_t& pozitieEgal, const size_t& pozitieParanteza, const bool esteInitializare)
+void setareVector(const string& expresie, string& expresieDeCitit, const string& numeElement, size_t& i, const size_t& pozitieEgal, const bool esteInitializare)
 {
+	const size_t pozitieParanteza = numeElement.find('[');
+	const size_t pozitieParantezaInchisa = numeElement.find(']');
 	const string numeVector = numeElement.substr(0, pozitieParanteza);
-	const size_t pozitieParantezaInchisa = expresie.find(']', pozitieParanteza + 1);
 	string indexStr = numeElement.substr(pozitieParanteza + 1, pozitieParantezaInchisa - pozitieParanteza - 1);
 
 	const int index = static_cast<int>(evaluareExpresie(indexStr));
-	if (isnan(static_cast<long double>(index)))
+	if (isnan(static_cast<long double>(index)) || index < 0)
 	{
 		const string eroare = "Eroare la atribuire! Index-ul vectorului nu este corect!";
 		cout << eroare << '\n';
@@ -129,12 +130,11 @@ void logicaAtribuire(Nod* N)
 		if ((pozitieVirgula != string::npos && pozitieEgal != string::npos && pozitieVirgula < pozitieEgal)
 			|| pozitieEgal == string::npos)
 		{
-			const size_t pozitieParanteza = expresie.find('[', i);
-			string numeElement = expresie.substr(i, pozitieVirgula);
+			string numeElement = expresie.substr(i, pozitieVirgula - i);
 
 			if (pozitieVirgula != string::npos)
 			{
-				setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, pozitieParanteza, true);
+				setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, true);
 			}
 			else
 			{
@@ -149,7 +149,7 @@ void logicaAtribuire(Nod* N)
 			string numeElement = expresie.substr(i, pozitieVirgula - i);
 			bool isVector = false;
 
-			size_t pozitieParanteza = numeElement.find('[');
+			const size_t pozitieParanteza = numeElement.find('[');
 			if (pozitieParanteza != string::npos)
 			{
 				isVector = true;
@@ -157,7 +157,7 @@ void logicaAtribuire(Nod* N)
 
 			if (isVector)
 			{
-				setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, pozitieParanteza, false);
+				setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, false);
 			}
 			else
 			{
@@ -334,8 +334,6 @@ void logicaAfisare(Nod* N)
 	cout << "S-a adaugat: " << output << " in lista de output" << endl;
 	listaConsola.push_back(output);
 }
-
-
 
 bool logicaDaca(Nod* N)
 {

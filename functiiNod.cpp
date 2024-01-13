@@ -351,6 +351,13 @@ void atribuireConstanteCunoscute()
 
 void creazaVector(const string& nume, const int dimensiune)
 {
+	if (dimensiune <= 0 || dimensiune > 1000)
+	{
+		const string eroare = "Eroare la atribuire! Dimensiunea vectorului nu este corecta!";
+		cout << eroare << '\n';
+		listaConsola.push_back(eroare);
+		return;
+	}
 	vectori[nume] = vector<long double>(dimensiune, 0);
 }
 
