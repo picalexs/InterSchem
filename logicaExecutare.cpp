@@ -111,8 +111,8 @@ void seteazaVariabila(const string& expresie, string& expresieDeCitit, const str
 	}
 }
 
-//caute expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
-//in plus initializeaza si vectori: vect[idx], sau seteaza o valoare a unui vector: vect[idx]=expresie
+//cauta expresii de tipul "var1 = expr1" sau "var1 = expr1, var2 = expr2, ..." si le salveaza in map-ul "variabile"
+//in plus initializeaza si vectori: vect[idx], sau seteaza o valoare a unui vector: vect[idx]=expresie in map-ul "vectori"
 void logicaAtribuire(Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
@@ -121,6 +121,13 @@ void logicaAtribuire(Nod* N)
 	string expresie = N->date.expresie;
 	stergereSpatii(expresie);
 	string expresieDeCitit;
+
+	// Sterge ultima virgula daca e in plus
+	if (expresie.back() == ',')
+	{
+		expresie.pop_back();
+		N->date.expresie = expresie;
+	}
 
 	size_t i = 0;
 	while (i < expresie.size())
@@ -131,18 +138,7 @@ void logicaAtribuire(Nod* N)
 			|| pozitieEgal == string::npos)
 		{
 			string numeElement = expresie.substr(i, pozitieVirgula - i);
-
-			if (pozitieVirgula != string::npos)
-			{
-				setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, true);
-			}
-			else
-			{
-				const string eroare = "Eroare la atribuire! Expresia nu contine '='!";
-				cout << eroare << '\n';
-				listaConsola.push_back(eroare);
-				return;
-			}
+			setareVector(expresie, expresieDeCitit, numeElement, i, pozitieEgal, true);
 		}
 		else
 		{
@@ -150,7 +146,7 @@ void logicaAtribuire(Nod* N)
 			bool isVector = false;
 
 			const size_t pozitieParanteza = numeElement.find('[');
-			if (pozitieParanteza != string::npos)
+			if (pozitieParanteza != string::npos && pozitieParanteza < pozitieEgal)
 			{
 				isVector = true;
 			}
@@ -166,13 +162,6 @@ void logicaAtribuire(Nod* N)
 			}
 		}
 	}
-	// Sterge ultima virgula daca e in plus
-	if (expresie.back() == ',')
-	{
-		expresie.pop_back();
-		N->date.expresie = expresie;
-	}
-	//cout << vectori["test"][0] << " " << vectori["var"][0] << endl;
 }
 
 bool seCiteste = false;
