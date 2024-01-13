@@ -5,8 +5,8 @@
 using namespace std;
 
 int main() {
-	//creareFereastra();
-	testareEvaluator();
+	creareFereastra();
+	//testareEvaluator();
 	cin.get();//pentru a nu se inchide fereastra imediat
 	return 0;
 }

@@ -349,10 +349,27 @@ void atribuireConstanteCunoscute()
 	seteazaVariabila("phi", 1.61803398874989484820458683436563811772030917980576286213544862270526046281890L);
 }
 
-void seteazaVector(const string& nume, const int idx, const int valoare)
+void creazaVector(const string& nume, const int dimensiune)
+{
+	vectori[nume] = vector<long double>(dimensiune, 0);
+}
+
+void seteazaVector(const string& nume, const int idx, const long double valoare)
 {
 	if (vectori[nume].empty())
-		vectori[nume] = vector<long double>(101, 0);
+	{
+		const string eroare = "Eroare la atribuire! Vectorul nu a fost initializat!";
+		listaConsola.push_back(eroare);
+		cout << eroare << '\n';
+		return;
+	}
+	if (idx >= vectori[nume].size())
+	{
+		const string eroare = "Eroare la atribuire! Indexul este prea mare!";
+		listaConsola.push_back(eroare);
+		cout << eroare << '\n';
+		return;
+	}
 	vectori[nume][idx] = valoare;
 }
 
@@ -364,6 +381,18 @@ bool esteVector(const string& token)
 long double valoareVector(const string& nume, const int idx)
 {
 	if (vectori[nume].empty())
-		return 0;
+	{
+		const string eroare = "Eroare la atribuire! Vectorul nu a fost initializat!";
+		listaConsola.push_back(eroare);
+		cout << eroare << '\n';
+		return NAN;
+	}
+	if (idx >= vectori[nume].size())
+	{
+		const string eroare = "Eroare la atribuire! Indexul este prea mare!";
+		listaConsola.push_back(eroare);
+		cout << eroare << '\n';
+		return NAN;
+	}
 	return vectori[nume][idx];
 }
