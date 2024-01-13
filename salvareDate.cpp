@@ -99,6 +99,7 @@ string obtineDataCalendaristica() {
 	return ss.str();
 }
 
+
 void salvareDateFisier(const VideoMode& desktop, string& numeFisier)
 {
 	if (listaArbori.empty())

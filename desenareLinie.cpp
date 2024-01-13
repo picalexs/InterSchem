@@ -41,7 +41,7 @@ unsigned getIdLinie()
 	}
 }
 
-int existaLinie(Nod* nodStart, Nod* nodStop)
+int existaLinie(const Nod* nodStart, const Nod* nodStop)
 {
 	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
 	{
@@ -265,7 +265,11 @@ void plaseazaDrumInMatrice(const vector<Punct>& drumOptimizat, const int valoare
 
 void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile, const vector<int>& poateTrecePrinIdLinii)
 {
-	if (existaLinie(const_cast<Nod*>(nod1), const_cast<Nod*>(nod2)) != -1)
+	if (nod1 == nullptr || nod2 == nullptr)
+		return;
+	if (existaLinie(nod1, nod2) != -1
+		&& nod1->date.tip != TipNod::DACA && nod1->date.tip != TipNod::CAT_TIMP
+		&& nod2->date.tip != TipNod::DACA && nod2->date.tip != TipNod::CAT_TIMP)
 		return;
 
 	const float inaltimeSimbol1 = nod1->date.inaltimeSimbol / 2;
@@ -339,7 +343,7 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
 		return;
 	}
 	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();) {
-		if (it->second.nodStart == nod || it->second.nodStop == nod)
+		if (it->second.nodStart == nod || it->second.nodStop == nod || it->second.coordonate.empty())
 		{
 			plaseazaDrumInMatrice(it->second.coordonate, 0);
 			it = liniiDeDesenat.erase(it);

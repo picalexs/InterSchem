@@ -63,10 +63,11 @@ void creareFereastra()
 		afisareListaOutput(fereastraAplicatie, desktop);//afiseaza listaConsola
 		afisareVariabile(fereastraAplicatie, desktop);//afiseaza variabilele pe ecran
 
+		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
+
 		logicaButon(fereastraAplicatie, desktop, event);
 		butoaneMeniu(fereastraAplicatie, desktop);
 
-		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 		fereastraAplicatie.display();
 	}
 }

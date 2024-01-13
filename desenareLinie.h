@@ -8,7 +8,7 @@ void resetMatrice();
 
 unsigned getIdLinie();
 
-int existaLinie(Nod* nodStart, Nod* nodStop);
+int existaLinie(const Nod* nodStart, const Nod* nodStop);
 
 vector<int> existaLinieCuNodStop(Nod* nodStop);
 
