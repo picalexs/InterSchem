@@ -13,6 +13,6 @@ string getNumeVariabila();
 
 bool seCitestePtParcurgere();
 
-void logicaAfisare(Nod* N);
+void logicaAfisare(const Nod* N);
 
 bool logicaDaca(Nod* N);

@@ -177,6 +177,7 @@ void logicaAtribuire(Nod* N)
 
 bool seCiteste = false;
 string numeVariabila;
+
 void logicaCitire(const Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
@@ -210,26 +211,86 @@ string getNumeVariabila()
 	return numeVariabila;
 }
 
-void logicaAfisare(Nod* N)
+void adaugareVector(string& numeVariabilaAfisare, string& output)
+{
+	const size_t pozitieParanteza = numeVariabilaAfisare.find('[');
+	if (pozitieParanteza != string::npos)
+	{
+		const string numeVector = numeVariabilaAfisare.substr(0, pozitieParanteza);
+		string indexStr = numeVariabilaAfisare.substr(pozitieParanteza + 1, numeVariabilaAfisare.size() - pozitieParanteza - 2);
+
+		const int index = static_cast<int>(evaluareExpresie(indexStr));
+		if (isnan(static_cast<long double>(index)))
+		{
+			const string eroare = "Eroare la atribuire! Index-ul vectorului nu este corect!";
+			cout << eroare << '\n';
+			listaConsola.push_back(eroare);
+			return;
+		}
+
+		const long double valoare = valoareVector(numeVector, index);
+		if (!isnan(valoare)) {
+			stringstream stream;
+			stream << defaultfloat << setprecision(6) << valoare;
+			output += stream.str();
+			numeVariabilaAfisare.clear();
+		}
+
+	}
+}
+
+void adaugareVariabila(string& numeVariabilaAfisare, string& output)
+{
+	const long double rezultat = evaluareExpresie(numeVariabilaAfisare);
+	if (!isnan(rezultat))
+	{
+		stringstream stream;
+		stream << defaultfloat << setprecision(6) << rezultat;
+		output += stream.str();
+		numeVariabilaAfisare.clear();
+	}
+}
+
+void adaugareElement(string& numeVariabilaAfisare, string& output)
+{
+	if (!numeVariabilaAfisare.empty())
+	{
+		if (esteVector(numeVariabilaAfisare))
+		{
+			adaugareVector(numeVariabilaAfisare, output);
+		}
+		else
+		{
+			adaugareVariabila(numeVariabilaAfisare, output);
+		}
+	}
+}
+
+bool textValid(const bool& ghilimele, const char& ch)
+{
+	return (!ghilimele && (isalnum(ch) || ch == ' ' || ch == ')' || ch == '(' || esteOperator(ch) || ch == '[' || ch == ']'))
+		|| (ghilimele && (ch > 31 && ch < 127 && ch != 34));
+}
+
+void logicaAfisare(const Nod* N)
 {
 	if (N == nullptr || N->date.expresie.empty())
 		return;
 
-	string expresie = N->date.expresie;
+	const string expresie = N->date.expresie;
 	string output, numeVariabilaAfisare;
 
 	bool ghilimele = false;
 	for (size_t i = 0; i < expresie.size(); i++)
 	{
-		char ch = expresie[i];
+		const char ch = expresie[i];
 		string opL = expresie.substr(i, 2);
 		if (!ghilimele && esteOperatorLung(opL))
 		{
 			numeVariabilaAfisare += opL;
 			i += 1;
 		}
-		else if ((!ghilimele && (isalnum(ch) || ch == ' ' || ch == ')' || ch == '(' || esteOperator(ch) || ch == '[' || ch == ']'))
-			|| (ghilimele && (ch > 31 && ch < 127 && ch != 34)))
+		else if (textValid(ghilimele, ch))
 		{
 			numeVariabilaAfisare += ch;
 		}
@@ -237,47 +298,7 @@ void logicaAfisare(Nod* N)
 		{
 			if (!ghilimele)
 			{
-				if (!numeVariabilaAfisare.empty())
-				{
-					if (esteVector(numeVariabilaAfisare)) // Check if the variable is a vector
-					{
-						size_t pozitieParanteza = numeVariabilaAfisare.find('[');
-						if (pozitieParanteza != string::npos)
-						{
-							string numeVector = numeVariabilaAfisare.substr(0, pozitieParanteza);
-							string indexStr = numeVariabilaAfisare.substr(pozitieParanteza + 1, numeVariabilaAfisare.size() - pozitieParanteza - 2);
-
-							const int index = static_cast<int>(evaluareExpresie(indexStr));
-							if (isnan(static_cast<long double>(index)))
-							{
-								const string eroare = "Eroare la atribuire! Index-ul vectorului nu este corect!";
-								cout << eroare << '\n';
-								listaConsola.push_back(eroare);
-								return;
-							}
-
-							long double valoare = valoareVector(numeVector, index);
-							if (!isnan(valoare)) {
-								stringstream stream;
-								stream << defaultfloat << setprecision(6) << valoare;
-								output += stream.str();
-								numeVariabilaAfisare.clear();
-							}
-
-						}
-					}
-					else
-					{
-						long double rezultat = evaluareExpresie(numeVariabilaAfisare);
-						if (!isnan(rezultat))
-						{
-							stringstream stream;
-							stream << defaultfloat << setprecision(6) << rezultat;
-							output += stream.str();
-							numeVariabilaAfisare.clear();
-						}
-					}
-				}
+				adaugareElement(numeVariabilaAfisare, output);
 			}
 			else
 			{
@@ -292,48 +313,12 @@ void logicaAfisare(Nod* N)
 	}
 	if (!ghilimele)
 	{
-		if (!numeVariabilaAfisare.empty())
-		{
-			if (esteVector(numeVariabilaAfisare)) // Check if the variable is a vector
-			{
-				size_t pozitieParanteza = numeVariabilaAfisare.find('[');
-				if (pozitieParanteza != string::npos)
-				{
-					string numeVector = numeVariabilaAfisare.substr(0, pozitieParanteza);
-					string indexStr = numeVariabilaAfisare.substr(pozitieParanteza + 1, numeVariabilaAfisare.size() - pozitieParanteza - 2);
-
-					const int index = static_cast<int>(evaluareExpresie(indexStr));
-					if (isnan(static_cast<long double>(index)))
-					{
-						const string eroare = "Eroare la atribuire! Index-ul vectorului nu este corect!";
-						cout << eroare << '\n';
-						listaConsola.push_back(eroare);
-						return;
-					}
-					long double valoare = valoareVector(numeVector, index);
-					stringstream stream;
-					stream << defaultfloat << setprecision(6) << valoare;
-					output += stream.str();
-					numeVariabilaAfisare.clear();
-
-				}
-			}
-			else
-			{
-				long double rezultat = evaluareExpresie(numeVariabilaAfisare);
-				if (!isnan(rezultat))
-				{
-					stringstream stream;
-					stream << defaultfloat << setprecision(6) << rezultat;
-					output += stream.str();
-					numeVariabilaAfisare.clear();
-				}
-			}
-		}
+		adaugareElement(numeVariabilaAfisare, output);
 	}
 	cout << "S-a adaugat: " << output << " in lista de output" << endl;
 	listaConsola.push_back(output);
 }
+
 
 bool logicaDaca(Nod* N)
 {
