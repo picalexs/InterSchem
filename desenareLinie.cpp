@@ -43,12 +43,11 @@ unsigned getIdLinie()
 
 int existaLinie(const Nod* nodStart, const Nod* nodStop)
 {
-	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
+	for (const auto& it : liniiDeDesenat)
 	{
-		const Linie linie = liniiDeDesenat[i];
-		if ((linie.nodStart == nodStart && linie.nodStop == nodStop) ||
-			(linie.nodStop == nodStart && linie.nodStart == nodStop))
-			return i;
+		if ((it.second.nodStart == nodStart && it.second.nodStop == nodStop) ||
+			(it.second.nodStop == nodStart && it.second.nodStart == nodStop))
+			return it.first;
 	}
 	return -1;
 }
@@ -56,11 +55,10 @@ int existaLinie(const Nod* nodStart, const Nod* nodStop)
 vector<int> existaLinieCuNodStop(Nod* nodStop)
 {
 	vector<int> idLinii;
-	for (unsigned i = 0; i < liniiDeDesenat.size(); i++)
+	for (const auto& it : liniiDeDesenat)
 	{
-		const Linie linie = liniiDeDesenat[i];
-		if (linie.nodStop == nodStop)
-			idLinii.push_back(i);
+		if (it.second.nodStop == nodStop)
+			idLinii.push_back(it.first);
 	}
 	return idLinii;
 }
@@ -343,8 +341,12 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
 		return;
 	}
 	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();) {
-		if (it->second.nodStart == nod || it->second.nodStop == nod || it->second.coordonate.empty())
+		if (it->second.nodStart == nod || it->second.nodStop == nod)
 		{
+			if (it->first == 5)
+			{
+				cout << "a";
+			}
 			plaseazaDrumInMatrice(it->second.coordonate, 0);
 			it = liniiDeDesenat.erase(it);
 		}
@@ -367,6 +369,10 @@ void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, c
 	}
 	const Nod* nodStart = liniiDeDesenat[idLinie].nodStart;
 	const Nod* nodStop = liniiDeDesenat[idLinie].nodStop;
+	if (idLinie == 5)
+	{
+		cout << "a";
+	}
 	liniiDeDesenat.erase(idLinie);
 	adaugaSimbolCaObstacole(nodDeMutat);
 	adaugaLinieObstacol(nodStart, nodStop, false, poateTrecePrinIdLinii);//actualizeaza linia Suprapusa de nodDeMutat

@@ -166,9 +166,10 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 	}
 
 	adaugaSimbolCaObstacole(nodDeMutat);
-	for (const auto& idLinie : iduriLiniiDeActualizat) {
-		actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat, { 0 });
+	for (const auto& nod : noduriDeActualizat) {
+		adaugaSimbolCaObstacole(nod);
 	}
+
 	vector<int> idLinii;
 	idLinii.push_back(getIdLinie());
 	for (const auto& nod : noduriDeLegatSpreNod) {
@@ -184,11 +185,11 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 		}
 		adaugaLinieObstacol(nodDeMutat, nod, linieSpreWhile, { 0 });
 	}
+	for (const auto& idLinie : iduriLiniiDeActualizat) {
+		actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat, { 0 });
+	}
 	if (nodLegatDeWhile != nullptr) {
 		adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true, { 0 });
-	}
-	for (const auto& nod : noduriDeActualizat) {
-		adaugaSimbolCaObstacole(nod);
 	}
 }
 
