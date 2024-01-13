@@ -94,7 +94,7 @@ void logicaMeniuri(RenderWindow& fereastraAplicatie, const Vector2i& pozitieMous
 	}
 }
 
-void logicaApasareButonIncarcare(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, int pozScroll, bool& esteApasatIncarcare)
+void logicaApasareButonIncarcare(const RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int& pozScroll, bool& esteApasatIncarcare)
 {//verifica daca s-a apasat pe unul din butoanele de incarcare ce contin numele fisierelor salvate
 	if (!esteApasatIncarcare)
 		return;
@@ -102,7 +102,6 @@ void logicaApasareButonIncarcare(const RenderWindow& fereastraAplicatie, const V
 	constexpr int nrMaximDeFisiere = 7;
 	const int startIdx = pozScroll;
 	const int stopIdx = min(static_cast<int>(fisiere.size()), pozScroll + nrMaximDeFisiere);
-
 	for (int i = startIdx; i < stopIdx; i++)
 	{
 		if (verificareButon(Mouse::getPosition(fereastraAplicatie), 12 * desktop.width / 100, (5 + 4 * (i - startIdx)) * desktop.height / 100, desktop.width / 10, desktop.height / 25))
@@ -122,7 +121,7 @@ void logicaScroll(const Event& event, bool& aFostFolositScroll, int& pozScroll)
 			if (event.mouseWheelScroll.delta > 0)
 				pozScroll = max(0, pozScroll - 2); // Scroll sus
 			else if (event.mouseWheelScroll.delta < 0)
-				pozScroll = min(0, min(static_cast<int>(numeFisiereInFolder().size()) - 7, pozScroll + 2)); // Scroll jos
+				pozScroll = max(0, min(static_cast<int>(numeFisiereInFolder().size()) - 7, pozScroll + 2)); // Scroll jos
 			aFostFolositScroll = true;
 		}
 	}
@@ -134,30 +133,30 @@ void logicaScroll(const Event& event, bool& aFostFolositScroll, int& pozScroll)
 
 void logicaSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop, bool& esteApasatSalvare, string& numeFisierDeSalvat)
 {
-	if (esteApasatSalvare)
+	if (!esteApasatSalvare)
+		return;
+	if (!seCitesteSalvare())
 	{
-		if (!seCitesteSalvare())
-		{
-			//s-a oprit citirea si se salveaza
-			if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
-				numeFisierDeSalvat.pop_back();
-			salvareDateFisier(desktop, numeFisierDeSalvat);
-			numeFisierDeSalvat.clear();
-			esteApasatSalvare = false;
-		}
-		else {
-			//citeste numele fisierului de salvat
-			const string numeTmp = getNumeFisierSalvare();
-			if (numeTmp.empty()) {
-				desenareSalvareFereastraText(fereastraAplicatie, desktop, numeTmp);
-				return;
-			}
-			numeFisierDeSalvat = numeTmp;
-			if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
-				numeFisierDeSalvat.pop_back();
-			desenareSalvareFereastraText(fereastraAplicatie, desktop, numeFisierDeSalvat);
-		}
+		//s-a oprit citirea si se salveaza
+		if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
+			numeFisierDeSalvat.pop_back();
+		salvareDateFisier(desktop, numeFisierDeSalvat);
+		numeFisierDeSalvat.clear();
+		esteApasatSalvare = false;
 	}
+	else {
+		//citeste numele fisierului de salvat
+		const string numeTmp = getNumeFisierSalvare();
+		if (numeTmp.empty()) {
+			desenareSalvareFereastraText(fereastraAplicatie, desktop, numeTmp);
+			return;
+		}
+		numeFisierDeSalvat = numeTmp;
+		if (!numeFisierDeSalvat.empty() && numeFisierDeSalvat.back() == '\r')
+			numeFisierDeSalvat.pop_back();
+		desenareSalvareFereastraText(fereastraAplicatie, desktop, numeFisierDeSalvat);
+	}
+
 }
 
 void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event)
