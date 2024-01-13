@@ -10,7 +10,6 @@ enum class TipAtom
 	OPERATOR,
 	FUNCTIE,
 	PARANTEZA,
-	PARANTEZA_DREAPTA,
 	VARIABILA,
 	VECTOR,
 	NECUNOSCUT
@@ -57,42 +56,6 @@ bool verificareParanteza(const vector<atom>& atomi, const int i, int& parantezeD
 	return  true;
 }
 
-
-bool verificareParantezaDreapta(const vector<atom>& atomi, const int i, int& parantezeDrepteDeschise)
-{
-	if (atomi[i].val == "[")
-	{
-		if (atomi.size() > i + 1 && atomi[i + 1].val == "]")
-		{
-			const string eroare = "Eroare: Paranteza dreapta deschisa fix langa paranteza inchisa!" + to_string(i);
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-			return false;
-		}
-
-		parantezeDrepteDeschise++;
-	}
-	else if (atomi[i].val == "]")
-	{
-		if (atomi.size() > i + 1 && atomi[i + 1].val == "[")
-		{
-			const string eroare = "Eroare: Paranteza dreapta deschisa fix langa paranteza inchisa!" + to_string(i);
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-			return false;
-		}
-		parantezeDrepteDeschise--;
-		if (parantezeDrepteDeschise < 0)
-		{
-			const string eroare = "Eroare: Paranteza dreapta inchise in exces la pozitia " + to_string(i);
-			cout << eroare << '\n';
-			listaConsola.push_back(eroare);
-			return false;
-		}
-	}
-	return  true;
-}
-
 bool verificareFunctie(const vector<atom>& atomi, const int i)
 {
 	// Verificam daca functia are paranteze deschise dupa ea
@@ -128,8 +91,8 @@ bool verificareOperator(const vector<atom>& atomi, const int i)
 		esteCazRau = true;
 		//daca nu avem un nr,var,fct sau '(' inainte de op., atunci nu e bine
 	}
-	else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR && atomi[i + 1].tip !=
-		TipAtom::VARIABILA
+	else if (atomi.size() > i + 1 && atomi[i + 1].tip != TipAtom::NUMAR
+		&& atomi[i + 1].tip != TipAtom::VARIABILA && atomi[i + 1].tip != TipAtom::VECTOR
 		&& atomi[i + 1].tip != TipAtom::FUNCTIE && atomi[i + 1].val != "(")
 	{
 		esteCazRau = true;
@@ -154,7 +117,7 @@ bool verificareOperator(const vector<atom>& atomi, const int i)
 bool verificareVariabila(const vector<atom>& atomi, const int i)
 {
 	// Verificam daca dupa o variabila apare altceva decat un operator sau o paranteza
-	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")" && atomi[i + 1].val != "]")
+	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
 	{
 		const string eroare = "Eroare: Variabila " + atomi[i].val +
 			" trebuie sa fie urmata de un operator la pozitia " + to_string(i);
@@ -167,11 +130,11 @@ bool verificareVariabila(const vector<atom>& atomi, const int i)
 
 bool verificareVector(const vector<atom>& atomi, const int i)
 {
-	// Verificam daca dupa un vector apare altceva deca o paranteza dreapta deschisa
-	if (i + 1 < atomi.size() && atomi[i + 1].val != "[")
+	// Verificam daca dupa un vector apare altceva deca o paranteza deschisa
+	if (i + 1 < atomi.size() && atomi[i + 1].val != "(")
 	{
 		const string eroare = "Eroare: Vectorul " + atomi[i].val +
-			" trebuie sa fie urmat de o paranteza dreapta deschisa la pozitia " + to_string(i);
+			" trebuie sa fie urmat de o paranteza deschisa la pozitia " + to_string(i);
 		cout << eroare << '\n';
 		listaConsola.push_back(eroare);
 		return false;
@@ -182,7 +145,7 @@ bool verificareVector(const vector<atom>& atomi, const int i)
 bool verificareNumar(const vector<atom>& atomi, const int i)
 {
 	// Verificam daca dupa un numar apare altceva decat un operator sau o paranteza
-	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")" && atomi[i + 1].val != "]")
+	if (i + 1 < atomi.size() && atomi[i + 1].tip != TipAtom::OPERATOR && atomi[i + 1].val != ")")
 	{
 		const string eroare = atomi[i].val + " trebuie sa fie urmat de un operator la pozitia " + to_string(i);
 		cout << eroare << '\n';
@@ -195,7 +158,6 @@ bool verificareNumar(const vector<atom>& atomi, const int i)
 bool esteExpresieCorecta(const vector<atom>& atomi)
 {
 	int parantezeDeschise = 0;
-	int parantezeDrepteDeschise = 0;
 	if (atomi.empty())
 		return false;
 	for (size_t i = 0; i < atomi.size(); ++i)
@@ -204,10 +166,6 @@ bool esteExpresieCorecta(const vector<atom>& atomi)
 		{
 		case TipAtom::PARANTEZA:
 			if (!verificareParanteza(atomi, i, parantezeDeschise))
-				return false;
-			break;
-		case TipAtom::PARANTEZA_DREAPTA:
-			if (!verificareParantezaDreapta(atomi, i, parantezeDrepteDeschise))
 				return false;
 			break;
 		case TipAtom::FUNCTIE:
@@ -315,15 +273,6 @@ vector<atom> atomizare(const string& expresie)
 					}
 					atomi.push_back({ TipAtom::PARANTEZA, string(1, ch) });
 				}
-				else if (ch == '[' || ch == ']') //PARANTEZA DREAPTA
-				{
-					if (!atomCurent.empty())
-					{
-						atomi.push_back({ TipAtom::NECUNOSCUT, atomCurent });
-						atomCurent.clear();
-					}
-					atomi.push_back({ TipAtom::PARANTEZA_DREAPTA, string(1, ch) });
-				}
 				else //SI...(N), Varia...(bila), C..(os), -...(1)
 				{
 					atomCurent += ch;
@@ -400,6 +349,27 @@ vector<atom> atomizare(const string& expresie)
 	return atomi;
 }
 
+string transformareParantezeVector(const string& expresie)
+{
+	string expresieNoua;
+	for (const auto& ch : expresie)
+	{
+		if (ch == '[')
+		{
+			expresieNoua += '(';
+		}
+		else if (ch == ']')
+		{
+			expresieNoua += ')';
+		}
+		else
+		{
+			expresieNoua += ch;
+		}
+	}
+	return expresieNoua;
+}
+
 struct operatori
 {
 	int precedenta;
@@ -415,7 +385,6 @@ map<string, operatori> reguliOperatori = {
 	{">", {1, false}},
 	{"<=", {1, false}},
 	{">=", {1, false}},
-	{"[",{2,false}},
 	{"(", {2, false}},
 	{"+", {3, false}},
 	{"-", {3, false}},
@@ -454,21 +423,31 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 		case TipAtom::VECTOR:
 		{
 			const atom& op1 = at;
-			while (!coada.empty())
+
+			if (op1.tip == TipAtom::VECTOR)
 			{
-				atom op2 = coada.top();
-				if ((!reguliOperatori[op1.val].asociativDreapta
-					&& reguliOperatori[op1.val].precedenta <= reguliOperatori[op2.val].precedenta)
-					|| (reguliOperatori[op1.val].asociativDreapta
-						&& reguliOperatori[op1.val].precedenta < reguliOperatori[op2.val].precedenta))
-				{
-					atomiPostfixat.push_back(coada.top());
-					coada.pop();
-					continue;
-				}
-				break;
+				coada.push(at);
 			}
-			coada.push(at);
+			else
+			{
+				while (!coada.empty())
+				{
+					atom op2 = coada.top();
+
+					if (op2.tip == TipAtom::VECTOR ||
+						(!reguliOperatori[op1.val].asociativDreapta &&
+							reguliOperatori[op1.val].precedenta <= reguliOperatori[op2.val].precedenta) ||
+						(reguliOperatori[op1.val].asociativDreapta &&
+							reguliOperatori[op1.val].precedenta < reguliOperatori[op2.val].precedenta))
+					{
+						atomiPostfixat.push_back(coada.top());
+						coada.pop();
+						continue;
+					}
+					break;
+				}
+				coada.push(at);
+			}
 		}
 		break;
 		case TipAtom::PARANTEZA:
@@ -485,23 +464,6 @@ vector<atom> conversieInPostfixat(const vector<atom>& atomi)
 					coada.pop();
 				}
 				coada.pop(); // Eliminate ( din coada
-			}
-			break;
-		}
-		case TipAtom::PARANTEZA_DREAPTA:
-		{
-			if (at.val == "[")
-			{
-				coada.push(at);
-			}
-			else if (at.val == "]")
-			{
-				while (!coada.empty() && coada.top().val != "[")
-				{
-					atomiPostfixat.push_back(coada.top());
-					coada.pop();
-				}
-				coada.pop(); // Eliminate [ din coada
 			}
 			break;
 		}
@@ -564,7 +526,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 				stiva.push(op1 / op2);
 			}
 			else if (at.val == "%")
-			{
+			{//le transformam in long long pentru a putea calcula restul
 				stiva.push(static_cast<long long>(op1) % static_cast<long long>(op2));
 			}
 			else if (at.val == "^")
@@ -653,6 +615,20 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 				}
 			}
 		}
+		else if (at.tip == TipAtom::VECTOR)
+		{
+			const long double op = stiva.top();
+			stiva.pop();
+			const long long index = static_cast<long long>(op);
+			if (index < 0 || index > 100)
+			{
+				const string eroare = "Eroare: Indexul vectorului " + at.val + " este invalid!";
+				cout << eroare << '\n';
+				listaConsola.push_back(eroare);
+				return 0;
+			}
+			stiva.push(valoareVector(at.val, index));
+		}
 	}
 	long double rezultat = stiva.top();
 	if (abs(rezultat) < 1e-10)
@@ -679,9 +655,6 @@ void afisareAtomi(const vector<atom>& atomi)
 			break;
 		case TipAtom::PARANTEZA:
 			cout << "paranteza";
-			break;
-		case TipAtom::PARANTEZA_DREAPTA:
-			cout << "paranteza dreapta";
 			break;
 		case TipAtom::VARIABILA:
 			cout << "variabila";
@@ -717,6 +690,7 @@ void testareEvaluator()
 		cout << "Introduceti expresia: " << '\n';
 		getline(cin, expresie);
 		stergereSpatii(expresie);
+		expresie = transformareParantezeVector(expresie);
 		cout << expresie << '\n';
 		vector<atom> atomi = atomizare(expresie);
 
@@ -744,6 +718,7 @@ void testareEvaluator()
 long double evaluareExpresie(string& expresie)
 {
 	stergereSpatii(expresie);
+	expresie = transformareParantezeVector(expresie);
 	const vector<atom> atomi = atomizare(expresie);
 	if (!esteExpresieCorecta(atomi))
 	{

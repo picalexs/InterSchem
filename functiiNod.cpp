@@ -352,7 +352,7 @@ void atribuireConstanteCunoscute()
 void seteazaVector(const string& nume, const int idx, const int valoare)
 {
 	if (vectori[nume].empty())
-		vectori[nume] = vector<long double>(100, 0);
+		vectori[nume] = vector<long double>(101, 0);
 	vectori[nume][idx] = valoare;
 }
 
