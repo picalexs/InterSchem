@@ -9,6 +9,8 @@
 #include "logicaSimboluri.h"
 #include <SFML/Graphics.hpp>
 
+void updateMarimeFont(const int marime);
+
 void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const Event& event);
 
 bool verificareButon(const Vector2f& pozitieMouse, float x, float y, const VideoMode& desktop);

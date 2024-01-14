@@ -2,8 +2,10 @@
 #include <iomanip>
 #include <sstream>
 
+#include "convertireCPlusPlus.h"
 #include "executareAlgoritm.h"
 #include "incarcareDate.h"
+#include "logicaButoane.h"
 
 float lungimeButonStandard = 0;
 float inaltimeButonStandard = 0;
@@ -43,7 +45,7 @@ void updateazaPozSlider(RectangleShape& slider, const RectangleShape& fundalSlid
 	slider.setPosition(sliderX, slider.getPosition().y);
 }
 
-void slider(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+void sliderVitezaRulare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
 	RectangleShape dreptunghi(Vector2f(lungimeButonStandard, inaltimeButonStandard));
 
@@ -101,7 +103,6 @@ void slider(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 	updateazaValoareVitezaDeRulare(valoare);
 }
-
 
 void butonSalvare(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
@@ -354,7 +355,7 @@ void butonSalvareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& d
 	const int inaltimeButon = desktop.height / 24;
 	RectangleShape rectangle(Vector2f(lungimeButon, inaltimeButon));
 
-	rectangle.setPosition(71 * pozitieXSimbolStandard, 12 * pozitieYSimbolStandard);
+	rectangle.setPosition(71 * pozitieXSimbolStandard, 8 * pozitieYSimbolStandard);
 	rectangle.setFillColor(culoareStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(culoareOutlineStandard);
@@ -406,7 +407,7 @@ void butonRulareTotal(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	mainText.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2, rectangle.getPosition().y + rectangle.getSize().y / 2);
 	fereastraAplicatie.draw(mainText);
 
-	slider(fereastraAplicatie, desktop);
+	sliderVitezaRulare(fereastraAplicatie, desktop);
 }
 
 void butonRularePas(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
@@ -476,18 +477,79 @@ void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop
 	butonAtribuire(fereastraAplicatie, desktop);
 	butonDaca(fereastraAplicatie, desktop);
 }
-void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+
+void sliderMarimeFont(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
+{
+	RectangleShape dreptunghi(Vector2f(lungimeButonStandard, inaltimeButonStandard));
+
+	dreptunghi.setPosition(89 * pozitieXSimbolStandard, 8.0f * pozitieYSimbolStandard);
+	dreptunghi.setFillColor(culoareExecutare);
+	dreptunghi.setOutlineThickness(desktop.width / 350);
+	dreptunghi.setOutlineColor(culoareOutlineExecutare);
+	fereastraAplicatie.draw(dreptunghi);
+
+	RectangleShape fundal(Vector2f(desktop.width / 14, desktop.height / 60));
+	fundal.setFillColor(Color(110, 162, 186));
+	fundal.setPosition(91.75f * pozitieXSimbolStandard, 9.25f * pozitieYSimbolStandard);
+
+	RectangleShape slider(Vector2f(40.0f / (3200.0f / desktop.width), 60.0f / (2000.0f / desktop.height)));
+	slider.setFillColor(culoareOutlineRulare);
+	slider.setPosition(89 * pozitieXSimbolStandard, 8.5f * pozitieYSimbolStandard);
+
+	constexpr int valMin = 15;
+	constexpr int valMax = 60;
+	static int valoare = 50;
+	Vector2i pozMouse = Mouse::getPosition(fereastraAplicatie);
+
+	if (verificareButonTMP(pozMouse, fundal.getPosition().x, slider.getPosition().y - slider.getSize().y / 2, fundal.getSize().x + slider.getSize().x / 2, slider.getSize().y)
+		&& Mouse::isButtonPressed(Mouse::Left))
+	{
+		pozMouse = Mouse::getPosition(fereastraAplicatie);
+		float xNou = clamp(static_cast<float>(pozMouse.x), fundal.getPosition().x, fundal.getPosition().x + fundal.getSize().x - slider.getSize().x);
+		slider.setPosition(xNou, slider.getPosition().y);
+
+		float range = valMax - valMin;
+		float percentage = (xNou - fundal.getPosition().x) / (fundal.getSize().x - slider.getSize().x);
+		valoare = valMin + range * percentage;
+	}
+
+	const int marimeFont = static_cast<int>(desktop.width) / 90;
+	stringstream stream;
+	stream << fixed << setprecision(0) << valoare;
+
+	Text mainText(stream.str(), fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+	const FloatRect marginiText = mainText.getLocalBounds();
+	mainText.setOrigin(marginiText.left, marginiText.top);
+	mainText.setPosition(dreptunghi.getPosition().x + desktop.width / 200, 9.5f * pozitieYSimbolStandard);
+
+	updateMarimeFont(valoare);
+	updateazaPozSlider(slider, fundal, valoare, valMin, valMax);
+
+	fereastraAplicatie.draw(mainText);
+	fereastraAplicatie.draw(fundal);
+	fereastraAplicatie.draw(slider);
+}
+
+void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int marimeFont)
 {
 	const int lungime = 60 * pozitieXSimbolStandard;
-	const int inaltime = 72 * pozitieYSimbolStandard;
+	const int inaltime = 92 * pozitieYSimbolStandard;
 	RectangleShape rectangle(Vector2f(lungime, inaltime));
 
-	rectangle.setPosition(70 * pozitieXSimbolStandard, 10 * pozitieYSimbolStandard);
+	rectangle.setPosition(70 * pozitieXSimbolStandard, 6.5 * pozitieYSimbolStandard);
 	rectangle.setOutlineThickness(desktop.width / 350);
 	rectangle.setOutlineColor(Color(0, 0, 0));
-	rectangle.setFillColor(Color(255, 255, 255));
+	rectangle.setFillColor(Color(225, 234, 247));
 	fereastraAplicatie.draw(rectangle);
 
+	const string codConvertit = getCodConvertit();
+	Text mainText(codConvertit, fontGlobal, marimeFont);
+	mainText.setFillColor(Color::Black);
+	mainText.setPosition(71 * desktop.width / 100, 14 * desktop.height / 100);
+	fereastraAplicatie.draw(mainText);
+
+	sliderMarimeFont(fereastraAplicatie, desktop);
 	butonSalvareConvertire(fereastraAplicatie, desktop);
 }
 
@@ -534,10 +596,10 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 void butoaneMeniu(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 {
+	butonAjutor(fereastraAplicatie, desktop);
 	butonSalvare(fereastraAplicatie, desktop);
 	butonIncarcare(fereastraAplicatie, desktop);
 	butonDropDown(fereastraAplicatie, desktop);
 	butonRulare(fereastraAplicatie, desktop);
 	butonConvertire(fereastraAplicatie, desktop);
-	butonAjutor(fereastraAplicatie, desktop);
 }

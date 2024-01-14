@@ -65,8 +65,8 @@ void creareFereastra()
 
 		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 
-		logicaButon(fereastraAplicatie, desktop, event);
 		butoaneMeniu(fereastraAplicatie, desktop);
+		logicaButon(fereastraAplicatie, desktop, event);
 
 		fereastraAplicatie.display();
 	}
