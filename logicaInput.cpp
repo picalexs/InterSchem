@@ -403,7 +403,7 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	}
 	if (esteRidicatLegare)
 	{
-		logicaLegaturaIntreSimboluri(false, { 0 });
+		logicaLegaturaIntreSimboluri(false);
 		esteApasatLegare = false;
 		esteRidicatLegare = false;
 	}

@@ -111,8 +111,10 @@ pair<unsigned int, unsigned int> esteLegaturaValida(Nod*& nodStart, Nod*& nodSto
 	return { pozArbore1, pozArbore2 };
 }
 
-void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata, const vector<unsigned>& poateTrecePrinLinii)
+void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata)
 {
+	vector<unsigned> poateTrecePrinIdLinii = existaLinieCuNodStop(nod2);
+
 	if (nod1 == nod2 || nod1 == nullptr || nod2 == nullptr)
 	{
 		nod1 = nullptr;
@@ -146,7 +148,9 @@ void logicaLegaturaIntreSimboluri(bool esteLegaturaIncarcata, const vector<unsig
 			adaugaLinieObstacol(nod1, nod2, true, 0, { 0 });
 		}
 		else {
-			adaugaLinieObstacol(nod1, nod2, false, 0, poateTrecePrinLinii);
+			if (poateTrecePrinIdLinii.empty())
+				poateTrecePrinIdLinii.push_back(0);
+			adaugaLinieObstacol(nod1, nod2, false, 0, poateTrecePrinIdLinii);
 		}
 		cout << "Legatura: tip= " << static_cast<int>(nod1->date.tip) << "->" << static_cast<int>(nod2->date.tip) << ", (" << nod1->date.x << ',' <<
 			nod1->date.y << ")->(" << nod2->date.x << ',' << nod2->date.y << ")\n";
@@ -159,9 +163,5 @@ void adaugaLinie(Nod*& nodStart, Nod*& nodStop)
 {
 	nod1 = nodStart;
 	nod2 = nodStop;
-	const vector<unsigned> poateTrecePrinIdLinii = existaLinieCuNodStop(nodStop);
-	if (!poateTrecePrinIdLinii.empty())
-		logicaLegaturaIntreSimboluri(true, poateTrecePrinIdLinii);
-	else
-		logicaLegaturaIntreSimboluri(true, { 0 });
+	logicaLegaturaIntreSimboluri(true);
 }
