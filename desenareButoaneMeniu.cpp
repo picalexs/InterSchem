@@ -57,7 +57,7 @@ void slider(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	background.setFillColor(Color(110, 162, 186));
 	background.setPosition(91.75f * pozitieXSimbolStandard, 15.75 * pozitieYSimbolStandard);
 
-	RectangleShape slider(Vector2f(40, 60));
+	RectangleShape slider(Vector2f(40.0f / (3200.0f / desktop.width), 60.0f / (2000.0f / desktop.height)));
 	slider.setFillColor(culoareOutlineRulare);
 	slider.setPosition(89 * pozitieXSimbolStandard, 15.0f * pozitieYSimbolStandard);
 

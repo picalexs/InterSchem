@@ -252,7 +252,7 @@ void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, co
 	Color culoareNu;
 	if (!isOutline)
 	{
-		const int marimeContur = desktop.height / 125;
+		const int marimeContur = 16.0f / (3200.0f / desktop.width);
 		const Color culoareContur = Color(0, 0, 0);
 		DateNod dateContur = date;
 		dateContur.lungimeSimbol += marimeContur;

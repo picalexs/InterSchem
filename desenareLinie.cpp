@@ -3,7 +3,7 @@
 #define PI 3.14159265358979323846
 
 int nrLinii, nrColoane, marimeCasuta;
-constexpr float marimeSpatiu = 20.0f;
+float marimeSpatiu = 20.0f;
 vector<vector<int>> matriceObstacole;
 
 void afisareMatrice()
@@ -350,10 +350,6 @@ void stergereLiniiObstacoleCuNodulDat(const Nod* nod) {
 	for (auto it = liniiDeDesenat.begin(); it != liniiDeDesenat.end();) {
 		if (it->second.nodStart == nod || it->second.nodStop == nod)
 		{
-			if (it->first == 5)
-			{
-				cout << "a";
-			}
 			plaseazaDrumInMatrice(it->second.coordonate, 0);
 			it = liniiDeDesenat.erase(it);
 		}
@@ -376,10 +372,6 @@ void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, c
 	}
 	const Nod* nodStart = liniiDeDesenat[idLinie].nodStart;
 	const Nod* nodStop = liniiDeDesenat[idLinie].nodStop;
-	if (idLinie == 5)
-	{
-		cout << "a";
-	}
 	liniiDeDesenat.erase(idLinie);
 	adaugaSimbolCaObstacole(nodDeMutat);
 	adaugaLinieObstacol(nodStart, nodStop, false, idLinie, poateTrecePrinIdLinii);//actualizeaza linia Suprapusa de nodDeMutat
@@ -426,6 +418,7 @@ void stergeSimbolObstacol(const Nod* nod)
 void initializareMatriceObstacole(const VideoMode& desktop)
 {
 	marimeCasuta = static_cast<int>(desktop.width) / 160;
+	marimeSpatiu = 20.0f / (3200.0f / desktop.width);
 	nrLinii = static_cast<int>(desktop.height) / marimeCasuta + 1;
 	nrColoane = static_cast<int>(desktop.width) / marimeCasuta + 1;
 	matriceObstacole = vector<vector<int>>(nrLinii, vector<int>(nrColoane, false));
