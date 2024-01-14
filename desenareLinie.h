@@ -10,11 +10,11 @@ unsigned getIdLinie();
 
 int existaLinie(const Nod* nodStart, const Nod* nodStop);
 
-vector<int> existaLinieCuNodStop(Nod* nodStop);
+vector<unsigned> existaLinieCuNodStop(Nod* nodStop);
 
-vector<Nod*> toateLiniileCuNodStop(Nod*& nodStop);
+vector<pair<Nod*, unsigned>> toateLiniileCuNodStop(Nod*& nodStop);
 
-vector<Nod*> toateLiniileCuNodStart(Nod*& nodStart);
+vector<pair<Nod*, unsigned>> toateLiniileCuNodStart(Nod*& nodStart);
 
 void reseteazaCuloareLinii();
 
@@ -22,9 +22,9 @@ void adaugaSimbolCaObstacole(const Nod* nod);
 
 void stergeSimbolObstacol(const Nod* nod);
 
-void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile, const vector<int>& poateTrecePrinIdLinii);
+void adaugaLinieObstacol(const Nod* nod1, const Nod* nod2, const bool linieSpreWhile, const int idLinie, const vector<unsigned>& poateTrecePrinIdLinii);
 
-void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, const vector<int>& poateTrecePrinIdLinii);
+void actualizeazaLinieObstacolPrinId(const int idLinie, const Nod* nodDeMutat, const vector<unsigned>& poateTrecePrinIdLinii);
 
 void stergereLiniiObstacoleCuNodulDat(const Nod* nod);
 

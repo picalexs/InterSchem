@@ -100,7 +100,7 @@ void logicaLMB(const RenderWindow& fereastraAplicatie, bool& seCitesteExpresie, 
 }
 
 void actualizareSimbolDeMutat(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodLegatDeWhile,
-	const Clock& timpApasatLMB, vector<Nod*>& noduriDeLegatSpreNod, vector<Nod*>& noduriDeLegatDinNod)
+	const Clock& timpApasatLMB, vector<pair<Nod*, unsigned>>& noduriDeLegatSpreNod, vector<pair<Nod*, unsigned>>& noduriDeLegatDinNod)
 {
 	if (timpApasatLMB.getElapsedTime().asSeconds() < 0.20f)
 		return;
@@ -135,7 +135,7 @@ void actualizareSimbolDeMutat(const RenderWindow& fereastraAplicatie, Nod*& nodD
 }
 
 void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat, Nod*& nodLegatDeWhile,
-	set<unsigned>& iduriLiniiDeActualizat, set<Nod*>& noduriDeActualizat, const vector<Nod*>& noduriDeLegatSpreNod, const vector<Nod*>& noduriDeLegatDinNod)
+	set<unsigned>& iduriLiniiDeActualizat, set<Nod*>& noduriDeActualizat, const vector<pair<Nod*, unsigned>>& noduriDeLegatSpreNod, const vector<pair<Nod*, unsigned>>& noduriDeLegatDinNod)
 {
 	if (nodDeMutat == nullptr)
 		return;
@@ -170,31 +170,35 @@ void logicaMutareSimbol(const RenderWindow& fereastraAplicatie, Nod*& nodDeMutat
 		adaugaSimbolCaObstacole(nod);
 	}
 
-	vector<int> idLinii;
-	idLinii.push_back(getIdLinie());
-	for (const auto& nod : noduriDeLegatSpreNod) {
-		adaugaLinieObstacol(nod, nodDeMutat, false, idLinii);
-	}
-	for (const auto& nod : noduriDeLegatDinNod)
-	{
-		bool linieSpreWhile = false;
-		if (nod->date.tip == TipNod::CAT_TIMP)
-		{
-			if (gasesteNodLegatDeWhile(nod) != nullptr && gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
-				linieSpreWhile = true;
-		}
-		adaugaLinieObstacol(nodDeMutat, nod, linieSpreWhile, { 0 });
-	}
 	for (const auto& idLinie : iduriLiniiDeActualizat) {
 		actualizeazaLinieObstacolPrinId(idLinie, nodDeMutat, { 0 });
 	}
+	for (const auto& it : noduriDeLegatDinNod)
+	{
+		bool linieSpreWhile = false;
+		if (it.first->date.tip == TipNod::CAT_TIMP)
+		{
+			if (gasesteNodLegatDeWhile(it.first) != nullptr && gasesteNodLegatDeWhile((nodDeMutat)) != nullptr)
+				linieSpreWhile = true;
+		}
+		adaugaLinieObstacol(nodDeMutat, it.first, linieSpreWhile, it.second, { 0 });
+	}
+	vector<unsigned> poateTrecePrinIduri;
+	poateTrecePrinIduri.reserve(noduriDeLegatSpreNod.size());
+	for (const auto& it : noduriDeLegatSpreNod)
+	{
+		poateTrecePrinIduri.push_back(it.second);
+	}
+	for (const auto& it : noduriDeLegatSpreNod) {
+		adaugaLinieObstacol(it.first, nodDeMutat, false, it.second, poateTrecePrinIduri);
+	}
 	if (nodLegatDeWhile != nullptr) {
-		adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true, { 0 });
+		adaugaLinieObstacol(nodLegatDeWhile, nodDeMutat, true, 0, { 0 });
 	}
 }
 
-void stopMutareSimbol(set<unsigned>& iduriLiniiDeActualizat, set<Nod*> noduriDeActualizat, vector<Nod*>& noduriDeLegatSpreNod,
-	vector<Nod*>& noduriDeLegatDinNod, Nod*& nodDeMutat, Nod*& nodLegatDeWhile, Clock& timpApasatLMB)
+void stopMutareSimbol(set<unsigned>& iduriLiniiDeActualizat, set<Nod*> noduriDeActualizat, vector<pair<Nod*, unsigned>>& noduriDeLegatSpreNod,
+	vector<pair<Nod*, unsigned>>& noduriDeLegatDinNod, Nod*& nodDeMutat, Nod*& nodLegatDeWhile, Clock& timpApasatLMB)
 {
 	for (const auto& nod : noduriDeActualizat) {
 		adaugaSimbolCaObstacole(nod);
@@ -368,8 +372,8 @@ void logicaExecutareInput(const RenderWindow& fereastraAplicatie, const VideoMod
 	static Clock timpCeasLMB, timpApasatLMB;
 	static set<unsigned> iduriLiniiDeActualizat;
 	static set<Nod*> noduriDeActualizat;
-	static vector<Nod*> noduriDeLegatSpreNod;
-	static vector<Nod*> noduriDeLegatDinNod;
+	static vector<pair<Nod*, unsigned>> noduriDeLegatSpreNod;
+	static vector<pair<Nod*, unsigned>> noduriDeLegatDinNod;
 
 	if (esteApasatLMB) {
 		logicaLMB(fereastraAplicatie, seCitesteExpresie, esteApasatLMB, esteRidicatLMB, nodDeGasit, timpCeasLMB, timpApasatLMB);
