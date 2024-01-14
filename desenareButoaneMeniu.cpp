@@ -570,13 +570,20 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	float buttonY = 0.83f * pozitieYSimbolStandard;
 	Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 
-	RenderWindow newWindow(VideoMode(static_cast<float>(50 * pozitieXSimbolStandard), static_cast<float>(50 * pozitieYSimbolStandard)), "Ajutor");
-	newWindow.setFramerateLimit(60);
+	RenderWindow newWindow(VideoMode(50 * pozitieXSimbolStandard, 50 * pozitieYSimbolStandard), "Ajutor");
+	newWindow.setFramerateLimit(10);
 
-	const int marimeFont = static_cast<int>(desktop.width) / 70;
-	Text mainText("Proiect InterSchem\n \n Blocurile se vor muta dupa mouse, daca este apasat butonul din stanga;\n \n Pentru a crea legaturi, se vor trasa cu butonul din dreapta mouse-ului; \n \n Pentru a crea blocuri, se vor apasa tastele 1(START), 2(STOP)\n 3(ATRIBUIRE), 4(CITIRE), 5(AFISARE), \n 6(DECIZIE) sau se vor folosi butoanele din meniu;\n \n Pentru a sterge un bloc si legatura sa, se va apasa ESCAPE\n \n Pentru executarea algoritmului se va folosi F12 \n \n Butonul de salvare va salva schema logica, iar cu cel de incarcare se vor \n incarca scheme logice deja facute", fontGlobal, marimeFont);
-	mainText.setFillColor(Color::White);
-	mainText.setPosition(pozitieXSimbolStandard, pozitieYSimbolStandard);
+	Texture texture;
+	if (!texture.loadFromFile("ajutor.jpg"))
+	{
+		cout << "Nu s-a putut incarca imaginea!!" << endl;
+		return;
+	}
+
+	Sprite sprite(texture);
+	sprite.setScale(Vector2f(newWindow.getSize().x / static_cast<float>(texture.getSize().x), newWindow.getSize().y / static_cast<float>(texture.getSize().y)));
+	newWindow.draw(sprite);
+	newWindow.display();
 
 	while (newWindow.isOpen())
 	{
@@ -588,9 +595,6 @@ void desenareAjutor(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 				newWindow.close();
 			}
 		}
-		newWindow.clear(Color::Black);
-		newWindow.draw(mainText);
-		newWindow.display();
 	}
 }
 
