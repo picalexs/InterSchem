@@ -208,11 +208,11 @@ void logicaButon(RenderWindow& fereastraAplicatie, const VideoMode& desktop, con
 
 	if (esteApasatIncarcare)
 	{//deseneaza meniul de incarcare
-		desenareButoaneDeSelectatFisier(fereastraAplicatie, pozScroll);
+		desenareButoaneDeSelectatFisier(fereastraAplicatie, desktop, pozScroll);
 	}
 	if (esteActivatDrop) {
 		//deseneaza meniul de creare simboluri
-		desenareDropDown(fereastraAplicatie);
+		desenareDropDown(fereastraAplicatie, desktop);
 	}
 	if (esteActivatDropRulare) {
 		//deseneaza meniul de rulare

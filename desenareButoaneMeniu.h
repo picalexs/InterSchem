@@ -4,9 +4,9 @@
 
 void setDimensiuniStandard(const VideoMode& desktop);
 
-void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicati, const int pozScroll);
+void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int pozScroll);
 
-void desenareDropDown(RenderWindow& fereastraAplicatie);
+void desenareDropDown(RenderWindow& fereastraAplicatie, const VideoMode& desktop);
 
 void desenareConvertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const int marimeFont);
 

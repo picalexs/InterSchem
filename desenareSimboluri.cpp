@@ -252,10 +252,11 @@ void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, co
 	Color culoareNu;
 	if (!isOutline)
 	{
-		const int marimeContur = 16 / (3200 / static_cast<int>(desktop.width));
+		const int marimeContur = 16.0f / (3200.0f / desktop.width);
+		const Color culoareContur = Color(0, 0, 0);
 		DateNod dateContur = date;
-		dateContur.lungimeSimbol += static_cast<float>(marimeContur);
-		dateContur.inaltimeSimbol += static_cast<float>(marimeContur);
+		dateContur.lungimeSimbol += marimeContur;
+		dateContur.inaltimeSimbol += marimeContur;
 		switchDesen(fereastraAplicatie, dateContur, culoareSimbol, culoareDa, culoareNu);
 	}
 
@@ -267,8 +268,8 @@ void creareSimbol(RenderWindow& fereastraAplicatie, const VideoMode& desktop, co
 void desenareOutline(RenderWindow& fereastraAplicatie, const VideoMode& desktop, const DateNod& dateNod, const int marimeOutline)
 {
 	DateNod dateTmp = dateNod;
-	dateTmp.lungimeSimbol += static_cast<float>(marimeOutline);
-	dateTmp.inaltimeSimbol += static_cast<float>(marimeOutline);
+	dateTmp.lungimeSimbol += marimeOutline;
+	dateTmp.inaltimeSimbol += marimeOutline;
 	creareSimbol(fereastraAplicatie, desktop, dateTmp, true);
 }
 
@@ -280,7 +281,7 @@ void creareSimbolPtArboreRecursiv(RenderWindow& fereastraAplicatie, const VideoM
 	noduriVizitate.insert(N);
 	if (nodCuOutline == N)
 	{
-		desenareOutline(fereastraAplicatie, desktop, N->date, static_cast<int>(desktop.width / 100));
+		desenareOutline(fereastraAplicatie, desktop, N->date, desktop.width / 100);
 	}
 
 	creareSimbol(fereastraAplicatie, desktop, N->date, false);
