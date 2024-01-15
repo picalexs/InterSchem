@@ -620,7 +620,7 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			const long double op = stiva.top();
 			stiva.pop();
 			const long long index = static_cast<long long>(op);
-			if (index < 0 || index > 100)
+			if (index < 0 || index > 1000)
 			{
 				const string eroare = "Eroare: Indexul vectorului " + at.val + " este invalid!";
 				cout << eroare << '\n';
