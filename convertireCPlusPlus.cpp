@@ -39,6 +39,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 		string vectorAtribuire;
 		s += nodCurent->date.expresie;
 		bool ok = false;
+
 		for (i = 0; i < s.size() && ok == false; i++) {
 			if (s[i] != '=') {
 				variabila += s[i];
@@ -47,33 +48,57 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 				ok = true;
 			}
 		}
+		atribuire += '=';
 		for (int j = i; j < s.size(); j++) {
 			atribuire += s[j];
 		}
-		for (i = 0; i < variabila.size(); i++)
+
+		int gasit = 0;
+		for (i = 0; i < variabila.size() && gasit==0; i++)
 			if (variabila[i] == '[')
 			{
 				if (vectorConvertire.find(vectorAtribuire) != vectorConvertire.end())
-					codConvertit += variabila + '=' + atribuire + ";\n";
+					codConvertit += variabila + atribuire + ";\n";
 				else
 				{
+					gasit = 1;
 					vectorConvertire.insert(vectorAtribuire);
 					cout << variabila << ' ' << atribuire << ' ';
-					codConvertit+= "float " +variabila+"={0}" + "; \n";
+					///codConvertit+= "float " +variabila+"={0}" + "; \n";
+					codConvertit += "float " + vectorAtribuire + '[';
+					i++;
+					while (variabila[i] != ']' && i<variabila.size())
+					{
+						codConvertit += variabila[i];
+						i++;
+					}
+					codConvertit += "]={0}";
 				}
 			}
 			else
 				vectorAtribuire += variabila[i];
+		if (gasit == 1)
+		{
+			while (i < variabila.size())
+			{
+				codConvertit += variabila[i];
+				i++;
+			}
+			if (atribuire.size() > 1)
+				codConvertit += atribuire + ";\n";
+			else
+				codConvertit += ";\n";
+		}
 		if (vectorAtribuire.compare(variabila) == 0)
 			if (variabileConvertire.find(variabila) != variabileConvertire.end())
 			{
-				codConvertit += variabila + '=' + atribuire + ";\n";
+				codConvertit += variabila + atribuire + ";\n";
 			}
 			else
 			{
 				variabileConvertire.insert(variabila);
 				cout << variabila << ' ' << atribuire << ' ';
-				codConvertit += "float " + variabila + '=' + atribuire + ";\n";
+				codConvertit += "float " + variabila + atribuire + ";\n";
 			}
 		///codConvertit += "float " + nodCurent->date.expresie + ";\n";
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
@@ -181,7 +206,7 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 	codConvertit += "#include <iostream>\n";
 	codConvertit += "#include <cmath>\n";
 	codConvertit += "using namespace std;\n";
-	codConvertit += "#int main()\n";
+	codConvertit += "int main()\n";
 	codConvertit += "{\n";
 
 	convertireInCodRec(listaArbori[0].radacina, fereastraAplicatie, desktop);
