@@ -21,11 +21,6 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	static set <string> vectorConvertire;
 	if (noduriVizitate.count(nodCurent) != 0 && nodCurent->date.tip == TipNod::CAT_TIMP)
 		return;
-	if (nodCurent == nullptr)
-	{
-		noduriVizitate.clear();
-		return;
-	}
 	noduriVizitate.insert(nodCurent);
 	if (nodCurent->date.tip == TipNod::START)
 	{
@@ -58,18 +53,17 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			atribuire += s[j];
 		}
 
-		bool gasit = false;
-		for (i = 0; i < variabila.size() && gasit == 0; i++) {
+		int gasit = 0;
+		for (i = 0; i < variabila.size() && gasit == 0; i++)
 			if (variabila[i] == '[')
 			{
 				if (vectorConvertire.find(vectorAtribuire) != vectorConvertire.end())
 					codConvertit += variabila + atribuire + ";\n";
 				else
 				{
-					gasit = true;
+					gasit = 1;
 					vectorConvertire.insert(vectorAtribuire);
 					cout << variabila << ' ' << atribuire << ' ';
-					///codConvertit+= "float " +variabila+"={0}" + "; \n";
 					codConvertit += "float " + vectorAtribuire + '[';
 					i++;
 					while (variabila[i] != ']' && i < variabila.size())
@@ -82,8 +76,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			}
 			else
 				vectorAtribuire += variabila[i];
-		}
-		if (gasit == false)
+		if (gasit == 1)
 		{
 			while (i < variabila.size())
 			{
@@ -95,7 +88,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			else
 				codConvertit += ";\n";
 		}
-		if (vectorAtribuire == variabila) {
+		if (vectorAtribuire == variabila)
 			if (variabileConvertire.find(variabila) != variabileConvertire.end())
 			{
 				codConvertit += variabila + atribuire + ";\n";
@@ -106,7 +99,6 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 				cout << variabila << ' ' << atribuire << ' ';
 				codConvertit += "float " + variabila + atribuire + ";\n";
 			}
-		}
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
@@ -197,6 +189,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 	}
+	noduriVizitate.clear();
 	variabileConvertire.clear();
 	vectorConvertire.clear();
 }
@@ -223,9 +216,10 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 	cout << "Codul a fost convertit!\n";
 
+
 	const int marimeFont = static_cast<int>(desktop.width) / 90;
 	Text mainText(codConvertit, fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
-	mainText.setPosition(71.0f * static_cast<float>(desktop.width) / 100.0f, 20.0f * static_cast<float>(desktop.height) / 100.0f);
+	mainText.setPosition(71 * desktop.width / 100, 20 * desktop.height / 100);
 	fereastraAplicatie.draw(mainText);
 }
