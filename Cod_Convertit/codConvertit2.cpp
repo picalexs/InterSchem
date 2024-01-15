@@ -3,41 +3,17 @@
 using namespace std;
 int main()
 {
-     float n=0;
-     cin>> n;
-     if(n<=1)
+     float v[100]={0}, x=0, i=0;
+     cin>> x;
+     while(i<x)
      {
-         cout << "n nu este prim!";
+         v[i]=i, i=i+1;
      }
-     else
+     float i=0;
+     while(i<x)
      {
-         if(n==2)
-         {
-             cout << "n este prim";
-         }
-         else
-         {
-             if(n%2==0)
-             {
-                 cout << "n nu este prim!";
-             }
-             else
-             {
-                 float i=3;
-                 while(i*i<=n)
-                 {
-                     if(n%i!=0)
-                     {
-                         i=i+1;
-                     }
-                     else
-                     {
-                         cout << "n nu e prim";
-                     }
-                 }
-                 cout << "n este prim";
-             }
-         }
+         cout << v[i];
+         i=i+1;
      }
      return 0;
 }

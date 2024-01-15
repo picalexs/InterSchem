@@ -19,8 +19,13 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	static set<const Nod*> noduriVizitate;
 	static set<string> variabileConvertire;
 	static set <string> vectorConvertire;
-	if (nodCurent == nullptr || noduriVizitate.count(nodCurent) != 0)
+	if (noduriVizitate.count(nodCurent) != 0)
 		return;
+	if (nodCurent == nullptr)
+	{
+		noduriVizitate.clear();
+		return;
+	}
 	noduriVizitate.insert(nodCurent);
 	if (nodCurent->date.tip == TipNod::START)
 	{
@@ -192,7 +197,6 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 
 		convertireInCodRec(nodCurent->dr, fereastraAplicatie, desktop);
 	}
-	noduriVizitate.clear();
 	variabileConvertire.clear();
 	vectorConvertire.clear();
 }
