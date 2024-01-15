@@ -58,21 +58,21 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			atribuire += s[j];
 		}
 
-		int gasit = 0;
-		for (i = 0; i < variabila.size() && gasit==0; i++)
+		bool gasit = false;
+		for (i = 0; i < variabila.size() && gasit == 0; i++) {
 			if (variabila[i] == '[')
 			{
 				if (vectorConvertire.find(vectorAtribuire) != vectorConvertire.end())
 					codConvertit += variabila + atribuire + ";\n";
 				else
 				{
-					gasit = 1;
+					gasit = true;
 					vectorConvertire.insert(vectorAtribuire);
 					cout << variabila << ' ' << atribuire << ' ';
 					///codConvertit+= "float " +variabila+"={0}" + "; \n";
 					codConvertit += "float " + vectorAtribuire + '[';
 					i++;
-					while (variabila[i] != ']' && i<variabila.size())
+					while (variabila[i] != ']' && i < variabila.size())
 					{
 						codConvertit += variabila[i];
 						i++;
@@ -82,7 +82,8 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			}
 			else
 				vectorAtribuire += variabila[i];
-		if (gasit == 1)
+		}
+		if (gasit == false)
 		{
 			while (i < variabila.size())
 			{
@@ -94,7 +95,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 			else
 				codConvertit += ";\n";
 		}
-		if (vectorAtribuire.compare(variabila) == 0)
+		if (vectorAtribuire == variabila) {
 			if (variabileConvertire.find(variabila) != variabileConvertire.end())
 			{
 				codConvertit += variabila + atribuire + ";\n";
@@ -105,7 +106,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 				cout << variabila << ' ' << atribuire << ' ';
 				codConvertit += "float " + variabila + atribuire + ";\n";
 			}
-		///codConvertit += "float " + nodCurent->date.expresie + ";\n";
+		}
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
 	if (nodCurent->date.tip == TipNod::CITIRE)
@@ -146,7 +147,6 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 					codConvertit += s[i];
 		}
 		codConvertit += ";\n";
-		///codConvertit += "cout<< " + nodCurent->date.expresie + ";\n";
 		s.clear();
 		convertireInCodRec(nodCurent->st, fereastraAplicatie, desktop);
 	}
@@ -223,14 +223,9 @@ void convertire(RenderWindow& fereastraAplicatie, const VideoMode& desktop)
 
 	cout << "Codul a fost convertit!\n";
 
-
 	const int marimeFont = static_cast<int>(desktop.width) / 90;
 	Text mainText(codConvertit, fontGlobal, marimeFont);
 	mainText.setFillColor(Color::Black);
-	mainText.setPosition(71 * desktop.width / 100, 20 * desktop.height / 100);
-	///if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		///view.move(0, -5);
-		fereastraAplicatie.draw(mainText);
-	///}
-	
+	mainText.setPosition(71.0f * static_cast<float>(desktop.width) / 100.0f, 20.0f * static_cast<float>(desktop.height) / 100.0f);
+	fereastraAplicatie.draw(mainText);
 }
