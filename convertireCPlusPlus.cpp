@@ -19,7 +19,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 	static set<const Nod*> noduriVizitate;
 	static set<string> variabileConvertire;
 	static set <string> vectorConvertire;
-	if (noduriVizitate.count(nodCurent) != 0)
+	if (noduriVizitate.count(nodCurent) != 0 && nodCurent->date.tip == TipNod::CAT_TIMP)
 		return;
 	if (nodCurent == nullptr)
 	{
