@@ -183,7 +183,7 @@ void butonSelectareFisier(RenderWindow& fereastraAplicatie, const string& text, 
 	fereastraAplicatie.draw(textButon);
 }
 
-void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie,const int pozScroll)
+void desenareButoaneDeSelectatFisier(RenderWindow& fereastraAplicatie, const int pozScroll)
 {
 	const vector<string> fisiere = numeFisiereInFolder();
 	constexpr int nrMaximDeFisiere = 7;
@@ -484,9 +484,9 @@ void slidermarimeFontStandard(RenderWindow& fereastraAplicatie, const VideoMode&
 	slider.setFillColor(culoareOutlineRulare);
 	slider.setPosition(89 * pozitieXSimbolStandard, 8.5f * pozitieYSimbolStandard);
 
-	constexpr int valMin = 15;
-	constexpr int valMax = 60;
-	static int valoare = 50;
+	constexpr int valMin = 5;
+	constexpr int valMax = 71;
+	static int valoare = 35;
 	const Vector2i pozitieMouse = Mouse::getPosition(fereastraAplicatie);
 	const Vector2f pozitieMouseWorld = fereastraAplicatie.mapPixelToCoords(pozitieMouse);
 

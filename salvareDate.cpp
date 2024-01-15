@@ -8,7 +8,8 @@ unsigned int index = 1;
 void parcurgereArborePtSalvare(const Nod* nodCurent, FILE* fisier)
 {
 	if (noduriParcurse.find(nodCurent) != noduriParcurse.end())
-		return;
+		if (nodCurent->date.tip == TipNod::CAT_TIMP)
+			return;
 
 	noduriParcurse[nodCurent] = index;
 	fprintf(fisier, "%d,", index);

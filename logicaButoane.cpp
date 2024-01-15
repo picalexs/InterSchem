@@ -110,7 +110,7 @@ void logicaApasareButonIncarcare(const RenderWindow& fereastraAplicatie, const V
 	const int stopIdx = min(static_cast<int>(fisiere.size()), pozScroll + nrMaximDeFisiere);
 	for (int i = startIdx; i < stopIdx; i++)
 	{
-		if (verificareButon(pozitieMouse, 12 * desktop.width / 100, (5 + 4 * (i - startIdx)) * desktop.height / 100, desktop.width / 10, desktop.height / 25))
+		if (verificareButon(pozitieMouse, 12 * desktop.width / 100, (5.5f + 4.5f * (i - startIdx)) * desktop.height / 100, desktop.width / 10, desktop.height / 25))
 		{
 			incarcareDateFisier(desktop, fisiere[i]);
 			esteApasatIncarcare = false;
