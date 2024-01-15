@@ -59,10 +59,7 @@ void convertireInCodRec(const Nod* nodCurent, const RenderWindow& fereastraAplic
 				{
 					vectorConvertire.insert(vectorAtribuire);
 					cout << variabila << ' ' << atribuire << ' ';
-					codConvertit+= "float " +vectorAtribuire + '[' + "1002" + ']' + "; \n";
-					for (i = 1; i <= nrSpatii; i++)
-						codConvertit += ' ';
-					codConvertit +=  variabila + '=' + atribuire + ";\n";
+					codConvertit+= "float " +variabila+"={0}" + "; \n";
 				}
 			}
 			else
