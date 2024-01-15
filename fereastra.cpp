@@ -42,18 +42,6 @@ void creareFereastra()
 				fereastraAplicatie.close();
 			}
 			logicaInput(event);
-			//////////////////////////////////////////
-			static bool apasatF11 = false;
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::F11 && !apasatF11) {
-					apasatF11 = true;
-					afisareMatrice();
-				}
-			}
-			else if (event.type == Event::KeyReleased && event.key.code == Keyboard::F11) {
-				apasatF11 = false;
-			}
-			//////////////////////////////////////////
 		}
 		fereastraAplicatie.clear(Color::White);
 		logicaExecutareInput(fereastraAplicatie, desktop, event);
@@ -63,7 +51,7 @@ void creareFereastra()
 		afisareListaOutput(fereastraAplicatie, desktop);//afiseaza listaConsola
 		afisareVariabile(fereastraAplicatie, desktop);//afiseaza variabilele pe ecran
 
-		functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
+		//functieDebugging(fereastraAplicatie, desktop);//deseneaza informatii de debugging
 
 		butoaneMeniu(fereastraAplicatie, desktop);
 		logicaButon(fereastraAplicatie, desktop, event);
