@@ -1,10 +1,9 @@
 #include "executareAlgoritm.h"
-
 #include "desenareLinie.h"
 #include "desenareSimboluri.h"
 #include "evaluareExpresie.h"
 #include "logicaExecutare.h"
-#include "logicaSimboluri.h"
+
 
 bool nrStartStop(int& nrStart, int& nrStop, const Nod* N, set<const Nod*>& noduriVizitate)
 {

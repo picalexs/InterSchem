@@ -527,6 +527,13 @@ long double calculeazaExpresiePostfixata(const vector<atom>& atomi)
 			}
 			else if (at.val == "%")
 			{//le transformam in long long pentru a putea calcula restul
+				if (op2 == 0)
+				{
+					const string eroare = "Eroare: Nu se poate imparti la 0!";
+					cout << eroare << '\n';
+					listaConsola.push_back(eroare);
+					return 0;
+				}
 				stiva.push(static_cast<long long>(op1) % static_cast<long long>(op2));
 			}
 			else if (at.val == "^")
